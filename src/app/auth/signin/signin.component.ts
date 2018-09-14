@@ -19,5 +19,4 @@ export class SigninComponent implements OnInit {
     this.authService.signInUser();
     this.router.navigate(['/map-view']);
   }
-
 }
