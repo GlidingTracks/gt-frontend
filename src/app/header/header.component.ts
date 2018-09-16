@@ -1,35 +1,31 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, NgModule, OnInit} from '@angular/core';
 import {AuthService} from "../services/auth.service";
-import {Subscription} from "rxjs";
-
+import * as firebase from "firebase";
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit, OnDestroy {
+export class HeaderComponent implements OnInit {
 
   isAuth: boolean;
-  isAuthSubscription: Subscription;
 
   constructor(private authService: AuthService) { }
 
   ngOnInit() {
-    this.isAuthSubscription = this.authService.isAuthSubject.subscribe(
-      (isAuth: boolean) => {
-        this.isAuth = isAuth;
+    firebase.auth().onAuthStateChanged(
+      (user) =>{
+        if (user) {
+          this.isAuth = true;
+        } else {
+          this.isAuth = false;
+        }
       }
     );
-    this.authService.emitIsAuthSubject();
   }
 
   onSignOut() {
     this.authService.signOutUser();
-    this.isAuth = this.authService.isAuth;
-  }
-
-  ngOnDestroy() {
-    this.isAuthSubscription.unsubscribe();
   }
 }

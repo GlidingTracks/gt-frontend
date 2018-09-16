@@ -18,7 +18,7 @@ const appRoutes: Routes = [
   { path: 'auth/signup', component: SignupComponent},
   { path: 'auth/signin', component: SigninComponent},
   { path: 'map-view', canActivate: [AuthGuardService], component: MapViewComponent},
-  { path: 'upload', component: UploadComponent},
+  { path: 'upload', canActivate: [AuthGuardService], component: UploadComponent},
   { path: '', redirectTo: 'map-view', pathMatch: 'full'},
   { path: '**', redirectTo: 'map-view'}
 ];
@@ -39,6 +39,7 @@ const appRoutes: Routes = [
     HttpClientModule,
     RouterModule.forRoot(appRoutes)
   ],
+  exports: [],
   providers: [
     AuthService,
     AuthGuardService,

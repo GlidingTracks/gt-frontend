@@ -40,3 +40,4 @@ Thumbs.db
 
 # Firebase service account creds
 gt-backend-firebase-adminsdk.json
+firebase-config.json

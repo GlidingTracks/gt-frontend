@@ -1,27 +1,44 @@
 import { Injectable } from '@angular/core';
-import {Subject} from "rxjs";
+import * as firebase from "firebase";
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthService {
-
-  isAuth: boolean;
-  isAuthSubject = new Subject<boolean>();
 
   constructor() { }
 
-  emitIsAuthSubject(){
-    this.isAuthSubject.next(this.isAuth);
+  createNewUser(email: string, password: string) {
+    return new Promise(
+      (resolve, reject) => {
+        firebase.auth().createUserWithEmailAndPassword(email, password).then(
+          () => {
+            resolve();
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+      }
+    );
   }
 
-  signInUser() {
-    this.isAuth = true;
-    console.log("User signed in!");
-    this.emitIsAuthSubject();
+  signInUser(email: string, password: string) {
+    return new Promise(
+      (resolve, reject) => {
+        firebase.auth().signInWithEmailAndPassword(email, password).then(
+          () => {
+            resolve();
+          },
+          (error) => {
+            reject(error);
+          }
+        );
+      }
+    );
   }
 
   signOutUser() {
-    this.isAuth = false;
-    console.log("User signed out!");
-    this.emitIsAuthSubject();
+    firebase.auth().signOut();
   }
 }

@@ -1,22 +1,21 @@
 import { Injectable } from '@angular/core';
 import {CanActivate, Router} from "@angular/router";
 import {Observable} from "rxjs";
-import {AuthService} from "./auth.service";
+import * as firebase from "firebase";
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthGuardService implements CanActivate {
 
-  isAuthSubscription;
-
-  constructor(private router: Router,
-              private authService: AuthService) { }
+  constructor(private router: Router) { }
 
   canActivate(): Observable<boolean> | Promise<boolean> | boolean {
     return new Promise(
-      (resolve, reject) => {
-        this.isAuthSubscription = this.authService.isAuthSubject.subscribe(
-          (isAuth: boolean) => {
-            if (isAuth) {
+      (resolve, reject ) => {
+        firebase.auth().onAuthStateChanged(
+          (user) => {
+            if (user) {
               resolve(true);
             } else {
               this.router.navigate(['/auth', 'signin']);
@@ -24,7 +23,6 @@ export class AuthGuardService implements CanActivate {
             }
           }
         );
-        this.authService.emitIsAuthSubject();
       }
     );
   }
