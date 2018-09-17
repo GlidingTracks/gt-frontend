@@ -1,0 +1,80 @@
+*{
+  font-family: "Comfortaa", sans-serif;
+  color: rgb(255, 255, 255);
+}
+
+nav {
+  background-color: rgb(89, 34, 229);
+  position: relative;
+  top: -100px;
+  left: -150px;
+  height: 300px;
+  width: 120%;
+}
+
+li{
+  list-style: none;
+}
+
+p.title{
+  font-size: 91px;
+  text-align: center;
+  position: relative;
+  left: -2%;
+  top: 40px;
+}
+
+a.func {
+  font-size: 1.5pc;
+  background-color: rgb(67, 146, 241);
+  padding: 1.5% 20% 1.5% 20%;
+  text-decoration: none;
+}
+a.func:hover{
+  background-color: rgb(87, 166, 255);
+}
+a.map{
+  background-color: #7cc254;
+}
+a.map:hover{
+  background-color: #91cc78;
+}
+
+li.upload {
+  position: relative;
+  left:0%;
+  top: 25px;
+}
+li.map{
+  position: relative;
+  left:47%;
+  top: 52px;
+}
+
+
+a.connect{
+  font-size: 1pc;
+  position: relative;
+}
+a.connect:hover{
+  color: rgb(230,230,255);
+}
+a.signup{
+  top: 1pc;
+}
+a.signin{
+  top: 2pc;
+}
+ul.connect {
+  background-color: rgb(67, 146, 241);
+  position: relative;
+  left: 78%;
+  top: -205px;
+  list-style-type:none;
+  width: 200px;
+  height: 80px;
+  border-radius: 15px 15px 15px 15px;
+}
+
+
+

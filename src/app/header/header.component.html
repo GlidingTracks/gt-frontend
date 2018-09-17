@@ -1,20 +1,32 @@
-<nav class="navbar navbar-default">
+<body>
+<nav class="navbar navbar-default" xmlns="" xmlns="">
+
+  <div class="title">
+    <p class="title">
+      Web Gliding
+    </p>
+  </div>
+
+  <div class="background">
+
+  </div>
+
   <div class="container-fluid">
-    <ul class="nav navbar-nav">
-      <li routerLinkActive="active">
-        <a routerLink="map-view">Map View</a>
+    <ul>
+      <li class="map" routerLinkActive="active">
+        <a class="func map" routerLink="map-view">Map View</a>
       </li>
-      <li routerLinkActive="active">
-        <a routerLink="upload">Upload track</a>
+      <li class="upload" routerLinkActive="active">
+        <a class="func upload" routerLink="upload">Upload track</a>
       </li>
     </ul>
 
-    <ul class="nav navbar-nav navbar-right">
+    <ul class="connect">
       <li routerLinkActive="active" *ngIf="!isAuth">
-        <a routerLink="auth/signup">Create account</a>
+        <a class="connect signup" routerLink="auth/signup">Create account</a>
       </li>
       <li routerLinkActive="active" *ngIf="!isAuth">
-        <a routerLink="auth/signin">Sign in</a>
+        <a class="connect signin" routerLink="auth/signin">Sign in</a>
       </li>
       <li *ngIf="isAuth">
         <a (click)="onSignOut()"
@@ -23,3 +35,4 @@
     </ul>
   </div>
 </nav>
+</body>
