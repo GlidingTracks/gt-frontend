@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators} from "@angular/forms";
+import { FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-upload',
@@ -27,12 +27,12 @@ export class UploadComponent implements OnInit {
     });
   }
 
-  onUploadFromFile(){
-    console.log("Uploading file!");
+  onUploadFromFile() {
+    console.log('Uploading file!');
   }
 
-  onUploadFromURL(){
-    console.log("Uploading file from url!")
+  onUploadFromURL() {
+    console.log('Uploading file from url!');
   }
 
 }

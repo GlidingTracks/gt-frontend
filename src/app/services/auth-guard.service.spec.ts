@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { AuthGuardService } from './auth-guard.service';
-import {Router} from "@angular/router";
+import {Router} from '@angular/router';
 
 const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 

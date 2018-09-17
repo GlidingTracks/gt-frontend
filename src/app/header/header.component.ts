@@ -1,6 +1,6 @@
 import {Component, NgModule, OnInit} from '@angular/core';
-import {AuthService} from "../services/auth.service";
-import * as firebase from "firebase";
+import {AuthService} from '../services/auth.service';
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-header',
@@ -15,7 +15,7 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     firebase.auth().onAuthStateChanged(
-      (user) =>{
+      (user) => {
         if (user) {
           this.isAuth = true;
         } else {
