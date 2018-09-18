@@ -11,22 +11,16 @@ header{
   height: 300px;
   width: 100%;
   display: compact;
-  /*clip-path: polygon(*/
-    /*0% 0,*/
-    /*100% 0,*/
-    /*100% 100%,*/
-    /*0 70%*/
-  /*);*/
 }
 
 div.background {
-  clip-path: polygon(
+  clip-path: polygon( /* this is used to create a slope on the top part of the image*/
     0% 0%,
-    100% 15%,
+    100% 10%,
     100% 100%,
     0% 100%
   );
-  
+
   background-image: url("Glidings.jpg");
   background-size: cover;
   top: -200px;
@@ -38,7 +32,7 @@ div.background {
 
 
 div.container-fluid{
-  top: -220px;
+  top: -300px;
   position: relative;
 }
 li{
@@ -52,30 +46,32 @@ p.title{
   top: 60px;
 }
 
-a.func {
+button.func {
   font-size: 1.5pc;
   text-decoration: none;
-  outline: none;}
+  outline: none;
+  border: none;}
 
-a.upload{
+button.upload{
   background-color: rgb(67, 146, 241);
-  padding: 1.5% 20.2% 1.5% 20.5%;
+  padding: 1.5%;
+  width: 50%;
   position: relative;
-  left:0%;
   top: 0px;
 }
-a.upload:hover{
+button.upload:hover{
   background-color: rgb(87, 166, 255);
 }
 
-a.map{
+button.map{
   background-color: #7cc254;
-  padding: 1.5% 21.5%;
+  padding: 1.5%;
+  width: 50%;
   position: relative;
-  left:50.1%;
-  top: 26px;
+  left:50%;
+  top: 84px;
 }
-a.map:hover{
+button.map:hover{
   background-color: #91cc78;
 }
 
@@ -102,4 +98,9 @@ a.signup{
 }
 a.signin{
   top: 2pc;
+}
+a.signout{
+  top: 2pc;
+  font-size: 1.3pc;
+  cursor: pointer;
 }

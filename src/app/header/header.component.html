@@ -12,8 +12,7 @@
       <a class="connect signin" routerLink="auth/signin">Sign in</a>
     </li>
     <li *ngIf="isAuth">
-      <a (click)="onSignOut()"
-         style="cursor:pointer">Sign out</a>
+      <a class="connect signout" (click)="onSignOut()">Sign out</a>
     </li>
   </ul>
 </header>
@@ -23,10 +22,10 @@
 
   <div class="container-fluid">
       <div class="map" routerLinkActive="active">
-        <a class="func map" routerLink="map-view">Map View</a>
+        <button class="func map" routerLink="map-view">Map View</button>
       </div>
       <div class="upload" routerLinkActive="active">
-        <a class="func upload" routerLink="upload">Upload track</a>
+        <button class="func upload" routerLink="upload">Upload track</button>
       </div>
   </div>
 </nav>
