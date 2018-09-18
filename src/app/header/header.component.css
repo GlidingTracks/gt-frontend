@@ -4,13 +4,9 @@
 }
 
 header{
-  background-color: rgb(89, 34, 229);
-  position: relative;
-  top: -100px;
-  /*left: -150px;*/
-  height: 300px;
-  width: 100%;
-  display: compact;
+  background-color: rgba(89, 34, 229, 255);
+  height: 15vh;
+  width: 100vw;
 }
 
 div.background {
@@ -20,85 +16,64 @@ div.background {
     100% 100%,
     0% 100%
   );
-
   background-image: url("Glidings.jpg");
   background-size: cover;
-  top: -200px;
-  height: 500px;
-  left: 0%;
-  width: 100%;
-  position: relative;
-}
-
-
-div.container-fluid{
-  top: -300px;
-  position: relative;
-}
-li{
-  list-style: none;
+  height: 50vh;
+  width: 100vw;
 }
 
 p.title{
-  font-size: 91px;
+  font-size: 5vw;
   text-align: center;
-  position: relative;
-  top: 60px;
+  max-width: 50vw;
+  margin: 2vh auto;
 }
 
 button.func {
-  font-size: 1.5pc;
+  font-size: 1.5vw;
   text-decoration: none;
   outline: none;
   border: none;}
 
 button.upload{
-  background-color: rgb(67, 146, 241);
+  background-color: #4392F1;
   padding: 1.5%;
   width: 50%;
-  position: relative;
-  top: 0px;
 }
 button.upload:hover{
-  background-color: rgb(87, 166, 255);
+  background-color: #57A6FF;
 }
 
 button.map{
   background-color: #7cc254;
   padding: 1.5%;
   width: 50%;
-  position: relative;
-  left:50%;
-  top: 84px;
 }
 button.map:hover{
   background-color: #91cc78;
 }
 
 
-ul.connect {
+div.connect {
+  position: relative;
+  top: -10.8vh;
+  right: 2vw;
   background-color: rgb(67, 146, 241);
-  position: relative;
-  left: 84%;
-  top: -150px;
-  list-style-type:none;
-  width: 200px;
-  height: 80px;
-  border-radius: 15px 15px 15px 15px;
+  float: right;
+  width: 10vw;
+  height: 8vh;
+  border-radius: 1vw 1vw 1vw 1vw;
 }
+
 a.connect{
-  font-size: 1pc;
+  font-size: 0.9vw;
   position: relative;
+  left: 10%;
 }
-a.connect:hover{
-  color: rgb(230,230,255);
-}
-a.signup{
-  top: 1pc;
-}
-a.signin{
-  top: 2pc;
-}
+a.connect:hover{color: rgb(230,230,255);}
+
+a.signup{top: 1.5vh;}
+a.signin{top: 3vh;}
 a.signout{
   top: 2pc;
   font-size: 1.3pc;

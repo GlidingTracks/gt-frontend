@@ -1,0 +1,13 @@
+*{
+  background-color: #5A26E3;
+}
+
+body{
+  position: relative;
+  height: 10000000000000%;
+}
+div.row{
+  position: relative;
+  height: 100%;
+  top:-300px;
+}
