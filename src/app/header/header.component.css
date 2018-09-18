@@ -1,18 +1,45 @@
-<<<<<<< HEAD
 *{
   font-family: "Comfortaa", sans-serif;
   color: rgb(255, 255, 255);
 }
 
-nav {
+header{
   background-color: rgb(89, 34, 229);
   position: relative;
   top: -100px;
-  left: -150px;
+  /*left: -150px;*/
   height: 300px;
-  width: 120%;
+  width: 100%;
+  display: compact;
+  /*clip-path: polygon(*/
+    /*0% 0,*/
+    /*100% 0,*/
+    /*100% 100%,*/
+    /*0 70%*/
+  /*);*/
 }
 
+div.background {
+  clip-path: polygon(
+    0% 0%,
+    100% 15%,
+    100% 100%,
+    0% 100%
+  );
+  background-image: url("Glider.jpg");
+  background-size: cover;
+  top: -200px;
+  height: 500px;
+  left: 0%;
+  width: 100%;
+  position: relative;
+}
+
+
+div.container-fluid{
+  top: -270px;
+  position: relative;
+}
 li{
   list-style: none;
 }
@@ -21,38 +48,47 @@ p.title{
   font-size: 91px;
   text-align: center;
   position: relative;
-  left: -2%;
-  top: 40px;
+  top: 60px;
 }
 
 a.func {
   font-size: 1.5pc;
-  background-color: rgb(67, 146, 241);
-  padding: 1.5% 20% 1.5% 20%;
   text-decoration: none;
+  outline: none;}
+
+a.upload{
+  background-color: rgb(67, 146, 241);
+  padding: 1.5% 20.2% 1.5% 20.5%;
+  position: relative;
+  left:0%;
+  top: 0px;
 }
-a.func:hover{
+a.upload:hover{
   background-color: rgb(87, 166, 255);
 }
+
 a.map{
   background-color: #7cc254;
+  padding: 1.5% 21.5%;
+  position: relative;
+  left:50.1%;
+  top: 26px;
 }
 a.map:hover{
   background-color: #91cc78;
 }
 
-li.upload {
-  position: relative;
-  left:0%;
-  top: 25px;
-}
-li.map{
-  position: relative;
-  left:47%;
-  top: 52px;
-}
 
-
+ul.connect {
+  background-color: rgb(67, 146, 241);
+  position: relative;
+  left: 84%;
+  top: -150px;
+  list-style-type:none;
+  width: 200px;
+  height: 80px;
+  border-radius: 15px 15px 15px 15px;
+}
 a.connect{
   font-size: 1pc;
   position: relative;
@@ -66,18 +102,3 @@ a.signup{
 a.signin{
   top: 2pc;
 }
-ul.connect {
-  background-color: rgb(67, 146, 241);
-  position: relative;
-  left: 78%;
-  top: -205px;
-  list-style-type:none;
-  width: 200px;
-  height: 80px;
-  border-radius: 15px 15px 15px 15px;
-}
-
-
-=======
->>>>>>> b929f5d73623b52898a322e2ba91f4e850792254
-

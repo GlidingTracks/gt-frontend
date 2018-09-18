@@ -1,38 +1,32 @@
-<body>
-<nav class="navbar navbar-default" xmlns="" xmlns="">
-
+<header>
   <div class="title">
     <p class="title">
       Web Gliding
     </p>
   </div>
+  <ul class="connect">
+    <li routerLinkActive="active" *ngIf="!isAuth">
+      <a class="connect signup" routerLink="auth/signup">Create account</a>
+    </li>
+    <li routerLinkActive="active" *ngIf="!isAuth">
+      <a class="connect signin" routerLink="auth/signin">Sign in</a>
+    </li>
+    <li *ngIf="isAuth">
+      <a (click)="onSignOut()"
+         style="cursor:pointer">Sign out</a>
+    </li>
+  </ul>
+</header>
 
-  <div class="background">
-
-  </div>
+<nav class="navbar navbar-default" xmlns="" xmlns="">
+  <div class="background"></div>
 
   <div class="container-fluid">
-    <ul>
-      <li class="map" routerLinkActive="active">
+      <div class="map" routerLinkActive="active">
         <a class="func map" routerLink="map-view">Map View</a>
-      </li>
-      <li class="upload" routerLinkActive="active">
+      </div>
+      <div class="upload" routerLinkActive="active">
         <a class="func upload" routerLink="upload">Upload track</a>
-      </li>
-    </ul>
-
-    <ul class="connect">
-      <li routerLinkActive="active" *ngIf="!isAuth">
-        <a class="connect signup" routerLink="auth/signup">Create account</a>
-      </li>
-      <li routerLinkActive="active" *ngIf="!isAuth">
-        <a class="connect signin" routerLink="auth/signin">Sign in</a>
-      </li>
-      <li *ngIf="isAuth">
-        <a (click)="onSignOut()"
-           style="cursor:pointer">Sign out</a>
-      </li>
-    </ul>
+      </div>
   </div>
 </nav>
-</body>
