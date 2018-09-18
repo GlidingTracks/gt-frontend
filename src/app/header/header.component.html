@@ -1,25 +1,32 @@
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <ul class="nav navbar-nav">
-      <li routerLinkActive="active">
-        <a routerLink="map-view">Map View</a>
-      </li>
-      <li routerLinkActive="active">
-        <a routerLink="upload">Upload track</a>
-      </li>
-    </ul>
+<header>
+  <div class="title">
+    <p class="title">
+      Gliding Tracks
+    </p>
+  </div>
+  <ul class="connect">
+    <li routerLinkActive="active" *ngIf="!isAuth">
+      <a class="connect signup" routerLink="auth/signup">Create account</a>
+    </li>
+    <li routerLinkActive="active" *ngIf="!isAuth">
+      <a class="connect signin" routerLink="auth/signin">Sign in</a>
+    </li>
+    <li *ngIf="isAuth">
+      <a (click)="onSignOut()"
+         style="cursor:pointer">Sign out</a>
+    </li>
+  </ul>
+</header>
 
-    <ul class="nav navbar-nav navbar-right">
-      <li routerLinkActive="active" *ngIf="!isAuth">
-        <a routerLink="auth/signup">Create account</a>
-      </li>
-      <li routerLinkActive="active" *ngIf="!isAuth">
-        <a routerLink="auth/signin">Sign in</a>
-      </li>
-      <li *ngIf="isAuth">
-        <a (click)="onSignOut()"
-           style="cursor:pointer">Sign out</a>
-      </li>
-    </ul>
+<nav class="navbar navbar-default" xmlns="" xmlns="">
+  <div class="background"></div>
+
+  <div class="container-fluid">
+      <div class="map" routerLinkActive="active">
+        <a class="func map" routerLink="map-view">Map View</a>
+      </div>
+      <div class="upload" routerLinkActive="active">
+        <a class="func upload" routerLink="upload">Upload track</a>
+      </div>
   </div>
 </nav>
