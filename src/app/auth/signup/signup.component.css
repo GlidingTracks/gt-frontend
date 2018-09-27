@@ -1,11 +1,11 @@
 *{
+  background-color: #5A26E3;
   text-align: center;
   font-family: "Comfortaa", sans-serif;
 }
 
-h2{ font-size: 1.8vw;}
-label{ font-size: 0.8vw;}
-
+body{
+}
 div.row{
   height: 50vh;
 }
@@ -14,7 +14,6 @@ input, button{
   background-color: white;
   margin: 2vh auto;
   text-align: left;
-  font-size: 0.8vw;
 }
 
 button {
