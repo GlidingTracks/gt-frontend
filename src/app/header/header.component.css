@@ -4,7 +4,6 @@
 }
 
 header{
-  background-color: rgba(89, 34, 229, 255);
   height: 15vh;
   width: 100vw;
 }
@@ -12,14 +11,13 @@ header{
 div.background {
   clip-path: polygon( /* this is used to create a slope on the top part of the image*/
     0% 0%,
-    100% 10%,
+    100vw 3vw,
     100% 100%,
     0% 100%
   );
   background-image: url("Glidings.jpg");
   background-size: cover;
   height: 50vh;
-  width: 100vw;
 }
 
 p.title{
@@ -75,7 +73,7 @@ a.connect:hover{color: rgb(230,230,255);}
 a.signup{top: 1.5vh;}
 a.signin{top: 3vh;}
 a.signout{
-  top: 2pc;
-  font-size: 1.3pc;
+  top: 2.6vh;
+  font-size: 1.3vw;
   cursor: pointer;
 }
