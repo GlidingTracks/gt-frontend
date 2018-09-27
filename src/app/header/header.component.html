@@ -4,29 +4,26 @@
       Gliding Tracks
     </p>
   </div>
-  <ul class="connect">
-    <li routerLinkActive="active" *ngIf="!isAuth">
+  <div class="connect">
+    <div routerLinkActive="active" *ngIf="!isAuth">
       <a class="connect signup" routerLink="auth/signup">Create account</a>
-    </li>
-    <li routerLinkActive="active" *ngIf="!isAuth">
+    </div>
+    <div routerLinkActive="active" *ngIf="!isAuth">
       <a class="connect signin" routerLink="auth/signin">Sign in</a>
-    </li>
-    <li *ngIf="isAuth">
-      <a (click)="onSignOut()"
-         style="cursor:pointer">Sign out</a>
-    </li>
-  </ul>
+    </div>
+    <div *ngIf="isAuth">
+      <a class="connect signout" (click)="onSignOut()">Sign out</a>
+    </div>
+  </div>
 </header>
 
 <nav class="navbar navbar-default" xmlns="" xmlns="">
   <div class="background"></div>
 
   <div class="container-fluid">
-      <div class="map" routerLinkActive="active">
-        <a class="func map" routerLink="map-view">Map View</a>
-      </div>
-      <div class="upload" routerLinkActive="active">
-        <a class="func upload" routerLink="upload">Upload track</a>
+      <div routerLinkActive="active">
+        <button class="func map" routerLink="map-view">Map View</button>
+        <button class="func upload" routerLink="upload">Upload track</button>
       </div>
   </div>
 </nav>
