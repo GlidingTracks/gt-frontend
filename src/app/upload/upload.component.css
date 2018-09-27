@@ -1,0 +1,44 @@
+*{
+  background-color: #4392F1;
+  margin: 0 0;
+}
+
+h1{
+  text-align: center;
+  padding-top: 2vh;
+}
+
+h3{
+  font-size: 1.2vw;
+}
+
+div{
+  text-align: center;
+  padding: 2vh 0;
+}
+div.file{
+  float: right;
+  width: 50%;
+}
+
+div.url{
+  float: left;
+  width: 50%;
+  box-shadow: 3px 0 0 #5A26E3;
+}
+
+input, button{
+  background-color: white;
+  text-align: left;
+}
+
+button {
+  font-size: 1.5vw;
+  text-decoration: none;
+  outline: none;
+  border: none;}
+button:hover{background-color: #EFEFEF;}
+
+input.form-control{
+  color: #000000;
+}
