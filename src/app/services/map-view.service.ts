@@ -21,8 +21,8 @@ export class MapViewService {
   // Define base colors
   COLORS = {
     red: [255, 0, 0, 0.9],
-    green: [255, 0, 0, 0.9],
-    blue: [255, 0, 0, 0.9]
+    green: [0, 255, 0, 0.9],
+    blue: [0, 0, 255, 0.9]
   };
   // Main attributes
   map: Map;
