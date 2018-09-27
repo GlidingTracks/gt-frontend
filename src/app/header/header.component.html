@@ -11,9 +11,9 @@
     <div routerLinkActive="active" *ngIf="!isAuth">
       <a class="connect signin" routerLink="auth/signin">Sign in</a>
     </div>
-    <li *ngIf="isAuth">
+    <div *ngIf="isAuth">
       <a class="connect signout" (click)="onSignOut()">Sign out</a>
-    </li>
+    </div>
   </div>
 </header>
 
