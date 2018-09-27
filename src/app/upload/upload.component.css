@@ -6,6 +6,7 @@
 h1{
   text-align: center;
   padding-top: 2vh;
+  font-size: 1.8vw;
 }
 
 h3{
@@ -28,8 +29,14 @@ div.url{
 }
 
 input, button{
+  font-family: "Comfortaa", sans-serif;
   background-color: white;
   text-align: left;
+  font-size: 0.8vw;
+}
+
+label{
+  font-size: 0.8vw;
 }
 
 button {
