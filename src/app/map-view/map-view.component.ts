@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {MapViewService} from '../services/map-view.service';
 import {Subscription} from 'rxjs';
-import {toLonLat, fromLonLat} from 'ol/proj';
 
 @Component({
   selector: 'app-map-view',

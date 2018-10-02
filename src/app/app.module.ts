@@ -13,6 +13,8 @@ import { UploadComponent } from './upload/upload.component';
 import {AuthService} from './services/auth.service';
 import {AuthGuardService} from './services/auth-guard.service';
 import {MapViewService} from './services/map-view.service';
+import { LatitudePipe } from './latitude.pipe';
+import { LongitudePipe } from './longitude.pipe';
 
 const appRoutes: Routes = [
   { path: 'auth/signup', component: SignupComponent},
@@ -30,7 +32,9 @@ const appRoutes: Routes = [
     SignupComponent,
     SigninComponent,
     MapViewComponent,
-    UploadComponent
+    UploadComponent,
+    LatitudePipe,
+    LongitudePipe
   ],
   imports: [
     BrowserModule,
