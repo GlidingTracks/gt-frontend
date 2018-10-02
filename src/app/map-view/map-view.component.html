@@ -1,7 +1,8 @@
 <h4 id="pilot">Pilot : {{ currentPilot }}</h4>
 <div id="map" class="map"></div>
 <div id="info">
-  Latitude: {{ currentLatitude }} <br>
-  Longitude: {{ currentLongitude }} <br>
+  <!-- TODO Add custom pipes for latitude/longitude values -->
+  Latitude: {{ currentLatitude | number }} <br>
+  Longitude: {{ currentLongitude  | number }} <br>
   Date: {{ currentDate }}
 </div>

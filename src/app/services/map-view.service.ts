@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
 
-import Feature from 'ol/Feature';
 import Map from 'ol/Map';
 import View from 'ol/View';
 import {defaults as defaultControls} from 'ol/control';
 import IGC from 'ol/format/IGC';
 import {LineString, Point} from 'ol/geom';
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer';
-import OSM, {ATTRIBUTION} from 'ol/source/OSM';
+import OSM from 'ol/source/OSM';
 import VectorSource from 'ol/source/Vector';
-import {fromLonLat} from 'ol/proj';
+import {toLonLat} from 'ol/proj';
 import {Circle as CircleStyle, Fill, Stroke, Style} from 'ol/style';
 import {Subject} from 'rxjs';
 
@@ -152,8 +151,7 @@ export class MapViewService {
       }
       // Update data of the closest point
       this.infos.pilot = closestFeature.get('PLT');
-      this.infos.latitude = closestPoint[0];
-      this.infos.longitude = closestPoint[1];
+      [this.infos.longitude, this.infos.latitude] = toLonLat([closestPoint[0], closestPoint[1]]);
       this.infos.date = new Date(closestPoint[2] * 1000).toUTCString();
       this.emitInfos();
       // Update shapes to draw for the closest point
