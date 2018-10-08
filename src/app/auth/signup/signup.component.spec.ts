@@ -14,9 +14,9 @@ describe('SignupComponent', () => {
     TestBed.configureTestingModule({
       imports: [FormsModule, ReactiveFormsModule],
       declarations: [ SignupComponent ],
-        providers: [
-          { provide: Router, useValue: routerSpy }
-        ]
+      providers: [
+        { provide: Router, useValue: routerSpy }
+      ]
     })
     .compileComponents();
   }));
