@@ -1,0 +1,19 @@
+*{
+  background-color: #4392F1;
+}
+
+div{padding: 2vh 0;}
+
+button{
+  display: block;
+  margin: 0 auto;
+  background-color: white;
+  color: black;
+  font-family: "Comfortaa", sans-serif;
+  font-size: 1.5vw;
+  text-decoration: none;
+  outline: none;
+  border: none;
+
+}
+button:hover{background-color: #EFEFEF;}
