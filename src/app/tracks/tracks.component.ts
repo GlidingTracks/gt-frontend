@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {TrackManagerService} from '../services/track-manager.service';
 import {AuthService} from '../services/auth.service';
 import * as firebase from 'firebase';
+import {TrackMetadata} from '../../track';
 
 @Component({
   selector: 'app-tracks',
@@ -11,7 +12,7 @@ import * as firebase from 'firebase';
 export class TracksComponent implements OnInit {
 
   uid: string;
-  tracks: Track[];
+  tracks: TrackMetadata[];
 
   constructor(private tracksManager: TrackManagerService,
               private authService: AuthService) { }
@@ -33,7 +34,7 @@ export class TracksComponent implements OnInit {
     if (this.uid) {
       console.log(this.uid);
       this.tracksManager.getTracks(this.uid, 'Public')
-        .subscribe((data: Track[]) => {
+        .subscribe((data: TrackMetadata[]) => {
           console.log(data);
           this.tracks = data;
         });

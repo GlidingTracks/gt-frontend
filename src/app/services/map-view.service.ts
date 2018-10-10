@@ -48,7 +48,7 @@ export class MapViewService {
     stroke: this.stroke,
     image: new CircleStyle({
       radius: 5,
-      fill: null,
+      fill: new Fill({color: this.COLORS.red}),
       stroke: this.stroke
     })
   });
@@ -129,7 +129,7 @@ export class MapViewService {
         vectorContext.drawGeometry(this.overlayShapes.point);
       }
       if (this.overlayShapes.line !== null) {
-        vectorContext.drawGeometry(this.overlayShapes.line);
+        // vectorContext.drawGeometry(this.overlayShapes.line);
       }
     });
   }
@@ -152,7 +152,7 @@ export class MapViewService {
       // Update data of the closest point
       this.infos.pilot = closestFeature.get('PLT');
       [this.infos.longitude, this.infos.latitude] = toLonLat([closestPoint[0], closestPoint[1]]);
-      this.infos.date = new Date(closestPoint[2] * 1000).toUTCString();
+      this.infos.date = new Date(closestPoint[2] * 1000).toUTCString(); // TODO fix incorrect date value
       this.emitInfos();
       // Update shapes to draw for the closest point
       const coordinates = [coordinate, [closestPoint[0], closestPoint[1]]];

@@ -1,4 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {TrackMetadata} from '../../track';
 
 @Component({
   selector: 'app-single-track',
@@ -7,7 +8,7 @@ import {Component, Input, OnInit} from '@angular/core';
 })
 export class SingleTrackComponent implements OnInit {
 
-  @Input() track: Track;
+  @Input() track: TrackMetadata;
 
   constructor() { }
 
