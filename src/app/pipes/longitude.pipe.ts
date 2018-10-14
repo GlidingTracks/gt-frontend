@@ -20,5 +20,4 @@ export class LongitudePipe implements PipeTransform {
 
     return `${deg}°${min}'${sec}" ${card}`;
   }
-
 }

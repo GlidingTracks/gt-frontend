@@ -20,5 +20,4 @@ export class LatitudePipe implements PipeTransform {
 
     return `${deg}°${min}'${sec}" ${card}`;
   }
-
 }

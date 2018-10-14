@@ -19,7 +19,7 @@ export class MapViewComponent implements OnInit {
     // 'http://openlayers.org/en/latest/examples/data/igc/Tom-Payne.igc',
     // 'http://openlayers.org/en/latest/examples/data/igc/Sylvain-Dhonneur.igc',
     // 'http://openlayers.org/en/latest/examples/data/igc/Ulrich-Prinz.igc',
-   '2018-08-12-XCT-MNO-02.igc'
+    '2018-08-12-XCT-MNO-02.igc',
   ];
   // Display data
   currentPilot: string;

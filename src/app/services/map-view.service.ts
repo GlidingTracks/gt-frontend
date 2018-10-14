@@ -212,7 +212,7 @@ export class MapViewService {
   fromTrackDataToFeatures(trackData: TrackPoint[], dataPerFeature = 20) {
     const features = [];
     let geometry, coords, point, alt_debut, alt_fin;
-    for (let i = 0; i < trackData.length; i += dataPerFeature) {
+    for (let i = 0; i < trackData.length; i += dataPerFeature - 1) {
       geometry = new LineString([], 'XYZM');
       for (let j = i; j < i + dataPerFeature && i < trackData.length - dataPerFeature; j++) {
         point = trackData[j];
