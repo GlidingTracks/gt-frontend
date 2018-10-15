@@ -81,7 +81,7 @@ export class MapViewService {
     // Init View
     this.view = new View({ // Set the center position of the map view and the zoom level
       center: [0, 0],
-      zoom: 9
+      minZoom: 9
     });
 
     // Container for the tracks
@@ -111,7 +111,8 @@ export class MapViewService {
     });
   }
 
-  loadTrack(igcUrls) {
+  // @deprecated We no longer use the built in OpenLayers IGC parser
+  loadTracks(igcUrls) {
     // Load features inside the source container
     const igcFormat = new IGC({altitudeMode: 'gps'});
     for (let i = 0; i < igcUrls.length; ++i) {
@@ -170,7 +171,7 @@ export class MapViewService {
       this.infos.pilot = closestFeature.get('PLT');
       [this.infos.longitude, this.infos.latitude] = toLonLat([closestPoint[0], closestPoint[1]]);
       this.infos.altitude = closestPoint[2];
-      this.infos.date = new Date(closestPoint[3] * 1000).toUTCString();
+      this.infos.date = new Date(closestPoint[3] * 1000).toString();
       this.emitInfos();
       // Update shapes to draw for the closest point
       const coordinates = [coordinate, [closestPoint[0], closestPoint[1]]];
@@ -221,10 +222,19 @@ export class MapViewService {
         }
       });
       callback(trackData);
-      const features = this.fromTrackDataToFeatures(trackData);
-      this.vectorSource.clear();
-      this.vectorSource.addFeatures(features);
     });
+  }
+
+  // Load a track as features into to tracks layer on the map
+  loadTrack(trackData) {
+    const features = this.fromTrackDataToFeatures(trackData);
+    this.vectorSource.addFeatures(features);
+    this.view.fit(this.vectorSource.getExtent());
+  }
+
+  // Delete all features from the tracks layer on the map
+  clearTracks() {
+    this.vectorSource.clear();
   }
 
   // Create feature from track data
@@ -257,6 +267,10 @@ export class MapViewService {
     return features;
   }
 
+  /*
+   * Updates the min, max and range values of the upward/downward movement variation variable.
+   * Used to color map the upward/downward movement along the track on the map.
+   */
   updateDeltaValues(delta) {
     if (Math.abs(delta) !== Infinity) {
       if (delta < this.minDelta || this.minDelta == null) {
@@ -304,6 +318,6 @@ export class MapViewService {
   }
 
   emitInfos() {
-    this.infosSubject.next(this.infos);
+      this.infosSubject.next(this.infos);
   }
 }
