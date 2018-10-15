@@ -1,7 +1,8 @@
 <h4 id="pilot">Pilot : {{ currentPilot }}</h4>
 <div id="map" class="map"></div>
 <div id="info">
-  Latitude: {{ currentLatitude }} <br>
-  Longitude: {{ currentLongitude }} <br>
-  Date: {{ currentDate }}
+  Latitude: {{ currentLatitude | latitude }} <br>
+  Longitude: {{ currentLongitude  | longitude }} <br>
+  Altitude: {{ currentAltitude }}m <br>
+  Date: {{ currentDate }} <br>
 </div>

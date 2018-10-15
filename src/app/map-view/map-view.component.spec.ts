@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MapViewComponent } from './map-view.component';
+import {LatitudePipe} from '../pipes/latitude.pipe';
+import {LongitudePipe} from '../pipes/longitude.pipe';
 
 describe('MapViewComponent', () => {
   let component: MapViewComponent;
@@ -8,7 +10,7 @@ describe('MapViewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MapViewComponent ]
+      declarations: [ MapViewComponent, LatitudePipe, LongitudePipe ]
     })
     .compileComponents();
   }));
