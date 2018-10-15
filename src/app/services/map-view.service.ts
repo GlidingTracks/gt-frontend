@@ -81,7 +81,7 @@ export class MapViewService {
     // Init View
     this.view = new View({ // Set the center position of the map view and the zoom level
       center: [0, 0],
-      minZoom: 9
+      minZoom: 10
     });
 
     // Container for the tracks

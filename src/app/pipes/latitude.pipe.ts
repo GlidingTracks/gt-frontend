@@ -8,7 +8,7 @@ export class LatitudePipe implements PipeTransform {
   transform(value: any, args?: any): any {
     /*
     5.23456° (DD: Decimal Degrees)
-    5.23456 - 5 = 023456° (you have suntracted your whole number)
+    5.23456 - 5 = 023456° (you have subtracted your whole number)
     0.23456 x 60' = 14.0736° (14 is your whole minute)
     0.0736 x 60" = 4.416° (this is your seconds)
     DMS (Degree/Minutes/Seconds) is now 5°14'4.416"

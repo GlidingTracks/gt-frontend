@@ -16,6 +16,7 @@ export class MapViewComponent implements OnInit {
     '2018-08-12-XCT-MNO-02.igc',
     'https://firebasestorage.googleapis.com/v0/b/gt-backend-8b9c2.appspot.com/o/' +
       'HAGOdywD9rQayoOOIHyd?alt=media&token=f0511567-2b36-4689-802d-b80e5b52b2af',
+    'http://openlayers.org/en/latest/examples/data/igc/Damien-de-Baenst.igc',
   ];
   // Display data
   currentPilot: string;
@@ -26,7 +27,7 @@ export class MapViewComponent implements OnInit {
   infosSubscription: Subscription;
 
   // IGC file Parsing
-  IGCFilename = this.igcUrls[0]; // TODO Connect urls to firestore
+  IGCFilename = this.igcUrls[2]; // TODO Connect urls to firestore
   IGCFilenameData = parseFilename(this.IGCFilename);
   trackDay: string;
 
@@ -48,7 +49,7 @@ export class MapViewComponent implements OnInit {
     this.mvs.initMap();
     this.mvs.setupEvents();
 
-    this.trackDay = this.IGCFilenameData.date;
+    this.trackDay = this.IGCFilenameData !== null ? this.IGCFilenameData.date : '1970-01-01';
     // TODO Format Track infos + Metadata
 
     this.mvs.parseIGCFile(this.IGCFilename, this.trackDay, (trackData) => {
