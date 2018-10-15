@@ -10,6 +10,7 @@ import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer';
 import OSM from 'ol/source/OSM';
 import VectorSource from 'ol/source/Vector';
 import {toLonLat, fromLonLat} from 'ol/proj';
+import {getLength} from 'ol/sphere';
 import {Circle as CircleStyle, Fill, Stroke, Style} from 'ol/style';
 import {Subject} from 'rxjs';
 import {TrackPoint} from '../../track';
@@ -25,6 +26,20 @@ export class MapViewService {
     green: [0, 255, 0, 1],
     blue: [0, 0, 255, 1]
   };
+  // Gradient for upward/downward movement TODO Tweak color gradient
+  GRADIENT = [
+    [255, 0, 0, 1],
+    [255, 102, 0, 1],
+    [255, 204, 0, 1],
+    [204, 255, 0, 1],
+    [101, 255, 0, 1],
+    [0, 255, 0, 1],
+    [0, 255, 101, 1],
+    [0, 255, 203, 1],
+    [0, 203, 255, 1],
+    [0, 101, 255, 1],
+    [0, 0, 255, 1]
+  ];
   // Main attributes
   map: Map;
   view: View;
@@ -55,6 +70,10 @@ export class MapViewService {
       stroke: this.stroke
     })
   });
+  // Track data
+  minDelta;
+  maxDelta;
+  deltaRange;
 
   constructor() { }
 
@@ -211,7 +230,7 @@ export class MapViewService {
   // Create feature from track data
   fromTrackDataToFeatures(trackData: TrackPoint[], dataPerFeature = 20) {
     const features = [];
-    let geometry, coords, point, alt_debut, alt_fin;
+    let geometry, coords, point, alt_debut, alt_fin, delta;
     for (let i = 0; i < trackData.length; i += dataPerFeature - 1) {
       geometry = new LineString([], 'XYZM');
       for (let j = i; j < i + dataPerFeature && i < trackData.length - dataPerFeature; j++) {
@@ -226,12 +245,29 @@ export class MapViewService {
         coords = [...coords, point.GPS_alt, point.Time.getTime() / 1000];
         geometry.appendCoordinate(coords);
       }
+      // delta is the steepness of the upward/downward movement for the current geometry
+      // delta > 0 means upward movement, else it's downward
+      delta = (alt_fin - alt_debut) / (getLength(geometry));
+      this.updateDeltaValues(delta);
       features.push(new Feature({
         geometry: geometry,
-        delta_altitude: alt_fin - alt_debut
+        delta_altitude: delta
       }));
     }
     return features;
+  }
+
+  updateDeltaValues(delta) {
+    if (Math.abs(delta) !== Infinity) {
+      if (delta < this.minDelta || this.minDelta == null) {
+        this.minDelta = delta;
+      } else if (delta > this.maxDelta || this.maxDelta == null) {
+        this.maxDelta = delta;
+      } else {
+        return;
+      }
+      this.deltaRange = this.maxDelta - this.minDelta;
+    }
   }
 
   // Convert parsed IGC coords ['5142113N','01751264E'] to float values in Decimal Degrees
@@ -246,7 +282,8 @@ export class MapViewService {
   getStyleFunction() {
     return (feature, resolution) => {
       const delta = feature.get('delta_altitude');
-      const color = delta > 0 ? this.COLORS.red : this.COLORS.blue; // TODO map level according to upward/downward movement
+      const i = Math.round((delta - this.minDelta) / this.deltaRange * (this.GRADIENT.length - 1));
+      const color = this.GRADIENT[this.GRADIENT.length - 1 - i];
       return new Style({
         stroke: new Stroke({
           color: color,
