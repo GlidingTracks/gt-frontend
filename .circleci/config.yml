@@ -17,7 +17,7 @@ jobs:
       - save_cache:
           key: gt-frontend-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
-          - "node_modules"
+            - "node_modules"
 
       - run:
           name: Setup Code Climate test-reporter
@@ -27,10 +27,10 @@ jobs:
               chmod +x ./cc-test-reporter
 
       - run:
-        name: Run unit tests
-        command: |
-          ./cc-test-reporter before-build
-          xvfb-run -a npm run test -- --code-coverage --watch=false --progress=false --browsers=ChromeNoSandbox
-          ./cc-test-reporter after-build --debug --coverage-input-type lcov --exit-code $?
+          name: Run unit tests
+          command: |
+            ./cc-test-reporter before-build
+            xvfb-run -a npm run test -- --code-coverage --watch=false --progress=false --browsers=ChromeNoSandbox
+            ./cc-test-reporter after-build --debug --coverage-input-type lcov --exit-code $?
 
       #- run: xvfb-run -a npm run e2e -- --config=protractor-ci.conf.js
