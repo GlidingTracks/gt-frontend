@@ -9,7 +9,7 @@ import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer';
 import OSM from 'ol/source/OSM';
 import VectorSource from 'ol/source/Vector';
 import {toLonLat, fromLonLat} from 'ol/proj';
-import {getLength} from 'ol/sphere';
+import {getLength, getDistance} from 'ol/sphere';
 import {Circle as CircleStyle, Fill, Stroke, Style} from 'ol/style';
 import {Subject} from 'rxjs';
 import {TrackPoint} from '../../track';
@@ -57,6 +57,11 @@ export class MapViewService {
   minDelta = Infinity;
   maxDelta = -Infinity;
   deltaRange;
+  totalDistance;
+  e2eDistance;
+  startAltitude;
+  stopAltitude;
+  highestPoint;
 
   constructor() { }
 
@@ -189,6 +194,7 @@ export class MapViewService {
   // Create feature from track data
   fromTrackDataToFeatures(trackData: TrackPoint[], dataPerFeature = 20) {
     const features = [];
+    let distance = 0;
     let geometry, coords, point, alt_debut, alt_fin, delta;
     for (let i = 0; i < trackData.length; i += dataPerFeature - 1) {
       geometry = new LineString([], 'XYZM');
@@ -207,13 +213,62 @@ export class MapViewService {
       // delta is the steepness of the upward/downward movement for the current geometry
       // delta > 0 means upward movement, else it's downward
       delta = (alt_fin - alt_debut) / (getLength(geometry));
+      distance += getLength(geometry);
       this.updateDeltaValues(delta);
       features.push(new Feature({
         geometry: geometry,
         delta_altitude: delta
       }));
     }
+    console.log('getLength:', distance);
     return features;
+  }
+
+  getTotalDistance(trackData) {
+    if (!this.totalDistance) {
+      this.totalDistance = 0;
+      let c1, c2;
+      for (let i = 0; i < trackData.length - 1; i++) {
+        c1 = this.fromLonLatStr([trackData[i].Longitude, trackData[i].Latitude]);
+        c2 = this.fromLonLatStr([trackData[i + 1].Longitude, trackData[i + 1].Latitude]);
+        this.totalDistance += getDistance(c1, c2);
+      }
+
+    }
+    return this.totalDistance;
+  }
+
+  getStartAltitude(trackData) {
+    if (!this.startAltitude) {
+      this.startAltitude = trackData[0].GPS_alt;
+    }
+    return this.startAltitude;
+  }
+
+  getStopAltitude(trackData) {
+    if (!this.stopAltitude) {
+      this.stopAltitude = trackData[trackData.length - 1].GPS_alt;
+    }
+    return this.stopAltitude;
+  }
+
+  getHighestPoint(trackData) {
+    if (!this.highestPoint) {
+      this.highestPoint = 0;
+      trackData.forEach( point =>
+        this.highestPoint = point.GPS_alt > this.highestPoint ? point.GPS_alt : this.highestPoint
+      );
+    }
+    return this.highestPoint;
+  }
+
+  getE2EDistance(trackData) {
+    if (!this.e2eDistance) {
+      const c1 = this.fromLonLatStr([trackData[0].Longitude, trackData[0].Latitude]);
+      const c2 = this.fromLonLatStr([trackData[trackData.length - 1].Longitude, trackData[trackData.length - 1].Latitude]);
+      this.e2eDistance = getDistance(c1, c2);
+    }
+    return this.e2eDistance;
   }
 
   /*

@@ -27,7 +27,7 @@ export class MapViewComponent implements OnInit {
   infosSubscription: Subscription;
 
   // IGC file Parsing
-  IGCFilename = this.igcUrls[2]; // TODO Connect urls to firestore
+  IGCFilename = this.igcUrls[0]; // TODO Connect urls to firestore
   IGCFilenameData = parseFilename(this.IGCFilename);
   trackDay: string;
 
@@ -54,6 +54,11 @@ export class MapViewComponent implements OnInit {
 
     this.mvs.parseIGCFile(this.IGCFilename, this.trackDay, (trackData) => {
       this.mvs.loadTrack(trackData);
+      console.log('totalDistance:', this.mvs.getTotalDistance(trackData));
+      console.log('startAltitude:', this.mvs.getStartAltitude(trackData));
+      console.log('stopAltitude:', this.mvs.getStopAltitude(trackData));
+      console.log('highestPoint:', this.mvs.getHighestPoint(trackData));
+      console.log('e2eDistance:', this.mvs.getE2EDistance(trackData));
     });
   }
 }
