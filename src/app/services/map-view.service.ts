@@ -224,7 +224,7 @@ export class MapViewService {
     return features;
   }
 
-  getTotalDistance(trackData) {
+  getTotalDistance(trackData) { // TODO Fix total distance wrong value ?
     if (!this.totalDistance) {
       this.totalDistance = 0;
       let c1, c2;
@@ -300,7 +300,8 @@ export class MapViewService {
   getStyleFunction() {
     return (feature, resolution) => {
       const delta = feature.get('delta_altitude');
-      const i = Math.round((delta - this.minDelta) / this.deltaRange * (this.GRADIENT.length - 1));
+      // const i = Math.round((delta - this.minDelta) / this.deltaRange * (this.GRADIENT.length - 1));
+      const i = Math.round(this.sigmoid(delta, this.deltaRange) * (this.GRADIENT.length - 1));
       const color = this.GRADIENT[this.GRADIENT.length - 1 - i];
       return new Style({
         stroke: new Stroke({
@@ -309,6 +310,11 @@ export class MapViewService {
         })
       });
     };
+  }
+
+  // Sigmoid function for better color range coding of the upward/downward movement
+  sigmoid(x, range) {
+    return 1 / ( 1 + Math.exp(-8 * x / range));
   }
 
   // GET html request
