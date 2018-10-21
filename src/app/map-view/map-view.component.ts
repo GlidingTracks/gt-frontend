@@ -9,7 +9,6 @@ import * as parseFilename from 'igc-filename-parser';
   styleUrls: ['./map-view.component.css']
 })
 export class MapViewComponent implements OnInit {
-  // TODO Add tooltips to show altitude/time of the closest point
 
   // Test urls of IGC files
   igcUrls =  [
@@ -28,11 +27,14 @@ export class MapViewComponent implements OnInit {
   infosSubscription: Subscription;
   // Track data
   pilot: string;
+  flightDuration: string;
   totalDistance: number;
   startAltitude: number;
   stopAltitude: number;
   highestPoint: number;
   e2eDistance: number;
+  maxAscendSpeed: number;
+  maxDescentSpeed: number;
 
   // IGC file Parsing
   IGCFilename = this.igcUrls[2]; // TODO Connect urls to firestore
@@ -59,7 +61,7 @@ export class MapViewComponent implements OnInit {
     this.mvs.setupEvents();
 
     this.trackDay = this.IGCFilenameData !== null ? this.IGCFilenameData.date : '1970-01-01';
-    // TODO Format Track infos + Metadata
+    // TODO Format Track infos + Metadata from frontend
 
     this.mvs.parseIGCFile(this.IGCFilename, this.trackDay, (trackData) => {
       this.mvs.loadTrack(trackData);
@@ -68,11 +70,14 @@ export class MapViewComponent implements OnInit {
   }
 
   getTrackInfos(trackData) {
+    this.flightDuration = this.mvs.getFlightDuration(trackData);
     this.totalDistance = this.mvs.getTotalDistance(trackData);
     this.startAltitude = this.mvs.getStartAltitude(trackData);
     this.stopAltitude = this.mvs.getStopAltitude(trackData);
     this.highestPoint = this.mvs.getHighestPoint(trackData);
     this.e2eDistance = this.mvs.getE2EDistance(trackData);
+    this.maxAscendSpeed = this.mvs.getMaxAscendSpeed();
+    this.maxDescentSpeed = this.mvs.getMaxDescentSpeed();
   }
 
   getScreenPos(index) {

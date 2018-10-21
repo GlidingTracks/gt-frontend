@@ -2,19 +2,24 @@
   <app-tracks></app-tracks>
 
   <div class="viewport">
+    <p>Map View</p>
     <div class="track-header">
       Pilot : {{ pilot }}
       <div class="track-info-container">
         <div class="track-info">
           <span class="label">Flight Day:</span> {{ trackDay | date }} <br>
+          <span class="label">Flight Duration:</span> {{ flightDuration }} <br>
           <span class="label">Total Distance:</span> {{ totalDistance | meter:'km':0.001 }} <br>
-          <span class="label">End to End Distance:</span> {{ e2eDistance | meter:'km':0.001 }} <br>
         </div>
         <div class="track-info">
           <span class="label">Start Altitude:</span> {{ startAltitude | meter }} <br>
           <span class="label">Stop Altitude:</span> {{ stopAltitude | meter }} <br>
-          <span class="label">Highest Point:</span> {{ highestPoint | meter }} <br>
-
+          <span class="label">End to End Distance:</span> {{ e2eDistance | meter:'km':0.001 }} <br>
+        </div>
+        <div class="track-info">
+          <span class="label">Highest Point:</span> {{  highestPoint | meter }} <br>
+          <span class="label">Max Ascending Speed:</span> {{ maxAscendSpeed | number:'1.1-1' }}m/s <br>
+          <span class="label">Max Descending Speed:</span> {{ maxDescentSpeed | number:'1.1-1' }}m/s <br>
         </div>
       </div>
     </div>
