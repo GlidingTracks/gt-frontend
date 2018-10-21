@@ -126,6 +126,7 @@ export class MapViewService {
     });
   }
 
+  // Detect the closest point from the given coordinates and setup the overlay for it
   displaySnap(coordinate) {
     // Fetch closest track from mouse coords
     const closestFeature = this.vectorSource.getClosestFeatureToCoordinate(coordinate);
@@ -229,6 +230,7 @@ export class MapViewService {
     return features;
   }
 
+  // Returns the total length of the track in meters
   getTotalDistance(trackData) {
     if (!this.totalDistance) {
       this.totalDistance = 0;
@@ -243,6 +245,7 @@ export class MapViewService {
     return this.totalDistance;
   }
 
+  // Returns the altitude in meters at the beginning of the track
   getStartAltitude(trackData) {
     if (!this.startAltitude) {
       this.startAltitude = trackData[0].GPS_alt;
@@ -250,6 +253,7 @@ export class MapViewService {
     return this.startAltitude;
   }
 
+  // Returns the altitude in meters at the end of the track
   getStopAltitude(trackData) {
     if (!this.stopAltitude) {
       this.stopAltitude = trackData[trackData.length - 1].GPS_alt;
@@ -257,6 +261,7 @@ export class MapViewService {
     return this.stopAltitude;
   }
 
+  // Returns the greatest altitude reached during the flight in meters
   getHighestPoint(trackData) {
     if (!this.highestPoint) {
       this.highestPoint = 0;
@@ -267,10 +272,12 @@ export class MapViewService {
     return this.highestPoint;
   }
 
+  // Returns the maximum ascending speed reached during the flight
   getMaxAscendSpeed() {
     return this.maxDelta;
   }
 
+  // Returns the maximum descending speed reached during the flight
   getMaxDescentSpeed() {
     return this.minDelta;
   }
@@ -280,6 +287,7 @@ export class MapViewService {
     return (t2 - t1) / 1000;
   }
 
+  // Returns to total duration of the flight
   getFlightDuration(trackData) {
     if (!this.flightDuration) {
       const t1 = trackData[0].Time;
@@ -293,6 +301,7 @@ export class MapViewService {
     return this.flightDuration;
   }
 
+  // Returns the distance in meters between the start and the end points
   getE2EDistance(trackData) {
     if (!this.e2eDistance) {
       const c1 = this.fromLonLatStr([trackData[0].Longitude, trackData[0].Latitude]);

@@ -12,7 +12,6 @@ import { Pipe, PipeTransform } from '@angular/core';
  *  formats to: '1324.5m'
  */
 
-
 @Pipe({
   name: 'meter'
 })
