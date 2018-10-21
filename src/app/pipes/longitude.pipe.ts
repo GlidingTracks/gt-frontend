@@ -15,7 +15,7 @@ export class LongitudePipe implements PipeTransform {
     */
     const deg = Math.floor(value);
     const min = Math.floor((value - deg) * 60);
-    const sec = Math.floor(((value - deg) * 60 - min) * 600000) / 10000;
+    const sec = Math.floor(((value - deg) * 60 - min) * 6000) / 100;
     const card = value >= 0 ? 'E' : 'W';
 
     return `${deg}°${min}'${sec}" ${card}`;

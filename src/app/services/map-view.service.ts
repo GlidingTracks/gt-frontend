@@ -25,7 +25,7 @@ export class MapViewService {
     green: [0, 255, 0, 1],
     blue: [0, 0, 255, 1]
   };
-  // Gradient for upward/downward movement TODO Tweak color gradient
+  // Gradient for upward/downward movement
   GRADIENT = [
     [255, 0, 0, 1],
     [255, 102, 0, 1],
@@ -45,7 +45,8 @@ export class MapViewService {
   vectorSource = new VectorSource();
   // Data for closest point
   infos = {
-    pilot: '',
+    screenPos: [0, 0],
+    dragging: false,
     latitude: '',
     longitude: '',
     altitude: 0,
@@ -100,10 +101,13 @@ export class MapViewService {
     // Event triggered each time the mouse moves over the map view
     this.map.on('pointermove', (evt) => {
       if (evt.dragging) {
-        return;
+        this.infos.dragging = true;
+      } else {
+        this.infos.dragging = false;
+        const coordinate = this.map.getEventCoordinate(evt.originalEvent);
+        this.displaySnap(coordinate);
       }
-      const coordinate = this.map.getEventCoordinate(evt.originalEvent);
-      this.displaySnap(coordinate);
+      this.emitInfos();
     });
 
     // Draw geometry on the closest point
@@ -130,13 +134,14 @@ export class MapViewService {
       // Fetch closest point from mouse coords
       const geometry = closestFeature.getGeometry();
       const closestPoint = geometry.getClosestPoint(coordinate);
+      const pixel = this.map.getPixelFromCoordinate(closestPoint);
       if (this.overlayPoint === null) {
         this.overlayPoint = new Point(closestPoint);
       } else {
         this.overlayPoint.setCoordinates(closestPoint);
       }
       // Update data of the closest point
-      this.updateInfos(closestFeature, closestPoint);
+      this.updateInfos(closestFeature, closestPoint, pixel);
     }
     this.map.render();
   }
@@ -194,7 +199,6 @@ export class MapViewService {
   // Create feature from track data
   fromTrackDataToFeatures(trackData: TrackPoint[], dataPerFeature = 20) {
     const features = [];
-    let distance = 0;
     let geometry, coords, point, alt_debut, alt_fin, delta;
     for (let i = 0; i < trackData.length; i += dataPerFeature - 1) {
       geometry = new LineString([], 'XYZM');
@@ -213,14 +217,12 @@ export class MapViewService {
       // delta is the steepness of the upward/downward movement for the current geometry
       // delta > 0 means upward movement, else it's downward
       delta = (alt_fin - alt_debut) / (getLength(geometry));
-      distance += getLength(geometry);
       this.updateDeltaValues(delta);
       features.push(new Feature({
         geometry: geometry,
         delta_altitude: delta
       }));
     }
-    console.log('getLength:', distance);
     return features;
   }
 
@@ -328,8 +330,8 @@ export class MapViewService {
   }
 
   // Update this.infos with the given data
-  updateInfos(feature: Feature, point: Point) {
-    this.infos.pilot = feature.get('PLT');
+  updateInfos(feature: Feature, point: Point, screenPos) {
+    this.infos.screenPos = screenPos.map(v => Math.round(v));
     [this.infos.longitude, this.infos.latitude] = toLonLat([point[0], point[1]]);
     this.infos.altitude = point[2];
     this.infos.date = new Date(point[3] * 1000).toString();

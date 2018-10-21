@@ -19,16 +19,24 @@ export class MapViewComponent implements OnInit {
     'http://openlayers.org/en/latest/examples/data/igc/Damien-de-Baenst.igc',
   ];
   // Display data
-  currentPilot: string;
   currentLatitude: string;
   currentLongitude: string;
   currentAltitude: number;
   currentDate: string;
+  currentScreenPos;
+  isDragging;
   infosSubscription: Subscription;
+  // Track data
+  pilot: string;
+  totalDistance: number;
+  startAltitude: number;
+  stopAltitude: number;
+  highestPoint: number;
+  e2eDistance: number;
 
   // IGC file Parsing
-  IGCFilename = this.igcUrls[0]; // TODO Connect urls to firestore
-  IGCFilenameData = parseFilename(this.IGCFilename);
+  IGCFilename = this.igcUrls[2]; // TODO Connect urls to firestore
+  IGCFilenameData = parseFilename(this.IGCFilename); // TODO Get pilot name
   trackDay: string;
 
   constructor(private mvs: MapViewService) { }
@@ -37,11 +45,12 @@ export class MapViewComponent implements OnInit {
     // Bind variables
     this.infosSubscription = this.mvs.infosSubject.subscribe(
       (infos: any) => {
-          this.currentPilot = infos.pilot;
-          this.currentLatitude = infos.latitude;
-          this.currentLongitude = infos.longitude;
-          this.currentAltitude = Math.floor(infos.altitude);
-          this.currentDate = infos.date;
+        this.currentScreenPos = infos.screenPos;
+        this.isDragging = infos.dragging;
+        this.currentLatitude = infos.latitude;
+        this.currentLongitude = infos.longitude;
+        this.currentAltitude = Math.floor(infos.altitude);
+        this.currentDate = infos.date;
       }
     );
     this.mvs.emitInfos();
@@ -54,11 +63,31 @@ export class MapViewComponent implements OnInit {
 
     this.mvs.parseIGCFile(this.IGCFilename, this.trackDay, (trackData) => {
       this.mvs.loadTrack(trackData);
-      console.log('totalDistance:', this.mvs.getTotalDistance(trackData));
-      console.log('startAltitude:', this.mvs.getStartAltitude(trackData));
-      console.log('stopAltitude:', this.mvs.getStopAltitude(trackData));
-      console.log('highestPoint:', this.mvs.getHighestPoint(trackData));
-      console.log('e2eDistance:', this.mvs.getE2EDistance(trackData));
+      this.getTrackInfos(trackData);
     });
+  }
+
+  getTrackInfos(trackData) {
+    this.totalDistance = this.mvs.getTotalDistance(trackData);
+    this.startAltitude = this.mvs.getStartAltitude(trackData);
+    this.stopAltitude = this.mvs.getStopAltitude(trackData);
+    this.highestPoint = this.mvs.getHighestPoint(trackData);
+    this.e2eDistance = this.mvs.getE2EDistance(trackData);
+  }
+
+  getScreenPos(index) {
+    if (index === 0) {
+      return this.currentScreenPos[0].toString() + 'px';
+    } else if (index === 1) {
+      return this.currentScreenPos[1].toString() + 'px';
+    }
+  }
+
+  isShown() {
+    if (this.isDragging || (this.currentScreenPos[0] === 0 && this.currentScreenPos[1] === 0)) {
+      return 'hidden';
+    } else {
+      return 'visible';
+    }
   }
 }
