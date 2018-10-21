@@ -58,6 +58,7 @@ export class MapViewService {
   minDelta = Infinity;
   maxDelta = -Infinity;
   deltaRange;
+  flightDuration;
   totalDistance;
   e2eDistance;
   startAltitude;
@@ -199,15 +200,17 @@ export class MapViewService {
   // Create feature from track data
   fromTrackDataToFeatures(trackData: TrackPoint[], dataPerFeature = 20) {
     const features = [];
-    let geometry, coords, point, alt_debut, alt_fin, delta;
+    let geometry, coords, point, alt1, alt2, t1, t2, delta;
     for (let i = 0; i < trackData.length; i += dataPerFeature - 1) {
       geometry = new LineString([], 'XYZM');
       for (let j = i; j < i + dataPerFeature && i < trackData.length - dataPerFeature; j++) {
         point = trackData[j];
         if (j === i) {
-          alt_debut = point.GPS_alt;
+          alt1 = point.GPS_alt;
+          t1 = point.Time;
         } else if (j === i + dataPerFeature - 1) {
-          alt_fin = point.GPS_alt;
+          alt2 = point.GPS_alt;
+          t2 = point.Time;
         }
         // Coordinates projection from Decimal Degrees to EPSG:3857
         coords = fromLonLat(this.fromLonLatStr([point.Longitude, point.Latitude]));
@@ -216,7 +219,7 @@ export class MapViewService {
       }
       // delta is the steepness of the upward/downward movement for the current geometry
       // delta > 0 means upward movement, else it's downward
-      delta = (alt_fin - alt_debut) / (getLength(geometry));
+      delta = (alt2 - alt1) / this.getElapsedTime(t1, t2);
       this.updateDeltaValues(delta);
       features.push(new Feature({
         geometry: geometry,
@@ -226,7 +229,7 @@ export class MapViewService {
     return features;
   }
 
-  getTotalDistance(trackData) { // TODO Fix total distance wrong value ?
+  getTotalDistance(trackData) {
     if (!this.totalDistance) {
       this.totalDistance = 0;
       let c1, c2;
@@ -262,6 +265,32 @@ export class MapViewService {
       );
     }
     return this.highestPoint;
+  }
+
+  getMaxAscendSpeed() {
+    return this.maxDelta;
+  }
+
+  getMaxDescentSpeed() {
+    return this.minDelta;
+  }
+
+  // Returns the time elapsed between t1 and t2 in seconds
+  getElapsedTime(t1, t2) {
+    return (t2 - t1) / 1000;
+  }
+
+  getFlightDuration(trackData) {
+    if (!this.flightDuration) {
+      const t1 = trackData[0].Time;
+      const t2 = trackData[trackData.length - 1].Time;
+      const deltaT = this.getElapsedTime(t1, t2);
+      const hours = Math.floor(deltaT / 3600);
+      const minutes = Math.floor((deltaT % 3600) / 60);
+      const seconds = Math.floor(deltaT % 60);
+      this.flightDuration = `${hours}h${minutes}m${seconds}s`;
+    }
+    return this.flightDuration;
   }
 
   getE2EDistance(trackData) {
