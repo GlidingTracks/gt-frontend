@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -18,6 +19,7 @@ import { LongitudePipe } from './pipes/longitude.pipe';
 import { TracksComponent } from './tracks/tracks.component';
 import { TrackPipe } from './pipes/track.pipe';
 import { SingleTrackComponent } from './single-track/single-track.component';
+import { MeterPipe } from './pipes/meter.pipe';
 
 const appRoutes: Routes = [
   { path: 'auth/signup', component: SignupComponent},
@@ -40,9 +42,11 @@ const appRoutes: Routes = [
     LongitudePipe,
     TracksComponent,
     TrackPipe,
-    SingleTrackComponent
+    SingleTrackComponent,
+    MeterPipe
   ],
   imports: [
+    NgbModule,
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
