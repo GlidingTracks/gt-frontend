@@ -12,7 +12,8 @@ import {TrackMetadata} from '../../track';
 export class TracksComponent implements OnInit {
 
   uid: string;
-  tracks: TrackMetadata[];
+  idToken: string;
+  tracks;
 
   constructor(private tracksManager: TrackManagerService,
               private authService: AuthService) { }
@@ -22,21 +23,27 @@ export class TracksComponent implements OnInit {
       (user) => {
         if (user) {
           this.uid = user.uid;
-          this.showTracks();
+          user.getIdToken().then( (token) => {
+            this.idToken = token;
+          });
         } else {
           this.uid = '';
+          this.idToken = '';
         }
       }
     );
   }
 
   showTracks() {
-    if (this.uid) {
-      console.log(this.uid);
-      this.tracksManager.getTracks(this.uid, 'Public')
-        .subscribe((data: TrackMetadata[]) => {
-          console.log(data);
-          this.tracks = data;
+    if (this.uid && this.idToken) {
+      this.tracksManager.getTracks(this.idToken, 'Public')
+        .subscribe(
+          (data) => {
+            console.log(data);
+            this.tracks = data;
+          },
+          (error) => {
+            console.warn(error);
         });
     }
   }
