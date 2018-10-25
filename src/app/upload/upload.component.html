@@ -5,7 +5,6 @@
     <h3>Upload from file</h3>
     <form [formGroup]="uploadFromFileForm"
           enctype="multipart/form-data"
-          action="http://127.0.0.1:4200/ProcessUploadRequest" method="post"
           (ngSubmit)="onUploadFromFile()">
       <div class="form-group">
         <label for="file">Select file : </label>

@@ -15,4 +15,12 @@ export class TrackManagerService {
     } : {};
     return this.httpClient.get('http://localhost:8080/getTracks', options);
   }
+
+  uploadTrack(uid: string, privacy = "Public"){
+    const options = uid ? { params: new HttpParams()
+        .set('uid', uid)
+        .set('queryType', privacy)
+    } : {};
+    return this.httpClient.post('https://gt-backend-test.herokuapp.com/ProcessUploadRequest', 'file', options);
+  }
 }
