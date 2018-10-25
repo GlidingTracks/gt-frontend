@@ -37,3 +37,10 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# Firebase service account creds
+gt-backend-firebase-adminsdk.json
+gt-backend-8b9c2-firebase-adminsdk-0t965-d5b53ac637.json
+
+# Backend executable
+main.exe

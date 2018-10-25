@@ -1,0 +1,14 @@
+<div class="viewport">
+  <p>Track List</p>
+  <div class="getTracks">
+    <button (click)="showTracks()">GetTracks</button>
+  </div>
+  <div class="track-container" *ngIf="tracks">
+    <h4>Number of tracks: {{ tracks.length }}</h4>
+
+    <div class="track" *ngFor="let mytrack of tracks">
+      <app-single-track [track]="mytrack"></app-single-track>
+    </div>
+  </div>
+</div>
+

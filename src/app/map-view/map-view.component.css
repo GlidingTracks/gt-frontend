@@ -1,0 +1,79 @@
+.row {
+  margin-top: 1vh;
+  display: flex;
+}
+
+app-tracks {
+  flex: 30%;
+  margin-right: 0.5vw;
+}
+
+.viewport{
+  background-color: #7cc254;
+  height: 100%;
+  flex: 70%;
+  margin: 0;
+  text-align: center;
+  font-size: 1.5vw;
+}
+
+.viewport.p {
+  padding: 0;
+}
+
+.track-header{
+  font-size: 1.2vw;
+  text-align: center;
+  padding: 1vh 1vw;
+}
+
+.track-info-container {
+  display: flex;
+}
+
+.track-info {
+  flex: 33%;
+  font-size: 1vw;
+  text-align: left;
+}
+
+.tooltip-container {
+  visibility: hidden;
+  position: relative;
+  background-color: transparent;
+  width: 1px;
+  height: 5px;
+  z-index: 100;
+}
+
+.tooltip-container .tooltip-text {
+  visibility: inherit;
+  width: 11.5vw;
+  background-color: rgba(0,60,136,.5);
+  color: #fff;
+  text-align: left;
+  font-size: 1vw;
+  border-radius: 5px;
+  padding: 3px;
+  position: absolute;
+  z-index: 101;
+  bottom: 175%;
+  left: 50%;
+  margin-left: -6vw;
+  pointer-events: none;
+}
+
+.tooltip-container .tooltip-text::after {
+  content: " ";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border: 5px solid transparent;
+  border-top-color: rgba(0,60,136,.5);
+}
+
+.label {
+  font-size: 0.8vw;
+  text-decoration: underline;
+}
