@@ -15,8 +15,7 @@ export class TracksComponent implements OnInit {
   idToken: string;
   tracks;
 
-  constructor(private tracksManager: TrackManagerService,
-              private authService: AuthService) { }
+  constructor(private tracksManager: TrackManagerService) { }
 
   ngOnInit() {
     firebase.auth().onAuthStateChanged(
@@ -35,11 +34,10 @@ export class TracksComponent implements OnInit {
   }
 
   showTracks() {
-    if (this.uid && this.idToken) {
+    if (this.idToken) {
       this.tracksManager.getTracks(this.idToken, 'Public')
         .subscribe(
           (data) => {
-            console.log(data);
             this.tracks = data;
           },
           (error) => {

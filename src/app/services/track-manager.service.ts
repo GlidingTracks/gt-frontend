@@ -5,7 +5,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
   providedIn: 'root'
 })
 export class TrackManagerService {
-  backendBaseURL = 'https://gt-backend-test-pr-14.herokuapp.com';
+  backendBaseURL = 'https://gt-backend-test.herokuapp.com';
 
   constructor(private http: HttpClient) { }
 
