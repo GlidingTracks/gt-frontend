@@ -59,15 +59,10 @@ export class ParserService {
 
   // Convert parsed IGC coord '5142113N' or '01751264E' to float values in Decimal Degrees
   parseCoord(value) {
-    let result;
-    if (value.length === 9) { // Longitude
-      result = parseInt(value.substr(0, 3), 10) + parseInt(value.substr(3, 5), 10) / 60000;
-      result = value.substring(value.length - 1) === 'E' ? result : -result;
-    } else { // Latitude
-      result = parseInt(value.substr(0, 2), 10) + parseInt(value.substr(2, 5), 10) / 60000;
-      result = value.substring(value.length - 1) === 'N' ? result : -result;
-    }
-    return result;
+    const i = value.length === 9 ? 3 : 2; // If true longitude, else latitude type
+    const c = value.substring(value.length - 1); // cardinal character
+    const result = parseInt(value.substr(0, i), 10) + parseInt(value.substr(i, 5), 10) / 60000;
+    return c === 'N' || c === 'E' ? result : -result;
   }
 
   // Returns the total length of the track in meters
