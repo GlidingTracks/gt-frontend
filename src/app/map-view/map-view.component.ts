@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {MapViewService} from '../services/map-view.service';
 import {Subscription} from 'rxjs';
 import * as parseFilename from 'igc-filename-parser';
+import {ParserService} from '../services/parser.service';
 
 @Component({
   selector: 'app-map-view',
@@ -41,11 +42,12 @@ export class MapViewComponent implements OnInit {
   IGCFilenameData = parseFilename(this.IGCFilename); // TODO Get pilot name
   trackDay: string;
 
-  constructor(private mvs: MapViewService) { }
+  constructor(private map: MapViewService,
+              private parser: ParserService) { }
 
   ngOnInit() {
     // Bind variables
-    this.infosSubscription = this.mvs.infosSubject.subscribe(
+    this.infosSubscription = this.map.infosSubject.subscribe(
       (infos: any) => {
         this.currentScreenPos = infos.screenPos;
         this.isDragging = infos.dragging;
@@ -55,29 +57,29 @@ export class MapViewComponent implements OnInit {
         this.currentDate = infos.date;
       }
     );
-    this.mvs.emitInfos();
+    this.map.emitInfos();
     // Setup map view
-    this.mvs.initMap();
-    this.mvs.setupEvents();
+    this.map.initMap();
+    this.map.setupEvents();
 
     this.trackDay = this.IGCFilenameData !== null ? this.IGCFilenameData.date : '1970-01-01';
-    // TODO Format Track infos + Metadata from frontend
+    // TODO Format Track infos + Metadata from backend
 
-    this.mvs.parseIGCFile(this.IGCFilename, this.trackDay, (trackData) => {
-      this.mvs.loadTrack(trackData);
+    this.parser.parseIGCFile(this.IGCFilename, this.trackDay, (trackData) => {
+      this.map.loadTrack(trackData);
       this.getTrackInfos(trackData);
     });
   }
 
   getTrackInfos(trackData) {
-    this.flightDuration = this.mvs.getFlightDuration(trackData);
-    this.totalDistance = this.mvs.getTotalDistance(trackData);
-    this.startAltitude = this.mvs.getStartAltitude(trackData);
-    this.stopAltitude = this.mvs.getStopAltitude(trackData);
-    this.highestPoint = this.mvs.getHighestPoint(trackData);
-    this.e2eDistance = this.mvs.getE2EDistance(trackData);
-    this.maxAscendSpeed = this.mvs.getMaxAscendSpeed();
-    this.maxDescentSpeed = this.mvs.getMaxDescentSpeed();
+    this.flightDuration = this.parser.getFlightDuration(trackData);
+    this.totalDistance = this.parser.getTotalDistance(trackData);
+    this.startAltitude = this.parser.getStartAltitude(trackData);
+    this.stopAltitude = this.parser.getStopAltitude(trackData);
+    this.highestPoint = this.parser.getHighestPoint(trackData);
+    this.e2eDistance = this.parser.getE2EDistance(trackData);
+    this.maxAscendSpeed = this.map.getMaxAscendSpeed();
+    this.maxDescentSpeed = this.map.getMaxDescentSpeed();
   }
 
   getScreenPos(index) {
