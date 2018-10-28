@@ -16,22 +16,35 @@ export class ParserService {
 
   constructor() {}
 
-  TurnPointsDetection(trackData, nPoints) {
+  /**
+   * Recursive algorithm that detects {@link nPoints} turn-points in a 2D-path.
+   * It keeps the first, the last and {@link nPoints} points inside the given
+   * {@link trackData} in order to maximize the length of the simplified path.
+   * @param trackData - The input path.
+   * @param nPoints - The desired number of turn-points.
+   * @return The simplified path with {@link nPoints} turn-points and its total length.
+   */
+  TurnPointsDetection(trackData: TrackPoint[], nPoints: number) {
     let resultDist = 0;
     let resultPath = [];
     if (nPoints > 1) {
       let path1, path2, dist1, dist2;
+      // Loop through each combination of segment and (nPoints - 1) turn-points paths
+      // and keep the one that is longer.
       for (let i = 0; i < trackData.length - 1; i++) {
         path1 = [trackData[0], trackData[i]];
         dist1 = this.getPathDistance(path1);
+        // Recursive call with nPoints - 1 turn-points on a portion of the path
         [path2, dist2] = this.TurnPointsDetection(trackData.slice(i), nPoints - 1);
-        if (dist1 + dist2 > resultDist) {
+        if (dist1 + dist2 > resultDist) { // Maximize the total length
           resultPath = path1.concat(path2.slice(1));
           resultDist = dist1 + dist2;
         }
       }
     } else {
       let path, dist;
+      // Here nPoints is 1, we can easily simplify the path by looping through each
+      // possible turn-point and keep the one that maximize the total length.
       for (let j = 0; j < trackData.length - 1; j++) {
         path = [trackData[0], trackData[j], trackData[trackData.length - 1]];
         dist = this.getPathDistance(path);
@@ -48,7 +61,7 @@ export class ParserService {
   async parseIGCFile(filename: string, trackDay: string) {
     let trackData: TrackPoint[] = [] as any;
     let p: string[];
-    // Accessing the file form its url
+    // Accessing the file form its url (async/await syntax)
     const data = await this.get(filename);
     // Separate rows and iterate through them
     const rows = data.split('\n');
@@ -102,6 +115,7 @@ export class ParserService {
     return this.totalDistance;
   }
 
+  // Compute the total length of the passed track
   getPathDistance(trackData) {
     let c1, c2, d = 0;
     for (let i = 0; i < trackData.length - 1; i++) {
@@ -168,6 +182,7 @@ export class ParserService {
     return this.e2eDistance;
   }
 
+  // GET request using async/await syntax and fetch API
   async get(url) {
     const response = await fetch(url);
     return await response.text();

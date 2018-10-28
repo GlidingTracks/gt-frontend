@@ -152,6 +152,7 @@ export class MapViewService {
     }));
   }
 
+  // Load the turn-points as features on the map
   loadTurnPoints(trackData, nPoints) {
     const [tp, _] = this.parser.TurnPointsDetection(trackData, nPoints);
     const features = this.fromTrackDataToFeatures(tp as TrackPoint[]);
@@ -164,7 +165,12 @@ export class MapViewService {
     return tp;
   }
 
-  // Create feature from track data
+  /**
+   * Create multiple features out of {@link trackData}.
+   * @param trackData - The input track data points
+   * @param dataPerFeature - The number of points per feature
+   * @return An array with the created features
+   */
   fromTrackDataToFeatures(trackData: TrackPoint[], dataPerFeature = 20) {
     const features = [];
     for (let i = 0; i < trackData.length; i += dataPerFeature - 1) {
@@ -175,6 +181,7 @@ export class MapViewService {
     return features;
   }
 
+  // Create a single feature out of the track data points array.
   createSingleFeatureFromTrackData(trackData) {
     let coords, point, alt1, alt2, t1, t2, delta;
     const geometry = new LineString([], 'XYZM');
@@ -244,6 +251,7 @@ export class MapViewService {
     };
   }
 
+  // Style function for the turn-points visualization and start/end icons.
   tpStyleFunction() {
     return (feature) => {
       const coordinates = feature.getGeometry().getCoordinates();
@@ -268,6 +276,7 @@ export class MapViewService {
     };
   }
 
+  // Load an Icon
   getIcon(imagePath, color, anchor) {
     // <div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a>
     // from<a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
@@ -299,4 +308,3 @@ export class MapViewService {
       this.infosSubject.next(this.infos);
   }
 }
-

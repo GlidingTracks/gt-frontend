@@ -75,9 +75,11 @@ export class MapViewComponent implements OnInit {
     this.trackDay = this.IGCFilenameData !== null ? this.IGCFilenameData.date : '1970-01-01';
     // TODO Format Track infos + Metadata from backend
 
+    // Load the IGC file
     this.loadIGC(this.IGCFilename, this.trackDay);
   }
 
+  // Load the IGC file and display the track on the map
   loadIGC(filename, dateTime) {
     // Parsing
     this.parser.parseIGCFile(filename, dateTime)
@@ -93,6 +95,7 @@ export class MapViewComponent implements OnInit {
       .catch(error => console.error(`Failed to parse ${this.IGCFilename} : ${error}`));
   }
 
+  // Update general information about the track
   getTrackInfos(trackData) {
     this.flightDuration = this.parser.getFlightDuration(trackData);
     this.totalDistance = this.parser.getTotalDistance(trackData);
@@ -104,10 +107,12 @@ export class MapViewComponent implements OnInit {
     this.maxDescentSpeed = this.map.getMaxDescentSpeed();
   }
 
+  // Update information about turn-points
   getTpInfos(tpData) {
     [this.startPoint, this.turnPoint1, this.turnPoint2, this.endPoint] = tpData;
   }
 
+  // Update position the track tooltip
   getScreenPos(index) {
     if (index === 0) {
       return this.currentScreenPos[0].toString() + 'px';
@@ -116,6 +121,7 @@ export class MapViewComponent implements OnInit {
     }
   }
 
+  // Decide whether the track tooltip should be shown or not
   isShown() {
     if (this.isDragging || (this.currentScreenPos[0] === 0 && this.currentScreenPos[1] === 0)) {
       return 'hidden';
@@ -124,10 +130,12 @@ export class MapViewComponent implements OnInit {
     }
   }
 
+  // Switch between general/turn-points information panel
   switchInfoPanel(value) {
     this.infoSwitch = value;
   }
 
+  // Update the color of the general/turn-points information panels
   getSwitchColor(value) {
     return this.infoSwitch === value ? '#91de5b' : '#7cc254';
   }
