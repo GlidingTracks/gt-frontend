@@ -21,6 +21,8 @@ The resulting web application will allow a user to import, manage and view detai
 
 ## Map view (WIP)
 
+![Map View](https://i.imgur.com/4J4saoL.png "Map View")
+
 
 
 #### Dependencies:

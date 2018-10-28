@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {TrackPoint} from '../../track';
 import {getDistance} from 'ol/sphere';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -14,36 +15,65 @@ export class ParserService {
   stopAltitude;
   highestPoint;
 
+  constructor(private http: HttpClient) {}
+
+  async TurnPointsDetection(trackData, nPoints) {
+    let resultDist = 0;
+    let resultPath = [];
+    if (nPoints > 1) {
+      let path1, path2, dist1, dist2;
+      for (let i = 0; i < trackData.length - 1; i++) {
+        path1 = [trackData[0], trackData[i]];
+        dist1 = this.getPathDistance(path1);
+        [path2, dist2] = await this.TurnPointsDetection(trackData.slice(i), nPoints - 1);
+        if (dist1 + dist2 > resultDist) {
+          resultPath = path1.concat(path2.slice(1));
+          resultDist = dist1 + dist2;
+        }
+      }
+    } else {
+      let path, dist;
+      for (let j = 0; j < trackData.length - 1; j++) {
+        path = [trackData[0], trackData[j], trackData[trackData.length - 1]];
+        dist = this.getPathDistance(path);
+        if (dist > resultDist) {
+          resultPath = path;
+          resultDist = dist;
+        }
+      }
+    }
+    return [resultPath, resultDist];
+  }
+
   // Function responsible for IGC file parsing
-  parseIGCFile(filename: string, trackDay: string, callback) {
+  async parseIGCFile(filename: string, trackDay: string) {
     let trackData: TrackPoint[] = [] as any;
     let p: string[];
     // Accessing the file form its url
-    this.get(filename, (data) => {
-      // Separate rows and iterate through them
-      const rows = data.split('\n');
-      rows.forEach( (row) => {
-        switch (row[0]) {
-          case 'B': // B Record parsing
-            p = this.parseBrecord(row);
-            // Add the record to the trackData array
-            trackData = [...trackData,
-              {
-                Time: new Date(`${trackDay}T${p[0]}:${p[1]}:${p[2]}`),
-                Latitude: this.parseCoord(p[3]),
-                Longitude: this.parseCoord(p[4]),
-                Valid: p[5] === 'A',
-                Pressure_alt: parseInt(p[6], 10),
-                GPS_alt: parseInt(p[7], 10),
-                Accuracy: parseInt(p[8], 10),
-                Engine_RPM: parseInt(p[9], 10),
-              } as TrackPoint
-            ];
-            break; // TODO Add test to check length of trackData
-        }
-      });
-      callback(trackData);
+    const data = await this.get(filename);
+    // Separate rows and iterate through them
+    const rows = data.split('\n');
+    rows.forEach( (row) => {
+      switch (row[0]) {
+        case 'B': // B Record parsing
+          p = this.parseBrecord(row);
+          // Add the record to the trackData array
+          trackData = [...trackData,
+            {
+              Time: new Date(`${trackDay}T${p[0]}:${p[1]}:${p[2]}`),
+              Latitude: this.parseCoord(p[3]),
+              Longitude: this.parseCoord(p[4]),
+              Valid: p[5] === 'A',
+              Pressure_alt: parseInt(p[6], 10),
+              GPS_alt: parseInt(p[7], 10),
+              Accuracy: parseInt(p[8], 10),
+              Engine_RPM: parseInt(p[9], 10),
+            } as TrackPoint
+          ];
+          break; // TODO Add test to check length of trackData
+      }
     });
+    return trackData;
   }
 
   // Parse a single IGC B record string into a string array
@@ -68,16 +98,19 @@ export class ParserService {
   // Returns the total length of the track in meters
   getTotalDistance(trackData) {
     if (!this.totalDistance) {
-      this.totalDistance = 0;
-      let c1, c2;
-      for (let i = 0; i < trackData.length - 1; i++) {
-        c1 = [trackData[i].Longitude, trackData[i].Latitude];
-        c2 = [trackData[i + 1].Longitude, trackData[i + 1].Latitude];
-        this.totalDistance += getDistance(c1, c2);
-      }
-
+      this.totalDistance = this.getPathDistance(trackData);
     }
     return this.totalDistance;
+  }
+
+  getPathDistance(trackData) {
+    let c1, c2, d = 0;
+    for (let i = 0; i < trackData.length - 1; i++) {
+      c1 = [trackData[i].Longitude, trackData[i].Latitude];
+      c2 = [trackData[i + 1].Longitude, trackData[i + 1].Latitude];
+      d += getDistance(c1, c2);
+    }
+    return d;
   }
 
   // Returns the altitude in meters at the beginning of the track
@@ -136,13 +169,8 @@ export class ParserService {
     return this.e2eDistance;
   }
 
-  // GET html request
-  get(url, callback) {
-    const client = new XMLHttpRequest();
-    client.open('GET', url);
-    client.onload = () => {
-      callback(client.responseText);
-    };
-    client.send();
+  async get(url) {
+    const response = await fetch(url);
+    return await response.text();
   }
 }

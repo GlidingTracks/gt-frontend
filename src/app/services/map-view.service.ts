@@ -10,7 +10,7 @@ import OSM from 'ol/source/OSM';
 import VectorSource from 'ol/source/Vector';
 import {toLonLat, fromLonLat} from 'ol/proj';
 import {getLength, getDistance} from 'ol/sphere';
-import {Circle as CircleStyle, Fill, Stroke, Style} from 'ol/style';
+import {Circle as CircleStyle, Fill, Stroke, Icon, Style} from 'ol/style';
 import {Subject} from 'rxjs';
 import {TrackPoint} from '../../track';
 import {ParserService} from './parser.service';
@@ -66,7 +66,8 @@ export class MapViewService {
     // Init View
     this.view = new View({ // Set the center position of the map view and the zoom level
       center: [0, 0],
-      minZoom: 10
+      minZoom: 9,
+      zoom: 10
     });
 
     // Map creation
@@ -74,10 +75,6 @@ export class MapViewService {
       layers: [
         new TileLayer({ // Set map background from OSM
           source: new OSM({wrapX: false}),
-        }),
-        new VectorLayer({ // Add layer for the tracks
-          source: this.vectorSource,
-          style: this.getStyleFunction()
         })
       ],
       target: 'map',
@@ -91,6 +88,7 @@ export class MapViewService {
       }),
       view: this.view
     });
+    this.map.render();
   }
 
   setupEvents() {
@@ -142,11 +140,27 @@ export class MapViewService {
     }
     this.map.render();
   }
+
   // Load a track as features into to tracks layer on the map
-  loadTrack(trackData) {
+  async loadTrack(trackData) {
     const features = this.fromTrackDataToFeatures(trackData);
     this.vectorSource.addFeatures(features);
     this.view.fit(this.vectorSource.getExtent());
+    this.map.addLayer(new VectorLayer({ // Add layer for the tracks
+      source: this.vectorSource,
+      style: this.trackStyleFunction()
+    }));
+  }
+
+  async loadTurnPoints(trackData, nPoints) {
+    const [tp, _] = await this.parser.TurnPointsDetection(trackData, nPoints);
+    const features = this.fromTrackDataToFeatures(tp as TrackPoint[]);
+    const v = new VectorSource();
+    v.addFeatures(features);
+    this.map.addLayer(new VectorLayer({ // Add layer for the turn-points
+      source: v,
+      style: this.tpStyleFunction()
+    }));
   }
 
   // Create feature from track data
@@ -214,8 +228,8 @@ export class MapViewService {
   }
 
   // Style function to color code upward/downward movement to each feature of the track
-  getStyleFunction() {
-    return (feature, resolution) => {
+  trackStyleFunction() {
+    return (feature) => {
       const delta = feature.get('delta_altitude');
       // const i = Math.round((delta - this.minDelta) / this.deltaRange * (this.GRADIENT.length - 1));
       const i = Math.round(this.sigmoid(delta, this.deltaRange) * (this.GRADIENT.length - 1));
@@ -227,6 +241,42 @@ export class MapViewService {
         })
       });
     };
+  }
+
+  tpStyleFunction() {
+    return (feature) => {
+      const coordinates = feature.getGeometry().getCoordinates();
+      const styles = [
+        new Style({
+          stroke: new Stroke({
+            color: [0, 0, 0, 0.3],
+            width: 2
+          })
+        })];
+      let src, color, anchor;
+      for (let i = 0; i < coordinates.length; i++) {
+        [src, color, anchor] = i === 0 ?
+          ['../../assets/home-point.png', [0, 136, 30, 1], [.5, 1]] : i === coordinates.length - 1 ?
+            ['../../assets/finish-flag.png', [0, 0, 0, 1], [.15, 1]] : ['../../assets/reload.png', [0, 60, 136, .3], [.5, .5]];
+        styles.push(new Style({
+          geometry: new Point(coordinates[i]),
+          image: this.getIcon(src, color, anchor)
+        }));
+      }
+      return styles;
+    };
+  }
+
+  getIcon(imagePath, color, anchor) {
+    // <div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a>
+    // from<a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+    // is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"
+    //  title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+    return new Icon({
+      src: imagePath,
+      color: color,
+      anchor: anchor
+    });
   }
 
   // Sigmoid function for better color range coding of the upward/downward movement
@@ -248,3 +298,4 @@ export class MapViewService {
       this.infosSubject.next(this.infos);
   }
 }
+

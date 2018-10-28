@@ -38,7 +38,7 @@ export class MapViewComponent implements OnInit {
   maxDescentSpeed: number;
 
   // IGC file Parsing
-  IGCFilename = this.igcUrls[2]; // TODO Connect urls to firestore
+  IGCFilename = this.igcUrls[0]; // TODO Connect urls to firestore
   IGCFilenameData = parseFilename(this.IGCFilename); // TODO Get pilot name
   trackDay: string;
 
@@ -58,6 +58,7 @@ export class MapViewComponent implements OnInit {
       }
     );
     this.map.emitInfos();
+
     // Setup map view
     this.map.initMap();
     this.map.setupEvents();
@@ -65,10 +66,21 @@ export class MapViewComponent implements OnInit {
     this.trackDay = this.IGCFilenameData !== null ? this.IGCFilenameData.date : '1970-01-01';
     // TODO Format Track infos + Metadata from backend
 
-    this.parser.parseIGCFile(this.IGCFilename, this.trackDay, (trackData) => {
-      this.map.loadTrack(trackData);
-      this.getTrackInfos(trackData);
-    });
+    this.loadIGC(this.IGCFilename, this.trackDay)
+      .catch(error => console.error('Cannot load IGC file : ' + error));
+  }
+
+  async loadIGC(filename, dateTime) {
+    this.parser.parseIGCFile(filename, dateTime)
+      .then(trackData => {
+        this.map.loadTrack(trackData)
+          .catch(error => console.error(`Failed to load ${trackData} on ${this.map} : ${error}`));
+        this.getTrackInfos(trackData);
+        this.map.loadTurnPoints(trackData, 2)
+          .catch(error => console.error(`Failed to load 2 turn-points path : ${error}`));
+      })
+      .catch(error => console.error(`Failed to parse ${this.IGCFilename} : ${error}`));
+
   }
 
   getTrackInfos(trackData) {
