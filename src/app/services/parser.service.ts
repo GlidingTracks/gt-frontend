@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import {TrackPoint} from '../../track';
 import {getDistance} from 'ol/sphere';
-import {HttpClient} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +14,7 @@ export class ParserService {
   stopAltitude;
   highestPoint;
 
-  constructor(private http: HttpClient) {}
+  constructor() {}
 
   TurnPointsDetection(trackData, nPoints) {
     let resultDist = 0;

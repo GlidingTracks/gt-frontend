@@ -47,7 +47,7 @@ export class MapViewComponent implements OnInit {
   endPoint: TrackPoint;
 
   // IGC file Parsing
-  IGCFilename = this.igcUrls[0]; // TODO Connect urls to firestore
+  IGCFilename = this.igcUrls[2]; // TODO Connect urls to firestore
   IGCFilenameData = parseFilename(this.IGCFilename); // TODO Get pilot name
   trackDay: string;
 
