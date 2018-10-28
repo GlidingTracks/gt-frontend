@@ -3,6 +3,7 @@ import {MapViewService} from '../services/map-view.service';
 import {Subscription} from 'rxjs';
 import * as parseFilename from 'igc-filename-parser';
 import {ParserService} from '../services/parser.service';
+import {TrackPoint} from '../../track';
 
 @Component({
   selector: 'app-map-view',
@@ -10,6 +11,9 @@ import {ParserService} from '../services/parser.service';
   styleUrls: ['./map-view.component.css']
 })
 export class MapViewComponent implements OnInit {
+
+  // Display logic
+  infoSwitch = false;
 
   // Test urls of IGC files
   igcUrls =  [
@@ -36,6 +40,11 @@ export class MapViewComponent implements OnInit {
   e2eDistance: number;
   maxAscendSpeed: number;
   maxDescentSpeed: number;
+  // Turn-points data
+  startPoint: TrackPoint;
+  turnPoint1: TrackPoint;
+  turnPoint2: TrackPoint;
+  endPoint: TrackPoint;
 
   // IGC file Parsing
   IGCFilename = this.igcUrls[0]; // TODO Connect urls to firestore
@@ -66,21 +75,22 @@ export class MapViewComponent implements OnInit {
     this.trackDay = this.IGCFilenameData !== null ? this.IGCFilenameData.date : '1970-01-01';
     // TODO Format Track infos + Metadata from backend
 
-    this.loadIGC(this.IGCFilename, this.trackDay)
-      .catch(error => console.error('Cannot load IGC file : ' + error));
+    this.loadIGC(this.IGCFilename, this.trackDay);
   }
 
-  async loadIGC(filename, dateTime) {
+  loadIGC(filename, dateTime) {
+    // Parsing
     this.parser.parseIGCFile(filename, dateTime)
       .then(trackData => {
-        this.map.loadTrack(trackData)
-          .catch(error => console.error(`Failed to load ${trackData} on ${this.map} : ${error}`));
+        // Loading track on the map
+        this.map.loadTrack(trackData);
+        // Display track information
         this.getTrackInfos(trackData);
-        this.map.loadTurnPoints(trackData, 2)
-          .catch(error => console.error(`Failed to load 2 turn-points path : ${error}`));
+        // Compute and load turn-points on the map
+        const tpData = this.map.loadTurnPoints(trackData, 2);
+        this.getTpInfos(tpData);
       })
       .catch(error => console.error(`Failed to parse ${this.IGCFilename} : ${error}`));
-
   }
 
   getTrackInfos(trackData) {
@@ -92,6 +102,10 @@ export class MapViewComponent implements OnInit {
     this.e2eDistance = this.parser.getE2EDistance(trackData);
     this.maxAscendSpeed = this.map.getMaxAscendSpeed();
     this.maxDescentSpeed = this.map.getMaxDescentSpeed();
+  }
+
+  getTpInfos(tpData) {
+    [this.startPoint, this.turnPoint1, this.turnPoint2, this.endPoint] = tpData;
   }
 
   getScreenPos(index) {
@@ -108,5 +122,13 @@ export class MapViewComponent implements OnInit {
     } else {
       return 'visible';
     }
+  }
+
+  switchInfoPanel(value) {
+    this.infoSwitch = value;
+  }
+
+  getSwitchColor(value) {
+    return this.infoSwitch === value ? '#91de5b' : '#7cc254';
   }
 }

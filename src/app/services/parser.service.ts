@@ -17,7 +17,7 @@ export class ParserService {
 
   constructor(private http: HttpClient) {}
 
-  async TurnPointsDetection(trackData, nPoints) {
+  TurnPointsDetection(trackData, nPoints) {
     let resultDist = 0;
     let resultPath = [];
     if (nPoints > 1) {
@@ -25,7 +25,7 @@ export class ParserService {
       for (let i = 0; i < trackData.length - 1; i++) {
         path1 = [trackData[0], trackData[i]];
         dist1 = this.getPathDistance(path1);
-        [path2, dist2] = await this.TurnPointsDetection(trackData.slice(i), nPoints - 1);
+        [path2, dist2] = this.TurnPointsDetection(trackData.slice(i), nPoints - 1);
         if (dist1 + dist2 > resultDist) {
           resultPath = path1.concat(path2.slice(1));
           resultDist = dist1 + dist2;

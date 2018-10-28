@@ -24,11 +24,22 @@ app-tracks {
 .track-header{
   font-size: 1.2vw;
   text-align: center;
-  padding: 1vh 1vw;
+}
+
+.switch-container {
+  display: flex;
+}
+
+.switch {
+  flex: 50%;
+  padding: 0.5vh 0;
+  cursor: pointer;
 }
 
 .track-info-container {
   display: flex;
+  background-color: #91de5b;
+  padding: 1vh 1vw;
 }
 
 .track-info {

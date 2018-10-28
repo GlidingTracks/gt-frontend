@@ -5,7 +5,18 @@
     <p>Map View</p>
     <div class="track-header">
       Pilot : {{ pilot }}
-      <div class="track-info-container">
+      <div class="switch-container">
+        <div class="switch" (click)="switchInfoPanel(false)"
+             [ngStyle] = "{'background-color': getSwitchColor(false)}">
+          General information
+        </div>
+        <div class="switch" (click)="switchInfoPanel(true)"
+             [ngStyle] = "{'background-color': getSwitchColor(true)}">
+          Start/Turn-points/End information
+        </div>
+      </div>
+      <!-- General track information -->
+      <div class="track-info-container" *ngIf="!infoSwitch">
         <div class="track-info">
           <span class="label">Flight Day:</span> {{ trackDay | date }} <br>
           <span class="label">Flight Duration:</span> {{ flightDuration }} <br>
@@ -20,6 +31,29 @@
           <span class="label">Highest Point:</span> {{  highestPoint | meter }} <br>
           <span class="label">Max Ascending Speed:</span> {{ maxAscendSpeed | number:'1.1-1' }}m/s <br>
           <span class="label">Max Descending Speed:</span> {{ maxDescentSpeed | number:'1.1-1' }}m/s <br>
+        </div>
+      </div>
+      <!-- Start/Turn-points/End information -->
+      <div class="track-info-container" *ngIf="infoSwitch">
+        <div class="track-info">
+          <span class="label">Start Time:</span> {{ startPoint.Time | date:'shortTime' }}<br>
+          <span class="label">Start Altitude:</span> {{ startPoint.GPS_alt | meter }}<br>
+          <span class="label">Start Position:</span><br>{{ startPoint.Latitude | latitude }}, {{ startPoint.Longitude | longitude }}<br>
+        </div>
+        <div class="track-info">
+          <span class="label">TP1 Time:</span> {{ turnPoint1.Time | date:'shortTime' }}<br>
+          <span class="label">TP1 Altitude:</span> {{ turnPoint1.GPS_alt | meter }}<br>
+          <span class="label">TP1 Position:</span><br>{{ turnPoint1.Latitude | latitude }}, {{ turnPoint1.Longitude | longitude }}<br>
+        </div>
+        <div class="track-info">
+          <span class="label">TP2 Time:</span> {{ turnPoint2.Time | date:'shortTime' }}<br>
+          <span class="label">TP2 Altitude:</span> {{ turnPoint2.GPS_alt | meter }}<br>
+          <span class="label">TP2 Position:</span><br>{{ turnPoint2.Latitude | latitude }}, {{ turnPoint2.Longitude | longitude }}<br>
+        </div>
+        <div class="track-info">
+          <span class="label">End Time:</span> {{ endPoint.Time | date:'shortTime' }}<br>
+          <span class="label">End Altitude:</span> {{ endPoint.GPS_alt | meter }}<br>
+          <span class="label">End Position:</span><br>{{ endPoint.Latitude | latitude }}, {{ endPoint.Longitude | longitude }}<br>
         </div>
       </div>
     </div>
@@ -40,5 +74,3 @@
     </div>
   </div>
 </div>
-
-

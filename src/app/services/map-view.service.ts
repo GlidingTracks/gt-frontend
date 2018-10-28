@@ -142,7 +142,7 @@ export class MapViewService {
   }
 
   // Load a track as features into to tracks layer on the map
-  async loadTrack(trackData) {
+  loadTrack(trackData) {
     const features = this.fromTrackDataToFeatures(trackData);
     this.vectorSource.addFeatures(features);
     this.view.fit(this.vectorSource.getExtent());
@@ -152,8 +152,8 @@ export class MapViewService {
     }));
   }
 
-  async loadTurnPoints(trackData, nPoints) {
-    const [tp, _] = await this.parser.TurnPointsDetection(trackData, nPoints);
+  loadTurnPoints(trackData, nPoints) {
+    const [tp, _] = this.parser.TurnPointsDetection(trackData, nPoints);
     const features = this.fromTrackDataToFeatures(tp as TrackPoint[]);
     const v = new VectorSource();
     v.addFeatures(features);
@@ -161,6 +161,7 @@ export class MapViewService {
       source: v,
       style: this.tpStyleFunction()
     }));
+    return tp;
   }
 
   // Create feature from track data
