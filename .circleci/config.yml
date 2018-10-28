@@ -1,18 +1,11 @@
 version: 2
 jobs:
   build:
-    environment:
-      - SOURCE_BRANCH: master
-      - TARGET_BRANCH: gh-pages
-      - GITHUB_ORG: https://GH_TOKEN@github.io/GlidingTracks
-      - GITHUB_NAME: gt-autodeploy
-      - NAME: gt-frontend
-
     branches:
       ignore:
         - gh-pages
 
-    working_directory: ~/$NAME
+    working_directory: ~/gt-frontend
 
     docker:
       - image: circleci/node:8-browsers
@@ -50,6 +43,6 @@ jobs:
           name: Deploy on Github Pages
           command: |
             ng build --prod
-            npx ngh --repo "$GITHUB_ORG/$NAME.git"
-                    --name "$GITHUB_NAME"
-                    --dir "dist/$NAME"
+            npx ngh --repo "https://GH_TOKEN@github.io/GlidingTracks/gt-frontend.git"
+                    --name "gt-autodeploy"
+                    --dir "dist/gt-frontend"
