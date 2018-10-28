@@ -42,7 +42,7 @@ jobs:
       - run:
           name: Deploy on Github Pages
           command: |
-            ng build --prod
+            npm build --prod
             npx ngh --repo "https://GH_TOKEN@github.io/GlidingTracks/gt-frontend.git"
                     --name "gt-autodeploy"
                     --dir "dist/gt-frontend"
