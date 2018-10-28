@@ -42,5 +42,5 @@ jobs:
       - run:
           name: Deploy on Github Pages
           command: |
-            npm run-script build --prod --base-href "https://glidingtracks.github.io/gt-frontend"
-            npx ngh --repo "https://GH_TOKEN@github.io/GlidingTracks/gt-frontend.git" --name "gt-autodeploy" --dir "dist/gt-frontend"
+            npm run-script build --prod
+            npx ngh --repo "https://github.com/GlidingTracks/gt-frontend.git" --name "gt-autodeploy" --dir "dist/gt-frontend"
