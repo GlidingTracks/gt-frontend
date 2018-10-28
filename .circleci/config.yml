@@ -1,7 +1,18 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/gt-frontend
+    environment:
+      - SOURCE_BRANCH: master
+      - TARGET_BRANCH: gh-pages
+      - GITHUB_ORG: https://GH_TOKEN@github.io/GlidingTracks
+      - GITHUB_NAME: gt-autodeploy
+      - NAME: gt-frontend
+
+    branches:
+      ignore:
+        - gh-pages
+
+    working_directory: ~/$NAME
 
     docker:
       - image: circleci/node:8-browsers
@@ -34,3 +45,11 @@ jobs:
             ./cc-test-reporter after-build --debug --coverage-input-type lcov --exit-code $?
 
       #- run: xvfb-run -a npm run e2e -- --config=protractor-ci.conf.js
+
+      - run:
+          name: Deploy on Github Pages
+          command: |
+            ng build --prod
+            npx ngh --repo "$GITHUB_ORG/$NAME.git"
+                    --name "$GITHUB_NAME"
+                    --dir "dist/$NAME"
