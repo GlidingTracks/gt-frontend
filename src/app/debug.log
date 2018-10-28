@@ -1,7 +1,0 @@
-[0914/172904.125:ERROR:file_io_win.cc(179)] CreateFile C:\Program Files (x86)\settings.dat: Accès refusé. (0x5)
-[0914/172904.128:ERROR:registration_protocol_win.cc(84)] TransactNamedPipe: Le canal de communication a été fermé. (0x6D)
-[0914/172904.130:ERROR:file_io_win.cc(179)] CreateFile C:\Program Files (x86)\settings.dat: Accès refusé. (0x5)
-[0914/173007.973:ERROR:file_io_win.cc(179)] CreateFile C:\Program Files (x86)\settings.dat: Accès refusé. (0x5)
-[0914/173007.976:ERROR:registration_protocol_win.cc(84)] TransactNamedPipe: Le canal de communication a été fermé. (0x6D)
-[0914/173007.977:ERROR:file_io_win.cc(179)] CreateFile C:\Program Files (x86)\settings.dat: Accès refusé. (0x5)
-[0918/081926.494:ERROR:registration_protocol_win.cc(56)] CreateFile: Le fichier spécifié est introuvable. (0x2)
