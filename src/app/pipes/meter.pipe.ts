@@ -18,11 +18,15 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class MeterPipe implements PipeTransform {
 
   transform(value: number, unit = 'm', precision = 1): string {
-    let result = '';
-    if (unit.toLowerCase() === 'km') {
-      result = (Math.round(value / precision / 1000) * precision).toString();
+    let result;
+    if (value) {
+      if (unit.toLowerCase() === 'km') {
+        result = (Math.round(value / precision / 1000) * precision).toString();
+      } else {
+        result = (Math.round(value / precision) * precision).toString();
+      }
     } else {
-      result = (Math.round(value / precision) * precision).toString();
+      result = '0';
     }
     return result + unit;
   }

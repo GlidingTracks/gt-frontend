@@ -32,8 +32,8 @@ interface Header {
 // Declaration for the IGC file parsing
 export interface TrackPoint {
   Time: Date;
-  Latitude: string;
-  Longitude: string;
+  Latitude: number;
+  Longitude: number;
   Valid: boolean;
   Pressure_alt: number;
   GPS_alt?: number;

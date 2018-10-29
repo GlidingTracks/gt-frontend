@@ -15,7 +15,7 @@ div.background {
     100% 100%,
     0% 100%
   );
-  background-image: url("Glidings.jpg");
+  background-image: url("../../assets/Glidings.jpg");
   background-size: cover;
   height: 50vh;
 }

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {MapViewService} from '../services/map-view.service';
 import {Subscription} from 'rxjs';
 import * as parseFilename from 'igc-filename-parser';
+import {ParserService} from '../services/parser.service';
+import {TrackPoint} from '../../track';
 
 @Component({
   selector: 'app-map-view',
@@ -9,6 +11,9 @@ import * as parseFilename from 'igc-filename-parser';
   styleUrls: ['./map-view.component.css']
 })
 export class MapViewComponent implements OnInit {
+
+  // Display logic
+  infoSwitch = false;
 
   // Test urls of IGC files
   igcUrls =  [
@@ -35,17 +40,23 @@ export class MapViewComponent implements OnInit {
   e2eDistance: number;
   maxAscendSpeed: number;
   maxDescentSpeed: number;
+  // Turn-points data
+  startPoint: TrackPoint;
+  turnPoint1: TrackPoint;
+  turnPoint2: TrackPoint;
+  endPoint: TrackPoint;
 
   // IGC file Parsing
   IGCFilename = this.igcUrls[2]; // TODO Connect urls to firestore
   IGCFilenameData = parseFilename(this.IGCFilename); // TODO Get pilot name
   trackDay: string;
 
-  constructor(private mvs: MapViewService) { }
+  constructor(private map: MapViewService,
+              private parser: ParserService) { }
 
   ngOnInit() {
     // Bind variables
-    this.infosSubscription = this.mvs.infosSubject.subscribe(
+    this.infosSubscription = this.map.infosSubject.subscribe(
       (infos: any) => {
         this.currentScreenPos = infos.screenPos;
         this.isDragging = infos.dragging;
@@ -55,31 +66,53 @@ export class MapViewComponent implements OnInit {
         this.currentDate = infos.date;
       }
     );
-    this.mvs.emitInfos();
+    this.map.emitInfos();
+
     // Setup map view
-    this.mvs.initMap();
-    this.mvs.setupEvents();
+    this.map.initMap();
+    this.map.setupEvents();
 
     this.trackDay = this.IGCFilenameData !== null ? this.IGCFilenameData.date : '1970-01-01';
-    // TODO Format Track infos + Metadata from frontend
+    // TODO Format Track infos + Metadata from backend
 
-    this.mvs.parseIGCFile(this.IGCFilename, this.trackDay, (trackData) => {
-      this.mvs.loadTrack(trackData);
-      this.getTrackInfos(trackData);
-    });
+    // Load the IGC file
+    this.loadIGC(this.IGCFilename, this.trackDay);
   }
 
+  // Load the IGC file and display the track on the map
+  loadIGC(filename, dateTime) {
+    // Parsing
+    this.parser.parseIGCFile(filename, dateTime)
+      .then(trackData => {
+        // Loading track on the map
+        this.map.loadTrack(trackData);
+        // Display track information
+        this.getTrackInfos(trackData);
+        // Compute and load turn-points on the map
+        const tpData = this.map.loadTurnPoints(trackData, 2);
+        this.getTpInfos(tpData);
+      })
+      .catch(error => console.error(`Failed to parse ${this.IGCFilename} : ${error}`));
+  }
+
+  // Update general information about the track
   getTrackInfos(trackData) {
-    this.flightDuration = this.mvs.getFlightDuration(trackData);
-    this.totalDistance = this.mvs.getTotalDistance(trackData);
-    this.startAltitude = this.mvs.getStartAltitude(trackData);
-    this.stopAltitude = this.mvs.getStopAltitude(trackData);
-    this.highestPoint = this.mvs.getHighestPoint(trackData);
-    this.e2eDistance = this.mvs.getE2EDistance(trackData);
-    this.maxAscendSpeed = this.mvs.getMaxAscendSpeed();
-    this.maxDescentSpeed = this.mvs.getMaxDescentSpeed();
+    this.flightDuration = this.parser.getFlightDuration(trackData);
+    this.totalDistance = this.parser.getTotalDistance(trackData);
+    this.startAltitude = this.parser.getStartAltitude(trackData);
+    this.stopAltitude = this.parser.getStopAltitude(trackData);
+    this.highestPoint = this.parser.getHighestPoint(trackData);
+    this.e2eDistance = this.parser.getE2EDistance(trackData);
+    this.maxAscendSpeed = this.map.getMaxAscendSpeed();
+    this.maxDescentSpeed = this.map.getMaxDescentSpeed();
   }
 
+  // Update information about turn-points
+  getTpInfos(tpData) {
+    [this.startPoint, this.turnPoint1, this.turnPoint2, this.endPoint] = tpData;
+  }
+
+  // Update position the track tooltip
   getScreenPos(index) {
     if (index === 0) {
       return this.currentScreenPos[0].toString() + 'px';
@@ -88,11 +121,22 @@ export class MapViewComponent implements OnInit {
     }
   }
 
+  // Decide whether the track tooltip should be shown or not
   isShown() {
     if (this.isDragging || (this.currentScreenPos[0] === 0 && this.currentScreenPos[1] === 0)) {
       return 'hidden';
     } else {
       return 'visible';
     }
+  }
+
+  // Switch between general/turn-points information panel
+  switchInfoPanel(value) {
+    this.infoSwitch = value;
+  }
+
+  // Update the color of the general/turn-points information panels
+  getSwitchColor(value) {
+    return this.infoSwitch === value ? '#91de5b' : '#7cc254';
   }
 }
