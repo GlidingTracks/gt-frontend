@@ -35,8 +35,8 @@ jobs:
 
       #- run: xvfb-run -a npm run e2e -- --config=protractor-ci.conf.js
 
-      - run:
-          name: Deploy on Github Pages
-          command: |
-            npm run deploy
-            npx ngh --no-silent --dir=dist/gt-frontend --name="Minipeps" --email=maximep@stud.ntnu.no
+      # - run:
+      #    name: Deploy on Github Pages
+      #    command: |
+      #      npm run deploy
+      #      npx ngh --no-silent --dir=dist/gt-frontend --name="Minipeps" --email=maximep@stud.ntnu.no
