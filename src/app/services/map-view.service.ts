@@ -265,8 +265,8 @@ export class MapViewService {
       let src, color, anchor;
       for (let i = 0; i < coordinates.length; i++) {
         [src, color, anchor] = i === 0 ?
-          ['../../assets/home-point.png', [0, 136, 30, 1], [.5, 1]] : i === coordinates.length - 1 ?
-            ['../../assets/finish-flag.png', [0, 0, 0, 1], [.15, 1]] : ['../../assets/reload.png', [0, 60, 136, .3], [.5, .5]];
+          ['assets/home-point.png', [0, 136, 30, 1], [.5, 1]] : i === coordinates.length - 1 ?
+            ['assets/finish-flag.png', [0, 0, 0, 1], [.15, 1]] : ['assets/reload.png', [0, 60, 136, .3], [.5, .5]];
         styles.push(new Style({
           geometry: new Point(coordinates[i]),
           image: this.getIcon(src, color, anchor)
