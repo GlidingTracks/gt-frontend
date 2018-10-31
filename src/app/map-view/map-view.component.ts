@@ -15,7 +15,7 @@ export class MapViewComponent implements OnInit {
     '2018-08-12-XCT-MNO-02.igc',
     'https://firebasestorage.googleapis.com/v0/b/gt-backend-8b9c2.appspot.com/o/' +
       'HAGOdywD9rQayoOOIHyd?alt=media&token=f0511567-2b36-4689-802d-b80e5b52b2af',
-    'http://openlayers.org/en/latest/examples/data/igc/Damien-de-Baenst.igc',
+    'https://openlayers.org/en/latest/examples/data/igc/Damien-de-Baenst.igc',
   ];
   // Display data
   currentLatitude: string;
