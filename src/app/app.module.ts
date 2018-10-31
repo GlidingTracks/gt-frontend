@@ -20,6 +20,7 @@ import { TracksComponent } from './tracks/tracks.component';
 import { TrackPipe } from './pipes/track.pipe';
 import { SingleTrackComponent } from './single-track/single-track.component';
 import { MeterPipe } from './pipes/meter.pipe';
+import { SignComponent } from './auth/sign/sign.component';
 
 const appRoutes: Routes = [
   { path: 'auth/signup', component: SignupComponent},
@@ -43,7 +44,8 @@ const appRoutes: Routes = [
     TracksComponent,
     TrackPipe,
     SingleTrackComponent,
-    MeterPipe
+    MeterPipe,
+    SignComponent
   ],
   imports: [
     NgbModule,
