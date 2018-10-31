@@ -18,23 +18,22 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class GeoPipe implements PipeTransform {
 
   transform(value: any, type: string): string {
-    let deg, min, sec, card;
-    if (value) {
-      deg = Math.floor(value);
-      min = Math.floor((value - deg) * 60);
-      sec = Math.floor(((value - deg) * 60 - min) * 6000) / 100;
-      switch (type) {
-        case 'lon':
-          card = value >= 0 ? 'E' : 'W';
-          break;
-        case 'lat':
-          card = value >= 0 ? 'N' : 'S';
-          break;
-      }
+    if (!value) {
+      return 'NaN';
+    }
+    let card;
+    const deg = Math.floor(value);
+    const min = Math.floor((value - deg) * 60);
+    const sec = Math.floor(((value - deg) * 60 - min) * 6000) / 100;
+    if (value >= 0 && type === 'lon') {
+      card = 'E';
+    } else if (value >= 0 && type === 'lat') {
+      card = 'N';
+    } else if (value < 0 && type === 'lon') {
+      card = 'W';
+    } else if (value < 0 && type === 'lat') {
+      card = 'S';
     } else {
-      deg = 0;
-      min = 0;
-      sec = 0;
       card = '';
     }
     return `${deg}°${min}'${sec}" ${card}`;
