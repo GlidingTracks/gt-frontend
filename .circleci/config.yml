@@ -4,7 +4,7 @@ jobs:
     working_directory: ~/gt-frontend
 
     docker:
-      - image: circleci/node:10-browsers
+      - image: circleci/node:8-browsers
 
     steps:
       - checkout
