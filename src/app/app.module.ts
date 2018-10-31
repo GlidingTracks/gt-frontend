@@ -14,13 +14,12 @@ import { UploadComponent } from './upload/upload.component';
 import {AuthService} from './services/auth.service';
 import {AuthGuardService} from './services/auth-guard.service';
 import {MapViewService} from './services/map-view.service';
-import { LatitudePipe } from './pipes/latitude.pipe';
-import { LongitudePipe } from './pipes/longitude.pipe';
 import { TracksComponent } from './tracks/tracks.component';
 import { TrackPipe } from './pipes/track.pipe';
 import { SingleTrackComponent } from './single-track/single-track.component';
 import { MeterPipe } from './pipes/meter.pipe';
 import { SignComponent } from './auth/sign/sign.component';
+import { GeoPipe } from './pipes/geo.pipe';
 
 const appRoutes: Routes = [
   { path: 'auth/signup', component: SignupComponent},
@@ -39,13 +38,12 @@ const appRoutes: Routes = [
     SigninComponent,
     MapViewComponent,
     UploadComponent,
-    LatitudePipe,
-    LongitudePipe,
     TracksComponent,
     TrackPipe,
     SingleTrackComponent,
     MeterPipe,
-    SignComponent
+    SignComponent,
+    GeoPipe
   ],
   imports: [
     NgbModule,

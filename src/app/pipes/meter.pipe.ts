@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
  * Usage:
  *  value | meter:'m':precision
  * Parameters:
- *  unit (string)  : the output unit 'm' or 'km', default is 'm'
+ *  unit (string): the output unit 'm' or 'km', default is 'm'
  *  precision (float): the desired precision of the output value, default is 1
  * Example:
  *  {{ 1324.456 | meter:'m':1 }}
