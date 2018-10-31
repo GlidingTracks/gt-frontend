@@ -14,7 +14,8 @@ export class SignComponent implements OnInit {
   errorMessage: string;
 
   constructor(private router: Router,
-              private formBuilder: FormBuilder) {}
+              private formBuilder: FormBuilder,
+              protected authService: AuthService) {}
 
   ngOnInit() {
     this.initForm();

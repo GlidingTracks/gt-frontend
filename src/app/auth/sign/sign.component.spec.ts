@@ -1,6 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SignComponent } from './sign.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {Router} from '@angular/router';
+
+const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
 describe('SignComponent', () => {
   let component: SignComponent;
@@ -8,7 +12,11 @@ describe('SignComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SignComponent ]
+      imports: [ FormsModule, ReactiveFormsModule ],
+      declarations: [ SignComponent ],
+      providers: [
+        { provide: Router, useValue: routerSpy }
+        ]
     })
     .compileComponents();
   }));

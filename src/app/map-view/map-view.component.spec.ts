@@ -1,10 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MapViewComponent } from './map-view.component';
-import {LatitudePipe} from '../pipes/latitude.pipe';
-import {LongitudePipe} from '../pipes/longitude.pipe';
 import {Component, NO_ERRORS_SCHEMA} from '@angular/core';
 import {MeterPipe} from '../pipes/meter.pipe';
+import { GeoPipe } from '../pipes/geo.pipe';
 
 @Component({ selector: 'app-tracks', template: ''})
 class TracksStubComponent {}
@@ -18,8 +17,7 @@ describe('MapViewComponent', () => {
       declarations: [
         MapViewComponent,
         TracksStubComponent,
-        LatitudePipe,
-        LongitudePipe,
+        GeoPipe,
         MeterPipe
       ],
       schemas: [NO_ERRORS_SCHEMA]
