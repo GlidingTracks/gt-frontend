@@ -56,7 +56,7 @@ describe('MapViewService', () => {
     expect(service.infos.screenPos).toEqual([400, 600]);
     expect([service.infos.longitude, service.infos.latitude]).toEqual([11.091050, 37.917721]);
     expect(service.infos.altitude).toEqual(1050);
-    expect(service.infos.date).toEqual('Thu Nov 01 2018 02:27:07 GMT+0100 (heure normale d’Europe centrale)');
+    expect(service.infos.date).toEqual(new Date(1541035627 * 1000).toString());
   });
 
   it('emitInfos() should update this.infosSubject obervable to this.infos', () => {
