@@ -4,6 +4,7 @@ import {Subscription} from 'rxjs';
 import * as parseFilename from 'igc-filename-parser';
 import {ParserService} from '../services/parser.service';
 import {TrackPoint} from '../../track';
+import {UploadComponent} from "../upload/upload.component";
 
 @Component({
   selector: 'app-map-view',
@@ -16,6 +17,7 @@ export class MapViewComponent implements OnInit {
   infoSwitch = false;
 
   // Test urls of IGC files
+
   igcUrls =  [
     '2018-08-12-XCT-MNO-02.igc',
     'https://firebasestorage.googleapis.com/v0/b/gt-backend-8b9c2.appspot.com/o/' +

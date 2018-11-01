@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {TrackManagerService} from "../services/track-manager.service";
+import * as firebase from "firebase";
 
 @Component({
   selector: 'app-upload',
@@ -10,11 +12,28 @@ export class UploadComponent implements OnInit {
 
   uploadFromFileForm: FormGroup;
   uploadFromURLForm: FormGroup;
+  uid: string;
+  idToken: string;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder,
+              private TrackManagerService: TrackManagerService) {
+  }
 
   ngOnInit() {
     this.initForms();
+    firebase.auth().onAuthStateChanged(
+      (user) => {
+        if (user) {
+          this.uid = user.uid;
+          user.getIdToken().then( (token) => {
+            this.idToken = token;
+          });
+        } else {
+          this.uid = '';
+          this.idToken = '';
+        }
+      }
+    );
   }
 
   initForms() {
@@ -28,11 +47,28 @@ export class UploadComponent implements OnInit {
   }
 
   onUploadFromFile() {
-    console.log('Uploading file!');
+    //console.log('Uploading file!');
+    const file = this.uploadFromFileForm.get('file').value;
+    console.log(this.idToken);
+    this.TrackManagerService.insertTracks(this.idToken, 'true', file)
+      .then( ()=> {
+      this.uploadFromFileForm.reset();
+    })
+      .catch( ()=> {
+        console.log("MERDE");
+      });
   }
 
   onUploadFromURL() {
-    console.log('Uploading file from url!');
+    const fileURL = this.uploadFromURLForm.get('fileURL').value;
+    this.TrackManagerService.insertTracksURL(this.idToken, 'true', fileURL)
+      .then( ()=> {
+        this.uploadFromURLForm.reset();
+      })
+      .catch( ()=> {
+          console.log("MERDE");
+        });
+
   }
 
 }
