@@ -6,7 +6,7 @@ import { SignComponent } from '../sign/sign.component';
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css']
 })
-export class SignupComponent extends SignComponent implements OnInit {
+export class SignupComponent extends SignComponent {
 
   onSignUp() {
     super.onSubmit(this.authService.createNewUser);

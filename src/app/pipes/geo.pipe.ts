@@ -18,13 +18,15 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class GeoPipe implements PipeTransform {
 
   transform(value: any, type: string): string {
-    if (!value) {
-      return 'NaN';
+    // Invalid coordinate type
+    if (!['lon', 'lat'].includes(type)) {
+      throw new Error('Invalid type');
     }
     let card;
-    const deg = Math.floor(value);
-    const min = Math.floor((value - deg) * 60);
-    const sec = Math.floor(((value - deg) * 60 - min) * 6000) / 100;
+    const absValue = Math.abs(value);
+    const deg = Math.floor(absValue);
+    const min = Math.floor((absValue - deg) * 60);
+    const sec = Math.floor(((absValue - deg) * 60 - min) * 6000) / 100;
     if (value >= 0 && type === 'lon') {
       card = 'E';
     } else if (value >= 0 && type === 'lat') {

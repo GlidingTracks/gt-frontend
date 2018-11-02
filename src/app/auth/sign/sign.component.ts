@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
@@ -33,8 +33,8 @@ export class SignComponent implements OnInit {
     const password = this.signForm.get('password').value;
 
     signMethod(email, password)
-    .then(() => this.router.navigate(['/map-view']),
-          (error) => this.errorMessage = error
-    );
+      .then(() => this.router.navigate(['/map-view']),
+            (error) => this.errorMessage = error
+      );
   }
 }

@@ -9,7 +9,7 @@ import { Pipe, PipeTransform } from '@angular/core';
  *  precision (float): the desired precision of the output value, default is 1
  * Example:
  *  {{ 1324.456 | meter:'m':1 }}
- *  formats to: '1324.5m'
+ *  formats to: '1324m'
  */
 
 @Pipe({
@@ -18,6 +18,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class MeterPipe implements PipeTransform {
 
   transform(value: number, unit = 'm', precision = 1): string {
+    // Invalid unit
+    if (!['m', 'km'].includes(unit)) {
+      throw new Error('Invalid unit');
+    }
     let result;
     if (value) {
       if (unit.toLowerCase() === 'km') {

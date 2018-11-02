@@ -9,7 +9,6 @@ import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer';
 import OSM from 'ol/source/OSM';
 import VectorSource from 'ol/source/Vector';
 import {toLonLat, fromLonLat} from 'ol/proj';
-import {getLength, getDistance} from 'ol/sphere';
 import {Circle as CircleStyle, Fill, Stroke, Icon, Style} from 'ol/style';
 import {Subject} from 'rxjs';
 import {TrackPoint} from '../../track';
