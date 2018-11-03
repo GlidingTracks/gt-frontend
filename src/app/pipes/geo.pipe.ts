@@ -17,7 +17,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class GeoPipe implements PipeTransform {
 
-  transform(value: any, type: string): string {
+  transform(value: number, type: string): string {
     if (this.isInvalidType(type)) {
       throw new Error('Invalid type');
     }
@@ -37,14 +37,15 @@ export class GeoPipe implements PipeTransform {
   getCardinalPoint(value, type) {
     if (value >= 0 && type === 'lon') {
       return 'E';
-    } else if (value >= 0 && type === 'lat') {
+    }
+    if (value >= 0 && type === 'lat') {
       return 'N';
-    } else if (value < 0 && type === 'lon') {
+    }
+    if (value < 0 && type === 'lon') {
       return 'W';
-    } else if (value < 0 && type === 'lat') {
+    }
+    if (value < 0 && type === 'lat') {
       return 'S';
-    } else {
-      throw new Error('No matching cardinal point');
     }
   }
 }

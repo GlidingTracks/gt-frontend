@@ -27,4 +27,8 @@ describe('MeterPipe', () => {
   it('1324.456 | meter:"mm" should throw "Invalid unit" error', () => {
     expect(() => pipe.transform(1324.456, 'mm')).toThrowError('Invalid unit');
   });
+
+  it('should transform undefined | meter to "0m"', () => {
+    expect(pipe.transform(undefined)).toEqual('0m');
+  });
 });
