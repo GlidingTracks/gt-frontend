@@ -35,17 +35,10 @@ export class GeoPipe implements PipeTransform {
   }
 
   getCardinalPoint(value, type) {
-    if (value >= 0 && type === 'lon') {
-      return 'E';
-    }
-    if (value >= 0 && type === 'lat') {
-      return 'N';
-    }
-    if (value < 0 && type === 'lon') {
-      return 'W';
-    }
-    if (value < 0 && type === 'lat') {
-      return 'S';
+    if (type === 'lon') {
+      return value >= 0 ? 'E' : 'W';
+    } else {
+      return value >= 0 ? 'N' : 'S';
     }
   }
 }
