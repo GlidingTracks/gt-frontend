@@ -1,4 +1,4 @@
-import { Component, OnInit, Injectable } from '@angular/core';
+import { Component, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
@@ -10,12 +10,16 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class SignComponent implements OnInit {
 
+  @Input() formTitle: string;
+  @Input() submitText: string;
+  @Input() submitMethod: string;
+
   signForm: FormGroup;
   errorMessage: string;
 
   constructor(private router: Router,
               private formBuilder: FormBuilder,
-              protected authService: AuthService) {}
+              private authService: AuthService) {}
 
   ngOnInit() {
     this.initForm();
@@ -28,13 +32,15 @@ export class SignComponent implements OnInit {
     });
   }
 
-  onSubmit(signMethod) {
+  onSubmit() {
     const email = this.signForm.get('email').value;
     const password = this.signForm.get('password').value;
 
-    signMethod(email, password)
-      .then(() => this.router.navigate(['/map-view']),
-            (error) => this.errorMessage = error
-      );
+    this.authService.userHandler(email, password, this.submitMethod)
+      .then( () => this.router.navigate(['/map-view']) )
+      .catch( error => {
+        this.errorMessage = error;
+        throw new Error(error);
+      });
   }
 }
