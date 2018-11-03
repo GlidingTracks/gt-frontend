@@ -18,27 +18,33 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class GeoPipe implements PipeTransform {
 
   transform(value: any, type: string): string {
-    // Invalid coordinate type
-    if (!['lon', 'lat'].includes(type)) {
+    if (this.isInvalidType(type)) {
       throw new Error('Invalid type');
     }
-    let card;
+    const card = this.getCardinalPoint(value, type);
     const absValue = Math.abs(value);
     const deg = Math.floor(absValue);
     const min = Math.floor((absValue - deg) * 60);
     const sec = Math.floor(((absValue - deg) * 60 - min) * 6000) / 100;
-    if (value >= 0 && type === 'lon') {
-      card = 'E';
-    } else if (value >= 0 && type === 'lat') {
-      card = 'N';
-    } else if (value < 0 && type === 'lon') {
-      card = 'W';
-    } else if (value < 0 && type === 'lat') {
-      card = 'S';
-    } else {
-      card = '';
-    }
+
     return `${deg}°${min}'${sec}" ${card}`;
   }
 
+  isInvalidType(type) {
+    return !['lon', 'lat'].includes(type);
+  }
+
+  getCardinalPoint(value, type) {
+    if (value >= 0 && type === 'lon') {
+      return 'E';
+    } else if (value >= 0 && type === 'lat') {
+      return 'N';
+    } else if (value < 0 && type === 'lon') {
+      return 'W';
+    } else if (value < 0 && type === 'lat') {
+      return 'S';
+    } else {
+      throw new Error('No matching cardinal point');
+    }
+  }
 }
