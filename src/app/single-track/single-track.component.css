@@ -1,0 +1,12 @@
+button{
+  font-family: Comfortaa, sans-serif;
+  outline: none;
+  border: none;
+  background-color: white;
+  float: right;
+  margin-right: 5vw;
+  font-size: 1vw;
+}
+button:hover{
+  background-color: #EFEFEF;
+}

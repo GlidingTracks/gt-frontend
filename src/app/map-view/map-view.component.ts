@@ -4,6 +4,7 @@ import {Subscription} from 'rxjs';
 import * as parseFilename from 'igc-filename-parser';
 import {ParserService} from '../services/parser.service';
 import {TrackPoint} from '../../track';
+import * as firebase from "firebase";
 
 @Component({
   selector: 'app-map-view',
@@ -47,14 +48,30 @@ export class MapViewComponent implements OnInit {
   endPoint: TrackPoint;
 
   // IGC file Parsing
-  IGCFilename = this.igcUrls[2]; // TODO Connect urls to firestore
-  IGCFilenameData = parseFilename(this.IGCFilename); // TODO Get pilot name
+  //IGCFilename = this.igcUrls[2]; // TODO Connect urls to firestore
+  //IGCFilenameData = parseFilename(this.IGCFilename); // TODO Get pilot name
   trackDay: string;
+  idToken: string;
+  uid:string;
+
 
   constructor(private map: MapViewService,
               private parser: ParserService) { }
-
   ngOnInit() {
+    firebase.auth().onAuthStateChanged(
+      (user) => {
+        if (user) {
+          this.uid = user.uid;
+          user.getIdToken().then( (token) => {
+            this.idToken = token;
+          });
+        } else {
+          this.uid = '';
+          this.idToken = '';
+        }
+      }
+    );
+
     // Bind tooltip variables
     this.subscribeTooltipInfo();
 
@@ -62,11 +79,11 @@ export class MapViewComponent implements OnInit {
     this.map.initMap();
     this.map.setupEvents();
 
-    this.trackDay = this.IGCFilenameData !== null ? this.IGCFilenameData.date : '1970-01-01';
+    //this.trackDay = this.IGCFilenameData !== null ? this.IGCFilenameData.date : '1970-01-01';
     // TODO Format Track infos + Metadata from backend
 
     // Load the IGC file
-    this.loadIGC(this.IGCFilename, this.trackDay);
+    //this.loadIGC(this.idToken, this.IGCFilename, this.trackDay);
   }
 
   // Subscribe to the observable from MapViewService
@@ -85,9 +102,9 @@ export class MapViewComponent implements OnInit {
   }
 
   // Load the IGC file and display the track on the map
-  loadIGC(filename, dateTime) {
+  loadIGC(idToken, TrackID, dateTime) {
     // Parsing
-    this.parser.parseIGCFile(filename, dateTime)
+    this.parser.parseIGCFile(idToken, TrackID, dateTime)
       .then(trackData => {
         // Loading track on the map
         this.map.loadTrack(trackData);
@@ -97,7 +114,7 @@ export class MapViewComponent implements OnInit {
         const tpData = this.map.loadTurnPoints(trackData, 2);
         this.getTpInfos(tpData);
       })
-      .catch(error => console.error(`Failed to parse ${this.IGCFilename} : ${error}`));
+      .catch(error => console.error(`Failed to parse ${TrackID} : ${error}`));
   }
 
   // Update general information about the track

@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable} from '@angular/core';
 import {TrackPoint} from '../../track';
 import {getDistance} from 'ol/sphere';
+import {TrackManagerService} from "./track-manager.service";
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,8 @@ export class ParserService {
   startAltitude;
   stopAltitude;
   highestPoint;
+
+  constructor(private manager: TrackManagerService) { }
 
   /**
    * Recursive algorithm that detects {@link nPoints} turn-points in a 2D-path.
@@ -56,13 +59,15 @@ export class ParserService {
   }
 
   // Function responsible for IGC file parsing
-  async parseIGCFile(filename: string, trackDay: string) {
+  async parseIGCFile(idToken: string, TrackID: string, trackDay: string) {
     let trackData: TrackPoint[] = [] as any;
     let p: string[];
-    // Accessing the file form its url (async/await syntax)
-    const data = await this.get(filename);
+    // Accessing the file from its TrackID
+    this.manager.getTrack(idToken, TrackID).subscribe(data => console.log("PUTE"));
+    //console.log(data);
+    const dataString = "";//data.toString();
     // Separate rows and iterate through them
-    const rows = data.split('\n');
+    const rows = dataString.split('\n');
     rows.forEach( (row) => {
       switch (row[0]) {
         case 'B': // B Record parsing

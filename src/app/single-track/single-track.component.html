@@ -1,5 +1,8 @@
 <!-- TODO Create a "more infos" button to display a popup with the detailed info about the track -->
 <div *ngIf="track">
+  <button (click)="useTrack()">
+    Select track
+  </button>
   Pilot: {{ track.Record.Header.Pilot }} <br>
   Import date: {{ track.Time*1000 | date:'MM/dd/yyyy HH:mm:ss' }}
 </div>

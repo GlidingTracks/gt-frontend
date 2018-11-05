@@ -9,3 +9,7 @@ body{
   background-color: rgb(90, 38, 227);
   overflow-x: hidden;
 }
+
+button{
+  cursor: pointer;
+}
