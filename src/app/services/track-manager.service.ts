@@ -18,7 +18,8 @@ export class TrackManagerService {
     const headers = new HttpHeaders()
       .set('token', idToken)
       .set('private', privacy)
-      .set('file', data);
+      .set('file', data)
+      .set('Content-Type', 'multipart/form-data');
     return this.http.request('POST', this.backendBaseURL + '/insertTrack', {headers}).toPromise();
   }
 
@@ -28,6 +29,7 @@ export class TrackManagerService {
       .set('token', idToken)
       .set('private', privacy)
       .set('file', file);
+      //.set('Content-Type', 'multipart/form-data');
     return this.http.request('POST', this.backendBaseURL + '/insertTrack', {headers}).toPromise();
   }
 

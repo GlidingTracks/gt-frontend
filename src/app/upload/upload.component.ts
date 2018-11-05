@@ -47,9 +47,7 @@ export class UploadComponent implements OnInit {
   }
 
   onUploadFromFile() {
-    //console.log('Uploading file!');
     const file = this.uploadFromFileForm.get('file').value;
-    console.log(this.idToken);
     this.TrackManagerService.insertTracks(this.idToken, 'true', file)
       .then( ()=> {
       this.uploadFromFileForm.reset();
@@ -66,7 +64,7 @@ export class UploadComponent implements OnInit {
         this.uploadFromURLForm.reset();
       })
       .catch( ()=> {
-          console.log("MERDE");
+          console.log("MER2");
         });
 
   }

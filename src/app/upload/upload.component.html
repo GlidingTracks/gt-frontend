@@ -18,7 +18,7 @@
   </div>
   <div class="url">
     <h3>Upload from URL</h3>
-    <form enctype="multipart/form-data" [formGroup]="uploadFromURLForm" (ngSubmit)="onUploadFromURL()">
+    <form [formGroup]="uploadFromURLForm" (ngSubmit)="onUploadFromURL()">
       <div class="form-group">
         <label for="fileURL">Enter file URL : </label>
         <input type="url"
