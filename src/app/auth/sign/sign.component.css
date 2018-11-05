@@ -1,0 +1,25 @@
+*{
+  text-align: center;
+  font-family: "Comfortaa", sans-serif;
+}
+
+h2{ font-size: 1.8vw;}
+label{ font-size: 0.8vw;}
+
+div.row{
+  height: 50vh;
+}
+
+input, button{
+  background-color: white;
+  margin: 2vh auto;
+  text-align: left;
+  font-size: 0.8vw;
+}
+
+button {
+  font-size: 1.5vw;
+  text-decoration: none;
+  outline: none;
+  border: none;}
+button:hover{background-color: #EFEFEF;}

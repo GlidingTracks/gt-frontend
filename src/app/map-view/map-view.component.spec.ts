@@ -1,10 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MapViewComponent } from './map-view.component';
-import {LatitudePipe} from '../pipes/latitude.pipe';
-import {LongitudePipe} from '../pipes/longitude.pipe';
 import {Component, NO_ERRORS_SCHEMA} from '@angular/core';
 import {MeterPipe} from '../pipes/meter.pipe';
+import { GeoPipe } from '../pipes/geo.pipe';
+import { MapViewService } from '../services/map-view.service';
 
 @Component({ selector: 'app-tracks', template: ''})
 class TracksStubComponent {}
@@ -12,14 +12,14 @@ class TracksStubComponent {}
 describe('MapViewComponent', () => {
   let component: MapViewComponent;
   let fixture: ComponentFixture<MapViewComponent>;
+  let map: MapViewService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
         MapViewComponent,
         TracksStubComponent,
-        LatitudePipe,
-        LongitudePipe,
+        GeoPipe,
         MeterPipe
       ],
       schemas: [NO_ERRORS_SCHEMA]
@@ -30,10 +30,39 @@ describe('MapViewComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(MapViewComponent);
     component = fixture.componentInstance;
+    map = TestBed.get(MapViewService);
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('tooltip information should be up to date with infosSubject obervable', () => {
+    component.subscribeTooltipInfo();
+    map.infosSubject.subscribe( infos => {
+      expect(component.currentScreenPos).toEqual(infos.screenPos);
+      expect(component.isDragging).toEqual(infos.isDragging);
+      expect(component.currentLatitude).toEqual(infos.latitude);
+      expect(component.currentLongitude).toEqual(infos.longitude);
+      expect(component.currentAltitude).toEqual(Math.floor(infos.altitude));
+      expect(component.currentDate).toEqual(infos.date);
+    });
+  });
+
+  it('switchInfoPanel() should set this.infoSwitch', () => {
+    component.switchInfoPanel(true);
+    expect(component.infoSwitch).toEqual(true);
+    component.switchInfoPanel(false);
+    expect(component.infoSwitch).toEqual(false);
+  });
+
+  it('getSwitchColor() should return the right color depending on this.infoSwitch', () => {
+    component.switchInfoPanel(true);
+    expect(component.getSwitchColor(true)).toEqual('#91de5b');
+    expect(component.getSwitchColor(false)).toEqual('#7cc254');
+    component.switchInfoPanel(false);
+    expect(component.getSwitchColor(false)).toEqual('#91de5b');
+    expect(component.getSwitchColor(true)).toEqual('#7cc254');
   });
 });

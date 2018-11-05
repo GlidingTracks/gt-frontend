@@ -14,8 +14,6 @@ export class ParserService {
   stopAltitude;
   highestPoint;
 
-  constructor() {}
-
   /**
    * Recursive algorithm that detects {@link nPoints} turn-points in a 2D-path.
    * It keeps the first, the last and {@link nPoints} points inside the given

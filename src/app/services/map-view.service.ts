@@ -9,7 +9,6 @@ import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer';
 import OSM from 'ol/source/OSM';
 import VectorSource from 'ol/source/Vector';
 import {toLonLat, fromLonLat} from 'ol/proj';
-import {getLength, getDistance} from 'ol/sphere';
 import {Circle as CircleStyle, Fill, Stroke, Icon, Style} from 'ol/style';
 import {Subject} from 'rxjs';
 import {TrackPoint} from '../../track';
@@ -136,7 +135,7 @@ export class MapViewService {
         this.overlayPoint.setCoordinates(closestPoint);
       }
       // Update data of the closest point
-      this.updateInfos(closestFeature, closestPoint, pixel);
+      this.updateInfos(closestPoint, pixel);
     }
     this.map.render();
   }
@@ -295,9 +294,9 @@ export class MapViewService {
   }
 
   // Update this.infos with the given data
-  updateInfos(feature: Feature, point: Point, screenPos) {
+  updateInfos(point: Point, screenPos) {
     this.infos.screenPos = screenPos.map(v => Math.round(v));
-    [this.infos.longitude, this.infos.latitude] = toLonLat([point[0], point[1]]);
+    [this.infos.longitude, this.infos.latitude] = toLonLat([point[0], point[1]]).map(v => Math.round(v * 1e6) / 1e6);
     this.infos.altitude = point[2];
     this.infos.date = new Date(point[3] * 1000).toString();
     this.emitInfos();

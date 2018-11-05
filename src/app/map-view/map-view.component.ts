@@ -55,7 +55,22 @@ export class MapViewComponent implements OnInit {
               private parser: ParserService) { }
 
   ngOnInit() {
-    // Bind variables
+    // Bind tooltip variables
+    this.subscribeTooltipInfo();
+
+    // Setup map view
+    this.map.initMap();
+    this.map.setupEvents();
+
+    this.trackDay = this.IGCFilenameData !== null ? this.IGCFilenameData.date : '1970-01-01';
+    // TODO Format Track infos + Metadata from backend
+
+    // Load the IGC file
+    this.loadIGC(this.IGCFilename, this.trackDay);
+  }
+
+  // Subscribe to the observable from MapViewService
+  subscribeTooltipInfo() {
     this.infosSubscription = this.map.infosSubject.subscribe(
       (infos: any) => {
         this.currentScreenPos = infos.screenPos;
@@ -67,16 +82,6 @@ export class MapViewComponent implements OnInit {
       }
     );
     this.map.emitInfos();
-
-    // Setup map view
-    this.map.initMap();
-    this.map.setupEvents();
-
-    this.trackDay = this.IGCFilenameData !== null ? this.IGCFilenameData.date : '1970-01-01';
-    // TODO Format Track infos + Metadata from backend
-
-    // Load the IGC file
-    this.loadIGC(this.IGCFilename, this.trackDay);
   }
 
   // Load the IGC file and display the track on the map

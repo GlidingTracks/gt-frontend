@@ -38,22 +38,22 @@
         <div class="track-info">
           <span class="label">Start Time:</span> {{ startPoint.Time | date:'shortTime' }}<br>
           <span class="label">Start Altitude:</span> {{ startPoint.GPS_alt | meter }}<br>
-          <span class="label">Start Position:</span><br>{{ startPoint.Latitude | latitude }}, {{ startPoint.Longitude | longitude }}<br>
+          <span class="label">Start Position:</span><br>{{ startPoint.Latitude | geo:'lat' }}, {{ startPoint.Longitude | geo:'lon' }}<br>
         </div>
         <div class="track-info">
           <span class="label">TP1 Time:</span> {{ turnPoint1.Time | date:'shortTime' }}<br>
           <span class="label">TP1 Altitude:</span> {{ turnPoint1.GPS_alt | meter }}<br>
-          <span class="label">TP1 Position:</span><br>{{ turnPoint1.Latitude | latitude }}, {{ turnPoint1.Longitude | longitude }}<br>
+          <span class="label">TP1 Position:</span><br>{{ turnPoint1.Latitude | geo:'lat' }}, {{ turnPoint1.Longitude | geo:'lon' }}<br>
         </div>
         <div class="track-info">
           <span class="label">TP2 Time:</span> {{ turnPoint2.Time | date:'shortTime' }}<br>
           <span class="label">TP2 Altitude:</span> {{ turnPoint2.GPS_alt | meter }}<br>
-          <span class="label">TP2 Position:</span><br>{{ turnPoint2.Latitude | latitude }}, {{ turnPoint2.Longitude | longitude }}<br>
+          <span class="label">TP2 Position:</span><br>{{ turnPoint2.Latitude | geo:'lat' }}, {{ turnPoint2.Longitude | geo:'lon' }}<br>
         </div>
         <div class="track-info">
           <span class="label">End Time:</span> {{ endPoint.Time | date:'shortTime' }}<br>
           <span class="label">End Altitude:</span> {{ endPoint.GPS_alt | meter }}<br>
-          <span class="label">End Position:</span><br>{{ endPoint.Latitude | latitude }}, {{ endPoint.Longitude | longitude }}<br>
+          <span class="label">End Position:</span><br>{{ endPoint.Latitude | geo:'lat' }}, {{ endPoint.Longitude | geo:'lon' }}<br>
         </div>
       </div>
     </div>
@@ -65,8 +65,8 @@
              visibility: isShown()
              }">
         <div class="tooltip-text">
-          <span class="label">Latitude:</span> {{ currentLatitude | latitude }} <br>
-          <span class="label">Longitude:</span> {{ currentLongitude  | longitude }} <br>
+          <span class="label">Latitude:</span> {{ currentLatitude | geo:'lat' }} <br>
+          <span class="label">Longitude:</span> {{ currentLongitude  | geo:'lon' }} <br>
           <span class="label">Altitude:</span> {{ currentAltitude }}m <br>
           <span class="label">Date:</span> {{ currentDate | date:'short' }} <br>
         </div>

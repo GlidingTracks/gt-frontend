@@ -6,36 +6,14 @@ import * as firebase from 'firebase';
 })
 export class AuthService {
 
-  constructor() { }
-
-  createNewUser(email: string, password: string) {
-    return new Promise(
-      (resolve, reject) => {
-        firebase.auth().createUserWithEmailAndPassword(email, password).then(
-          () => {
-            resolve();
-          },
-          (error) => {
-            reject(error);
-          }
-        );
-      }
-    );
-  }
-
-  signInUser(email: string, password: string) {
-    return new Promise(
-      (resolve, reject) => {
-        firebase.auth().signInWithEmailAndPassword(email, password).then(
-          () => {
-            resolve();
-          },
-          (error) => {
-            reject(error);
-          }
-        );
-      }
-    );
+  userHandler(email: string, password: string, signMethod: string) {
+    let func;
+    if (signMethod === 'signIn') {
+      func = () => firebase.auth().signInWithEmailAndPassword(email, password);
+    } else if (signMethod === 'signUp') {
+      func = () => firebase.auth().createUserWithEmailAndPassword(email, password);
+    }
+    return func();
   }
 
   signOutUser() {
