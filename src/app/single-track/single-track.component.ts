@@ -1,8 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {TrackMetadata} from '../../track';
-import {MapViewComponent} from "../map-view/map-view.component";
-import * as firebase from "firebase";
-import {TrackManagerService} from "../services/track-manager.service";
+import {MapViewComponent} from '../map-view/map-view.component';
+import * as firebase from 'firebase';
+import {TrackManagerService} from '../services/track-manager.service';
 
 @Component({
   selector: 'app-single-track',
@@ -11,13 +11,13 @@ import {TrackManagerService} from "../services/track-manager.service";
 })
 export class SingleTrackComponent implements OnInit {
 
-  @Input() track: TrackMetadata
+  @Input() track: TrackMetadata;
 
   uid: string;
   idToken: string;
 
   constructor(
-    private mapview:MapViewComponent,
+    private mapview: MapViewComponent,
     private manager: TrackManagerService) {}
 
   ngOnInit() {
@@ -36,7 +36,7 @@ export class SingleTrackComponent implements OnInit {
     );
   }
 
-  useTrack(){
+  useTrack() {
     this.mapview.loadIGC(this.idToken, this.track);
   }
 
@@ -59,18 +59,18 @@ export class SingleTrackComponent implements OnInit {
     }
   }*/
 
-  downloadTrack(){
+  downloadTrack() {
     const TrackID = this.track.TrackID;
     this.manager.getTrack(this.idToken, TrackID).subscribe(
-      (response: any) =>{
-        let dataType = response.type;
-        let binaryData = [];
+      (response: any) => {
+        const dataType = response.type;
+        const binaryData = [];
         binaryData.push(response);
-        let downloadLink = document.createElement('a');
+        const downloadLink = document.createElement('a');
         downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, {type: dataType}));
         document.body.appendChild(downloadLink);
         downloadLink.click();
       }
-    )
+    );
   }
 }

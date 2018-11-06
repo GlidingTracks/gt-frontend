@@ -5,7 +5,9 @@ import {Component, NO_ERRORS_SCHEMA} from '@angular/core';
 import {MeterPipe} from '../pipes/meter.pipe';
 import { GeoPipe } from '../pipes/geo.pipe';
 import { MapViewService } from '../services/map-view.service';
+import {HttpClient} from '@angular/common/http';
 
+const httpClientSpy = jasmine.createSpyObj('Router', ['get']);
 @Component({ selector: 'app-tracks', template: ''})
 class TracksStubComponent {}
 
@@ -21,6 +23,9 @@ describe('MapViewComponent', () => {
         TracksStubComponent,
         GeoPipe,
         MeterPipe
+      ],
+      providers: [
+        { provide: HttpClient, useValue: httpClientSpy }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     })

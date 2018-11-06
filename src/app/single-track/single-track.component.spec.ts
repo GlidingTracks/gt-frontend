@@ -1,6 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SingleTrackComponent } from './single-track.component';
+import { MapViewComponent } from '../map-view/map-view.component';
+import {HttpClient} from '@angular/common/http';
+
+const httpClientSpy = jasmine.createSpyObj('Router', ['get']);
+const mapViewSpy = jasmine.createSpyObj('Router', ['loadIGC']);
 
 describe('SingleTrackComponent', () => {
   let component: SingleTrackComponent;
@@ -8,7 +13,13 @@ describe('SingleTrackComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SingleTrackComponent ]
+      declarations: [
+        SingleTrackComponent,
+      ],
+      providers: [
+        { provide: HttpClient, useValue: httpClientSpy },
+        { provide: MapViewComponent, useValue: mapViewSpy }
+      ],
     })
     .compileComponents();
   }));

@@ -2,6 +2,9 @@ import { TestBed } from '@angular/core/testing';
 
 import { ParserService } from './parser.service';
 import { TrackPoint } from 'src/track';
+import {HttpClient} from '@angular/common/http';
+
+const httpClientSpy = jasmine.createSpyObj('Router', ['get']);
 
 const dummyTrackData = [
   {'Latitude': 51.864156, 'Longitude': 18.894288, 'GPS_alt': 512 } as TrackPoint,
@@ -14,8 +17,12 @@ const dummyIGCrow = 'B1204475142114N01751264EA0010800141';
 describe('ParserService', () => {
   let service: ParserService;
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = new ParserService();
+    TestBed.configureTestingModule({
+      providers: [
+        { provide: HttpClient, useValue: httpClientSpy }
+      ],
+    });
+    service = TestBed.get(ParserService);
   });
 
   it('should be created', () => {
