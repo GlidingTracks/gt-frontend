@@ -63,11 +63,9 @@ export class ParserService {
     let trackData: TrackPoint[] = [] as any;
     let p: string[];
     // Accessing the file from its TrackID
-    this.manager.getTrack(idToken, TrackID).subscribe(data => console.log("PUTE"));
-    //console.log(data);
-    const dataString = "";//data.toString();
+    const data = await this.manager.getTrack(idToken, TrackID).toPromise();
     // Separate rows and iterate through them
-    const rows = dataString.split('\n');
+    const rows = data.split('\n');
     rows.forEach( (row) => {
       switch (row[0]) {
         case 'B': // B Record parsing

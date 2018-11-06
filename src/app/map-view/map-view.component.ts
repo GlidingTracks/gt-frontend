@@ -106,6 +106,7 @@ export class MapViewComponent implements OnInit {
     // Parsing
     this.parser.parseIGCFile(idToken, TrackID, dateTime)
       .then(trackData => {
+        this.trackDay = dateTime;
         // Loading track on the map
         this.map.loadTrack(trackData);
         // Display track information

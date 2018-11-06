@@ -19,6 +19,6 @@ export class TrackManagerService {
     const headers = new HttpHeaders()
       .set('token', idToken)
       .set('TrackID', TrackID);
-    return this.http.request('GET', this.backendBaseURL + '/getTrack', {headers});
+    return this.http.request('GET', this.backendBaseURL + '/getTrack', {headers, responseType:'text'});
   }
 }
