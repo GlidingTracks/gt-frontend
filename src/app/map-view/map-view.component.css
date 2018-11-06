@@ -1,11 +1,10 @@
 .row {
-  margin-top: 1vh;
   display: flex;
 }
 
 app-tracks {
   flex: 30%;
-  margin-right: 0.5vw;
+  margin-right: 0.15vw;
 }
 
 .viewport{

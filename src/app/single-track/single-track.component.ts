@@ -37,8 +37,7 @@ export class SingleTrackComponent implements OnInit {
   useTrack(){
     const TrackID = this.track.TrackID;
     const dateTime = this.track.Record.Header.Date;
-    const trackDay = '20' + dateTime.substr(4, 2) + '-' + dateTime.substr(2, 2) + '-' + dateTime.substr(0, 2);
-    this.mapview.loadIGC(this.idToken, TrackID, trackDay);
+    this.mapview.loadIGC(this.idToken, this.track);
   }
 
 }

@@ -58,6 +58,17 @@ export class ParserService {
     return [resultPath, resultDist];
   }
 
+  // Parse a single IGC B record string into a string array
+  parseBrecord(s: string) {
+    return [
+      s.substring(1, 3), s.substring(3, 5), s.substring(5, 7), // hours, minutes, seconds
+      s.substring(7, 15), s.substring(15, 24),                 // latitude, longitude
+      s.substring(24, 25),                                     // valid
+      s.substring(25, 30), s.substring(30, 35),                // pressure alt, gps alt
+      s.substring(35, 38), s.substring(38, 42)                 // accuracy; engine rpm
+    ];
+  }
+
   // Function responsible for IGC file parsing
   async parseIGCFile(idToken: string, TrackID: string, trackDay: string) {
     let trackData: TrackPoint[] = [] as any;
@@ -87,17 +98,6 @@ export class ParserService {
       }
     });
     return trackData;
-  }
-
-  // Parse a single IGC B record string into a string array
-  parseBrecord(s: string) {
-    return [
-      s.substring(1, 3), s.substring(3, 5), s.substring(5, 7), // hours, minutes, seconds
-      s.substring(7, 15), s.substring(15, 24),                 // latitude, longitude
-      s.substring(24, 25),                                     // valid
-      s.substring(25, 30), s.substring(30, 35),                // pressure alt, gps alt
-      s.substring(35, 38), s.substring(38, 42)                 // accuracy; engine rpm
-    ];
   }
 
   // Convert parsed IGC coord '5142113N' or '01751264E' to float values in Decimal Degrees
