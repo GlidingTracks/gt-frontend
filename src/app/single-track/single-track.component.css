@@ -4,9 +4,15 @@ button{
   border: none;
   background-color: white;
   float: right;
-  margin-right: 5vw;
   font-size: 1vw;
 }
 button:hover{
   background-color: #EFEFEF;
+}
+
+button.useTrack{
+  margin-right: 1.5vw;
+}
+button.downloadTrack{
+  margin-right: 1.5vw;
 }

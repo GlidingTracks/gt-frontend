@@ -14,7 +14,7 @@
 
 button{
   display: block;
-  margin: 0.5vh auto;
+  margin: 0.5vh auto 1.5vh;
   background-color: white;
   color: black;
   font-family: "Comfortaa", sans-serif;

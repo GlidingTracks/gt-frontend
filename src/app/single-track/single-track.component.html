@@ -1,6 +1,9 @@
 <!-- TODO Create a "more infos" button to display a popup with the detailed info about the track -->
 <div *ngIf="track">
-  <button (click)="useTrack()">
+  <button class="downloadTrack" (click)="downloadTrack()">
+    Download track
+  </button>
+  <button class="useTrack" (click)="useTrack()">
     Select track
   </button>
   Pilot: {{ track.Record.Header.Pilot }} <br>
