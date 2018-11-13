@@ -15,10 +15,10 @@ export class TrackManagerService {
     return this.http.request('GET', this.backendBaseURL + '/getTracks', {headers});
   }
 
-  getTrack(idToken: string, TrackID: string){
+  getTrack(idToken: string, TrackID: string) {
     const headers = new HttpHeaders()
       .set('token', idToken)
       .set('TrackID', TrackID);
-    return this.http.request('GET', this.backendBaseURL + '/getTrack', {headers, responseType:'text'});
+    return this.http.request('GET', this.backendBaseURL + '/getTrack', {headers, responseType: 'text'});
   }
 }

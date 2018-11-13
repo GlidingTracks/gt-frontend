@@ -1,7 +1,7 @@
 import { Injectable} from '@angular/core';
 import {TrackPoint} from '../../track';
 import {getDistance} from 'ol/sphere';
-import {TrackManagerService} from "./track-manager.service";
+import {TrackManagerService} from './track-manager.service';
 
 @Injectable({
   providedIn: 'root'
