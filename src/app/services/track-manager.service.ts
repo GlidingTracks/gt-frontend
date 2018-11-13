@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpRequest} from '@angular/common/http';
+import {findProblemCode} from "codelyzer/angular/styles/cssLexer";
 
 @Injectable({
   providedIn: 'root'
@@ -23,14 +24,14 @@ export class TrackManagerService {
     return this.http.request('POST', this.backendBaseURL + '/insertTrack', {headers}).toPromise();
   }
 
-  insertTracks(idToken: string, privacy: string = 'false', file: string) {
-    // Accessing the file form its url (async/await syntax)
+  insertTracks(idToken: string, privacy: string = 'false', file) {
     const headers = new HttpHeaders()
       .set('token', idToken)
-      .set('private', privacy)
-      .set('file', file);
-      //.set('Content-Type', 'multipart/form-data');
-    return this.http.request('POST', this.backendBaseURL + '/insertTrack', {headers}).toPromise();
+      .set('Content-Type', 'multipart/form-data');
+    const formData: FormData = new FormData();
+    formData.append('file', file, file.name);
+    const request = new HttpRequest('POST', this.backendBaseURL + '/insertTrack', formData, {headers});
+    return this.http.request(request).toPromise();
   }
 
   getTracks(idToken: string, privacy = 'Public') {
