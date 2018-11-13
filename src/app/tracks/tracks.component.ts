@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {TrackManagerService} from '../services/track-manager.service';
-import {AuthService} from '../services/auth.service';
 import * as firebase from 'firebase';
-import {TrackMetadata} from '../../track';
 
 @Component({
   selector: 'app-tracks',

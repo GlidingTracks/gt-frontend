@@ -3,6 +3,7 @@ import {MapViewService} from '../services/map-view.service';
 import {Subscription} from 'rxjs';
 import {ParserService} from '../services/parser.service';
 import {TrackPoint} from '../../track';
+import { TrackManagerService } from '../services/track-manager.service';
 
 @Component({
   selector: 'app-map-view',
@@ -43,7 +44,9 @@ export class MapViewComponent implements OnInit {
 
 
   constructor(private map: MapViewService,
-              private parser: ParserService) { }
+              private parser: ParserService,
+              private trackManager: TrackManagerService) { }
+
   ngOnInit() {
     // TODO Add IGC file loaded by default
 
@@ -109,6 +112,13 @@ export class MapViewComponent implements OnInit {
   // Update information about turn-points
   getTpInfos(tpData) {
     [this.startPoint, this.turnPoint1, this.turnPoint2, this.endPoint] = tpData;
+  }
+
+  async pushTpData() {
+    const tpData = [this.startPoint, this.turnPoint1, this.turnPoint2, this.endPoint];
+    (await this.trackManager.insertTrackPoint('', tpData)).toPromise()
+      .then( res => console.log('Success! ' + res.toString()))
+      .catch(error => console.log('Fail! ' + error));
   }
 
   // Update position the track tooltip
