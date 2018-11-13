@@ -43,6 +43,11 @@ describe('MapViewComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('date should be in the right form', () => {
+    const ex_dataTime = '120818';
+    expect('20' + ex_dataTime.substr(4, 2) + '-' + ex_dataTime.substr(2, 2) + '-' + ex_dataTime.substr(0, 2)).toEqual('2018-08-12');
+    });
+
   it('tooltip information should be up to date with infosSubject obervable', () => {
     component.subscribeTooltipInfo();
     map.infosSubject.subscribe( infos => {

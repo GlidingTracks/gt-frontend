@@ -42,22 +42,6 @@ export class SingleTrackComponent implements OnInit {
 
 
   // Stolen from https://stackoverflow.com/questions/51682514/how-download-a-file-from-httpclient#
-  /**
-   * Method is use to download file.
-   * @param data - Array Buffer data
-   * @param type - type of the document.
-   */
-  /*downloadFile(data: any, type: string)
-  {
-    let blob = new Blob([data], { type: type});
-    let url = window.URL.createObjectURL(blob);
-    let pwa = window.open(url);
-    console.log(url);
-    if (!pwa || pwa.closed || typeof pwa.closed == 'undefined')
-    {
-      alert( 'Please disable your Pop-up blocker and try again.');
-    }
-  }*/
 
   downloadTrack() {
     const TrackID = this.track.TrackID;

@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { SingleTrackComponent } from './single-track.component';
 import { MapViewComponent } from '../map-view/map-view.component';
 import {HttpClient} from '@angular/common/http';
+import {By} from "@angular/platform-browser";
 
 const httpClientSpy = jasmine.createSpyObj('Router', ['get']);
 const mapViewSpy = jasmine.createSpyObj('Router', ['loadIGC']);
@@ -33,4 +34,5 @@ describe('SingleTrackComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
 });
