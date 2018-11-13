@@ -4,14 +4,21 @@ import { MapViewService } from './map-view.service';
 import { ParserService } from './parser.service';
 import { Point } from 'ol/geom';
 import { Icon } from 'ol/style';
+import {HttpClient} from '@angular/common/http';
+
+const httpClientSpy = jasmine.createSpyObj('Router', ['get']);
 
 const dummyPoint = [1234650, 4567809, 1050, 1541035627] as Point;
 
 describe('MapViewService', () => {
   let service, parser;
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    parser = new ParserService();
+    TestBed.configureTestingModule({
+      providers: [
+        { provide: HttpClient, useValue: httpClientSpy }
+      ],
+    });
+    parser = TestBed.get(ParserService);
     service = new MapViewService(parser);
   });
 

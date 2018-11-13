@@ -5,7 +5,9 @@ import {Component, NO_ERRORS_SCHEMA} from '@angular/core';
 import {MeterPipe} from '../pipes/meter.pipe';
 import { GeoPipe } from '../pipes/geo.pipe';
 import { MapViewService } from '../services/map-view.service';
+import {HttpClient} from '@angular/common/http';
 
+const httpClientSpy = jasmine.createSpyObj('Router', ['get']);
 @Component({ selector: 'app-tracks', template: ''})
 class TracksStubComponent {}
 
@@ -22,6 +24,9 @@ describe('MapViewComponent', () => {
         GeoPipe,
         MeterPipe
       ],
+      providers: [
+        { provide: HttpClient, useValue: httpClientSpy }
+      ],
       schemas: [NO_ERRORS_SCHEMA]
     })
     .compileComponents();
@@ -37,6 +42,11 @@ describe('MapViewComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('date should be in the right form', () => {
+    const ex_dataTime = '120818';
+    expect('20' + ex_dataTime.substr(4, 2) + '-' + ex_dataTime.substr(2, 2) + '-' + ex_dataTime.substr(0, 2)).toEqual('2018-08-12');
+    });
 
   it('tooltip information should be up to date with infosSubject obervable', () => {
     component.subscribeTooltipInfo();

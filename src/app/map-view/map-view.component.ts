@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {MapViewService} from '../services/map-view.service';
 import {Subscription} from 'rxjs';
-import * as parseFilename from 'igc-filename-parser';
 import {ParserService} from '../services/parser.service';
 import {TrackPoint} from '../../track';
 
@@ -15,13 +14,6 @@ export class MapViewComponent implements OnInit {
   // Display logic
   infoSwitch = false;
 
-  // Test urls of IGC files
-  igcUrls =  [
-    '2018-08-12-XCT-MNO-02.igc',
-    'https://firebasestorage.googleapis.com/v0/b/gt-backend-8b9c2.appspot.com/o/' +
-      'HAGOdywD9rQayoOOIHyd?alt=media&token=f0511567-2b36-4689-802d-b80e5b52b2af',
-    'https://openlayers.org/en/latest/examples/data/igc/Damien-de-Baenst.igc',
-  ];
   // Display data
   currentLatitude: string;
   currentLongitude: string;
@@ -47,14 +39,14 @@ export class MapViewComponent implements OnInit {
   endPoint: TrackPoint;
 
   // IGC file Parsing
-  IGCFilename = this.igcUrls[2]; // TODO Connect urls to firestore
-  IGCFilenameData = parseFilename(this.IGCFilename); // TODO Get pilot name
   trackDay: string;
+
 
   constructor(private map: MapViewService,
               private parser: ParserService) { }
-
   ngOnInit() {
+    // TODO Add IGC file loaded by default
+
     // Bind tooltip variables
     this.subscribeTooltipInfo();
 
@@ -62,11 +54,6 @@ export class MapViewComponent implements OnInit {
     this.map.initMap();
     this.map.setupEvents();
 
-    this.trackDay = this.IGCFilenameData !== null ? this.IGCFilenameData.date : '1970-01-01';
-    // TODO Format Track infos + Metadata from backend
-
-    // Load the IGC file
-    this.loadIGC(this.IGCFilename, this.trackDay);
   }
 
   // Subscribe to the observable from MapViewService
@@ -85,10 +72,17 @@ export class MapViewComponent implements OnInit {
   }
 
   // Load the IGC file and display the track on the map
-  loadIGC(filename, dateTime) {
+  loadIGC(idToken, metadata) {
+    // Parsing metadata
+    const TrackID = metadata.TrackID;
+    const metadataTime = metadata.Record.Header.Date;
+    const dateTime = '20' + metadataTime.substr(4, 2) + '-' + metadataTime.substr(2, 2) + '-' + metadataTime.substr(0, 2);
+    this.pilot = metadata.Record.Header.Pilot;
+
     // Parsing
-    this.parser.parseIGCFile(filename, dateTime)
+    this.parser.parseIGCFile(idToken, TrackID, dateTime)
       .then(trackData => {
+        this.trackDay = dateTime;
         // Loading track on the map
         this.map.loadTrack(trackData);
         // Display track information
@@ -97,7 +91,7 @@ export class MapViewComponent implements OnInit {
         const tpData = this.map.loadTurnPoints(trackData, 2);
         this.getTpInfos(tpData);
       })
-      .catch(error => console.error(`Failed to parse ${this.IGCFilename} : ${error}`));
+      .catch(error => console.error(`Failed to parse ${TrackID} : ${error}`));
   }
 
   // Update general information about the track
