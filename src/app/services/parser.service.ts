@@ -58,6 +58,12 @@ export class ParserService {
     return [resultPath, resultDist];
   }
 
+  pushTpData(TrackID, tpData) {
+    this.manager.insertTrackPoint(TrackID, tpData)
+      .then(res => console.log('Success! ' + res.toString()))
+      .catch(error => console.error('Failed to push:', tpData, error));
+  }
+
   // Parse a single IGC B record string into a string array
   parseBrecord(s: string) {
     return [
@@ -70,11 +76,11 @@ export class ParserService {
   }
 
   // Function responsible for IGC file parsing
-  async parseIGCFile(idToken: string, TrackID: string, trackDay: string) {
+  async parseIGCFile(TrackID: string, trackDay: string) {
     let trackData: TrackPoint[] = [] as any;
     let p: string[];
     // Accessing the file from its TrackID
-    const data = await this.manager.getTrack(idToken, TrackID).toPromise();
+    const data = await this.manager.getTrack(TrackID);
     // Separate rows and iterate through them
     const rows = data.split('\n');
     rows.forEach( (row) => {
@@ -84,7 +90,7 @@ export class ParserService {
           // Add the record to the trackData array
           trackData = [...trackData,
             {
-              Time: new Date(`${trackDay}T${p[0]}:${p[1]}:${p[2]}`),
+              Time: new Date(`${trackDay}T${p[0]}:${p[1]}:${p[2]}`).getTime() / 1000,
               Latitude: this.parseCoord(p[3]),
               Longitude: this.parseCoord(p[4]),
               Valid: p[5] === 'A',
@@ -156,7 +162,7 @@ export class ParserService {
 
   // Returns the time elapsed between t1 and t2 in seconds
   getElapsedTime(t1, t2) {
-    return (t2 - t1) / 1000;
+    return t2 - t1;
   }
 
   // Returns to total duration of the flight

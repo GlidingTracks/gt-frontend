@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {TrackManagerService} from '../services/track-manager.service';
-import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-tracks',
@@ -9,38 +8,17 @@ import * as firebase from 'firebase';
 })
 export class TracksComponent implements OnInit {
 
-  uid: string;
-  idToken: string;
   tracks;
 
-  constructor(private tracksManager: TrackManagerService) { }
+  constructor(private trackManager: TrackManagerService) { }
 
   ngOnInit() {
-    firebase.auth().onAuthStateChanged(
-      (user) => {
-        if (user) {
-          this.uid = user.uid;
-          user.getIdToken().then( (token) => {
-            this.idToken = token;
-          });
-        } else {
-          this.uid = '';
-          this.idToken = '';
-        }
-      }
-    );
+    this.showTracks();
   }
 
   showTracks() {
-    if (this.idToken) {
-      this.tracksManager.getTracks(this.idToken, 'Public')
-        .subscribe(
-          (data) => {
-            this.tracks = data;
-          },
-          (error) => {
-            console.warn(error);
-        });
-    }
+    this.trackManager.getTracks('Public')
+      .then(data => this.tracks = data)
+      .catch( error => console.warn(error));
   }
 }

@@ -1,11 +1,13 @@
 <!-- TODO Create a "more infos" button to display a popup with the detailed info about the track -->
-<div *ngIf="track">
+<div class="track" *ngIf="track">
   <button class="downloadTrack" (click)="downloadTrack()">
     Download track
   </button>
   <button class="useTrack" (click)="useTrack()">
     Select track
   </button>
-  Pilot: {{ track.Record.Header.Pilot }} <br>
-  Import date: {{ track.Time*1000 | date:'MM/dd/yyyy HH:mm:ss' }}
+  <span>Pilot: {{ track.Record.Header.Pilot }}</span><br>
+  <span>Import date: {{ track.Time*1000 | date:'MM/dd/yyyy HH:mm:ss' }}</span><br>
+  <span *ngIf="track.TrackPoints" style="color: green">Turn-points already generated</span>
+  <span *ngIf="!track.TrackPoints" style="color: red">Turn-points not generated</span>
 </div>
