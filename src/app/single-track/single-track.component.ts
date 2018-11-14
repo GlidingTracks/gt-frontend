@@ -15,6 +15,7 @@ export class SingleTrackComponent implements OnInit {
 
   uid: string;
   idToken: string;
+  more: boolean = false;
 
   constructor(
     private mapview: MapViewComponent,
@@ -41,8 +42,7 @@ export class SingleTrackComponent implements OnInit {
   }
 
 
-  // Stolen from https://stackoverflow.com/questions/51682514/how-download-a-file-from-httpclient#
-
+  // from https://stackoverflow.com/questions/51682514/how-download-a-file-from-httpclient#
   downloadTrack() {
     const TrackID = this.track.TrackID;
     this.manager.getTrack(this.idToken, TrackID).subscribe(
@@ -56,5 +56,13 @@ export class SingleTrackComponent implements OnInit {
         downloadLink.click();
       }
     );
+  }
+
+  showMore(){
+    this.more=!this.more;
+  }
+
+  changePrivacy(){
+
   }
 }

@@ -14,5 +14,16 @@ button.useTrack{
   margin-right: 1.5vw;
 }
 button.downloadTrack{
+  margin-top: 2.5vh;
+}
+button.more{
   margin-right: 1.5vw;
+}
+button.changePrivacy{
+  margin-right: 1.5vw;
+  margin-top: 02.5vh;
+}
+
+div.more{
+
 }
