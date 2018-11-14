@@ -7,7 +7,7 @@ import { TrackPoint } from '../../track';
   providedIn: 'root'
 })
 export class TrackManagerService {
-  backendBaseURL = 'https://gt-backend-test.herokuapp.com/';
+  backendBaseURL = 'https://gt-backend-test.herokuapp.com';
 
   constructor(private http: HttpClient,
               private auth: AuthService) { }

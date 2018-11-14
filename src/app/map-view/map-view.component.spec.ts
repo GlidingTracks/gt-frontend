@@ -11,6 +11,16 @@ const httpClientSpy = jasmine.createSpyObj('Router', ['get']);
 @Component({ selector: 'app-tracks', template: ''})
 class TracksStubComponent {}
 
+const trackData = [
+  {'Time': 1535960184, 'Latitude': 43.263616666666664, 'Longitude': 27.2839,
+    'Valid': true, 'Pressure_alt': 0, 'GPS_alt': 324, 'Accuracy': 80, 'Engine_RPM': 0},
+  {'Time': 1535963730, 'Latitude': 43.1516, 'Longitude': 27.025466666666667,
+    'Valid': true, 'Pressure_alt': 0, 'GPS_alt': 1890, 'Accuracy': 2, 'Engine_RPM': 0},
+  {'Time': 1535966894, 'Latitude': 42.897416666666665, 'Longitude': 26.935166666666667,
+    'Valid': true, 'Pressure_alt': 0, 'GPS_alt': 1251, 'Accuracy': 88, 'Engine_RPM': 0},
+  {'Time': 1535969598, 'Latitude': 42.752716666666664, 'Longitude': 26.70725,
+    'Valid': true, 'Pressure_alt': 0, 'GPS_alt': 195, 'Accuracy': 20, 'Engine_RPM': 0}];
+
 describe('MapViewComponent', () => {
   let component: MapViewComponent;
   let fixture: ComponentFixture<MapViewComponent>;
@@ -46,7 +56,12 @@ describe('MapViewComponent', () => {
   it('date should be in the right form', () => {
     const ex_dataTime = '120818';
     expect('20' + ex_dataTime.substr(4, 2) + '-' + ex_dataTime.substr(2, 2) + '-' + ex_dataTime.substr(0, 2)).toEqual('2018-08-12');
-    });
+  });
+
+  it('loadTpData() should use existing tpData if the metadata has one', () => {
+    const metadata = {TrackPoints: trackData};
+    expect(component.loadTpData(metadata, trackData)).toBeFalsy();
+  });
 
   it('tooltip information should be up to date with infosSubject obervable', () => {
     component.subscribeTooltipInfo();
