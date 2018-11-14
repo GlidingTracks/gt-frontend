@@ -4,7 +4,8 @@
   <div class="viewport">
     <p>Map View</p>
     <div class="track-header">
-      Pilot : {{ pilot }}
+      <span *ngIf="!isPilotFalsy()">Pilot : {{ pilot }}</span>
+      <span *ngIf="isPilotFalsy()"><br></span>
       <div class="switch-container">
         <div class="switch" (click)="switchInfoPanel(false)"
              [ngStyle] = "{'background-color': getSwitchColor(false)}">
@@ -36,22 +37,22 @@
       <!-- Start/Turn-points/End information -->
       <div class="track-info-container" *ngIf="infoSwitch">
         <div class="track-info">
-          <span class="label">Start Time:</span> {{ startPoint.Time | date:'shortTime' }}<br>
+          <span class="label">Start Time:</span> {{ startPoint.Time*1000 | date:'shortTime' }}<br>
           <span class="label">Start Altitude:</span> {{ startPoint.GPS_alt | meter }}<br>
           <span class="label">Start Position:</span><br>{{ startPoint.Latitude | geo:'lat' }}, {{ startPoint.Longitude | geo:'lon' }}<br>
         </div>
         <div class="track-info">
-          <span class="label">TP1 Time:</span> {{ turnPoint1.Time | date:'shortTime' }}<br>
+          <span class="label">TP1 Time:</span> {{ turnPoint1.Time*1000 | date:'shortTime' }}<br>
           <span class="label">TP1 Altitude:</span> {{ turnPoint1.GPS_alt | meter }}<br>
           <span class="label">TP1 Position:</span><br>{{ turnPoint1.Latitude | geo:'lat' }}, {{ turnPoint1.Longitude | geo:'lon' }}<br>
         </div>
         <div class="track-info">
-          <span class="label">TP2 Time:</span> {{ turnPoint2.Time | date:'shortTime' }}<br>
+          <span class="label">TP2 Time:</span> {{ turnPoint2.Time*1000 | date:'shortTime' }}<br>
           <span class="label">TP2 Altitude:</span> {{ turnPoint2.GPS_alt | meter }}<br>
           <span class="label">TP2 Position:</span><br>{{ turnPoint2.Latitude | geo:'lat' }}, {{ turnPoint2.Longitude | geo:'lon' }}<br>
         </div>
         <div class="track-info">
-          <span class="label">End Time:</span> {{ endPoint.Time | date:'shortTime' }}<br>
+          <span class="label">End Time:</span> {{ endPoint.Time*1000 | date:'shortTime' }}<br>
           <span class="label">End Altitude:</span> {{ endPoint.GPS_alt | meter }}<br>
           <span class="label">End Position:</span><br>{{ endPoint.Latitude | geo:'lat' }}, {{ endPoint.Longitude | geo:'lon' }}<br>
         </div>

@@ -6,6 +6,10 @@ import * as firebase from 'firebase';
 })
 export class AuthService {
 
+  async getUserToken() {
+    return await firebase.auth().currentUser.getIdToken();
+  }
+
   userHandler(email: string, password: string, signMethod: string) {
     let func;
     if (signMethod === 'signIn') {

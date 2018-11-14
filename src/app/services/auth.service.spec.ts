@@ -1,12 +1,30 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, fakeAsync, flushMicrotasks } from '@angular/core/testing';
+import * as firebase from 'firebase';
 
 import { AuthService } from './auth.service';
 
+const email = 'test@test.com';
+const password = 'password123';
+const signin = () => firebase.auth().signInWithEmailAndPassword(email, password);
+const signup = () => firebase.auth().createUserWithEmailAndPassword(email, password);
+
 describe('AuthService', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+  let service: AuthService;
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.get(AuthService);
+  });
 
   it('should be created', () => {
-    const service: AuthService = TestBed.get(AuthService);
     expect(service).toBeTruthy();
+  });
+
+  it('firebase app should be initialized', () => {
+    expect(firebase.app.length).toBeGreaterThan(0);
+  });
+
+  it('signOutUser() should sign out the user', () => {
+    firebase.auth().signOut();
+    expect(firebase.auth().currentUser).toBeFalsy();
   });
 });

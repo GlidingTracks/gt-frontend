@@ -4,7 +4,7 @@ import Map from 'ol/Map';
 import View from 'ol/View';
 import Feature from 'ol/Feature';
 import {defaults as defaultControls} from 'ol/control';
-import {LineString, Point, GeometryLayout} from 'ol/geom';
+import {LineString, Point } from 'ol/geom';
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer';
 import OSM from 'ol/source/OSM';
 import VectorSource from 'ol/source/Vector';
@@ -43,6 +43,7 @@ export class MapViewService {
   map: Map;
   view: View;
   vectorSource = new VectorSource();
+  vectorTp = new VectorSource();
   // Data for closest point
   infos = {
     screenPos: [0, 0],
@@ -74,6 +75,14 @@ export class MapViewService {
       layers: [
         new TileLayer({ // Set map background from OSM
           source: new OSM({wrapX: false}),
+        }),
+        new VectorLayer({ // Add layer for the tracks
+          source: this.vectorSource,
+          style: this.trackStyleFunction()
+        }),
+        new VectorLayer({ // Add layer for the turn-points
+          source: this.vectorTp,
+          style: this.tpStyleFunction()
         })
       ],
       target: 'map',
@@ -143,25 +152,24 @@ export class MapViewService {
   // Load a track as features into to tracks layer on the map
   loadTrack(trackData) {
     const features = this.fromTrackDataToFeatures(trackData);
+    this.vectorSource.clear();
     this.vectorSource.addFeatures(features);
     this.view.fit(this.vectorSource.getExtent());
-    this.map.addLayer(new VectorLayer({ // Add layer for the tracks
-      source: this.vectorSource,
-      style: this.trackStyleFunction()
-    }));
   }
 
   // Load the turn-points as features on the map
-  loadTurnPoints(trackData, nPoints) {
-    const [tp, _] = this.parser.TurnPointsDetection(trackData, nPoints);
-    const features = this.fromTrackDataToFeatures(tp as TrackPoint[]);
-    const v = new VectorSource();
-    v.addFeatures(features);
-    this.map.addLayer(new VectorLayer({ // Add layer for the turn-points
-      source: v,
-      style: this.tpStyleFunction()
-    }));
-    return tp;
+  loadTurnPoints(trackData, tpData, trackId) {
+    let tp, d, features;
+    if (tpData === null) {
+      [tp, d] = this.parser.TurnPointsDetection(trackData, 2);
+      features = this.fromTrackDataToFeatures(tp as TrackPoint[]);
+      this.parser.pushTpData(trackId, tp as TrackPoint[]);
+    } else {
+      features = this.fromTrackDataToFeatures(tpData as TrackPoint[]);
+    }
+    this.vectorTp.clear();
+    this.vectorTp.addFeatures(features);
+    return tpData ? tpData : tp;
   }
 
   /**
@@ -195,7 +203,7 @@ export class MapViewService {
       }
       // Coordinates projection from Decimal Degrees to EPSG:3857
       coords = fromLonLat([point.Longitude, point.Latitude]);
-      coords = [...coords, point.GPS_alt, point.Time.getTime() / 1000];
+      coords = [...coords, point.GPS_alt, point.Time];
       geometry.appendCoordinate(coords);
     }
     // delta is the steepness of the upward/downward movement for the current geometry
