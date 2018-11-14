@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {MapViewService} from '../services/map-view.service';
 import {Subscription} from 'rxjs';
 import {ParserService} from '../services/parser.service';
-import {TrackPoint} from '../../track';
+import { TrackMetadata, TrackPoint } from '../../track';
+import { TrackManagerService } from '../services/track-manager.service';
 
 @Component({
   selector: 'app-map-view',
@@ -44,16 +45,14 @@ export class MapViewComponent implements OnInit {
 
   constructor(private map: MapViewService,
               private parser: ParserService) { }
-  ngOnInit() {
-    // TODO Add IGC file loaded by default
 
+  ngOnInit() {
     // Bind tooltip variables
     this.subscribeTooltipInfo();
 
     // Setup map view
     this.map.initMap();
     this.map.setupEvents();
-
   }
 
   // Subscribe to the observable from MapViewService
@@ -72,26 +71,25 @@ export class MapViewComponent implements OnInit {
   }
 
   // Load the IGC file and display the track on the map
-  loadIGC(idToken, metadata) {
+  loadIGC(metadata) {
     // Parsing metadata
-    const TrackID = metadata.TrackID;
+    const trackID = metadata.TrackID;
     const metadataTime = metadata.Record.Header.Date;
     const dateTime = '20' + metadataTime.substr(4, 2) + '-' + metadataTime.substr(2, 2) + '-' + metadataTime.substr(0, 2);
     this.pilot = metadata.Record.Header.Pilot;
 
     // Parsing
-    this.parser.parseIGCFile(idToken, TrackID, dateTime)
+    this.parser.parseIGCFile(trackID, dateTime)
       .then(trackData => {
         this.trackDay = dateTime;
         // Loading track on the map
         this.map.loadTrack(trackData);
         // Display track information
         this.getTrackInfos(trackData);
-        // Compute and load turn-points on the map
-        const tpData = this.map.loadTurnPoints(trackData, 2);
-        this.getTpInfos(tpData);
+        // Load turn-points data
+        this.loadTpData(metadata, trackData);
       })
-      .catch(error => console.error(`Failed to parse ${TrackID} : ${error}`));
+      .catch(error => console.error(`Failed to parse track ${trackID} : ${error}`));
   }
 
   // Update general information about the track
@@ -104,6 +102,11 @@ export class MapViewComponent implements OnInit {
     this.e2eDistance = this.parser.getE2EDistance(trackData);
     this.maxAscendSpeed = this.map.getMaxAscendSpeed();
     this.maxDescentSpeed = this.map.getMaxDescentSpeed();
+  }
+
+  loadTpData(metadata, trackData) {
+    const tpData = this.map.loadTurnPoints(trackData, metadata.TrackPoints, metadata.TrackID);
+    this.getTpInfos(tpData);
   }
 
   // Update information about turn-points
@@ -137,5 +140,9 @@ export class MapViewComponent implements OnInit {
   // Update the color of the general/turn-points information panels
   getSwitchColor(value) {
     return this.infoSwitch === value ? '#91de5b' : '#7cc254';
+  }
+
+  isPilotFalsy() {
+    return !this.pilot || this.pilot === '';
   }
 }

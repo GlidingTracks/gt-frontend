@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
+import { AuthService } from './auth.service';
+import { TrackPoint } from '../../track';
 
 @Injectable({
   providedIn: 'root'
@@ -7,18 +9,31 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 export class TrackManagerService {
   backendBaseURL = 'https://gt-backend-test.herokuapp.com';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+              private auth: AuthService) { }
 
-  getTracks(idToken: string, privacy = 'Public') {
-    const headers = new HttpHeaders()
-      .set('token', idToken);
-    return this.http.request('GET', this.backendBaseURL + '/getTracks', {headers});
-  }
-
-  getTrack(idToken: string, TrackID: string) {
+  async getTracks(privacy = 'Public') {
+    const idToken = await this.auth.getUserToken();
     const headers = new HttpHeaders()
       .set('token', idToken)
-      .set('TrackID', TrackID);
-    return this.http.request('GET', this.backendBaseURL + '/getTrack', {headers, responseType: 'text'});
+      .set('queryType', privacy);
+    return await this.http.request('GET', this.backendBaseURL + '/getTracks', {headers}).toPromise();
+  }
+
+  async getTrack(trackID: string) {
+    const idToken = await this.auth.getUserToken();
+    const headers = new HttpHeaders()
+      .set('token', idToken)
+      .set('trackID', trackID);
+    return await this.http.request('GET', this.backendBaseURL + '/getTrack', {headers, responseType: 'text'}).toPromise();
+  }
+
+  async insertTrackPoint(trackId: string, tpData: TrackPoint[]) {
+    const idToken = await this.auth.getUserToken();
+    const headers = new HttpHeaders()
+      .set('token', idToken)
+      .set('trackID', trackId)
+      .set('trackPoints', JSON.stringify(tpData));
+    return (await this.http.request('PUT', this.backendBaseURL + '/insertTrackPoint', {headers})).toPromise();
   }
 }

@@ -6,6 +6,7 @@ export interface TrackMetadata {
   UID: string;
   Record: TrackRecord;
   TrackID: string;
+  TrackPoints: TrackPoint[];
 }
 
 interface TrackRecord {
@@ -31,7 +32,7 @@ interface Header {
 
 // Declaration for the IGC file parsing
 export interface TrackPoint {
-  Time: Date;
+  Time: number;
   Latitude: number;
   Longitude: number;
   Valid: boolean;
