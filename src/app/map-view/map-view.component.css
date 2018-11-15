@@ -52,7 +52,6 @@ app-tracks {
   position: relative;
   background-color: transparent;
   width: 1px;
-  /*height: 5px;*/
   z-index: 100;
 }
 
