@@ -1,7 +1,7 @@
 <div class="viewport">
   <p>Track List</p>
   <div class="getTracks">
-      <button (click)="switchTracksPanel(false);showTracks();"
+      <button (click)="showTracks();switchTracksPanel(false);"
               [ngStyle] = "{'background-color': getTracksColor(false)}">
         Public Tracks</button>
       <button (click)="showOwnTracks();switchTracksPanel(true);"
@@ -15,4 +15,3 @@
     </div>
   </div>
 </div>
-

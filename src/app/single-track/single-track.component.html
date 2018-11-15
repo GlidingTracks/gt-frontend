@@ -1,5 +1,5 @@
 <div *ngIf="track" class="viewport">
-  <div class="buttons">
+  <div *ngIf="ownedFilter" class="buttons">
     <button class="more shown" (click)="showMore()">
       More
     </button>
@@ -7,14 +7,24 @@
       Select track
     </button>
     <div *ngIf="more" class="more" id="more">
-      <br>
       <button class="downloadTrack moreFunc" (click)="downloadTrack()">
         Download track
       </button>
       <button class="changePrivacy moreFunc" (click)="changePrivacy()">
         Change privacy
       </button>
+      <button class="deleteTrack moreFunc" (click)="deleteTrack()">
+        Delete track
+      </button>
     </div>
+  </div>
+  <div *ngIf="!ownedFilter" class="buttons">
+    <button class="downloadTrack public" (click)="downloadTrack()">
+      Download track
+    </button>
+    <button class="useTrack public" (click)="useTrack()">
+      Select track
+    </button>
   </div>
   <div class="info">
     <span>Pilot: {{ track.Record.Header.Pilot }}</span><br>

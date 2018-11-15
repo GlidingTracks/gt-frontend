@@ -53,4 +53,12 @@ export class TrackManagerService {
       .set('trackID', trackID);
     return(await this.http.request('PUT', this.backendBaseURL + '/takeOwnership', {headers})).toPromise();
   }
+
+  async deleteTrack(trackID: string){
+    const idToken = await this.auth.getUserToken();
+    const headers = new HttpHeaders()
+      .set('token', idToken)
+      .set('trackID', trackID);
+    return(await this.http.request('DELETE', this.backendBaseURL + '/deleteTrack', {headers})).toPromise();
+}
 }

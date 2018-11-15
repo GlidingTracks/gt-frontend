@@ -1,46 +1,33 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {TrackMetadata} from '../../track';
 import {MapViewComponent} from '../map-view/map-view.component';
-import * as firebase from 'firebase';
 import {TrackManagerService} from '../services/track-manager.service';
+import {AuthService} from "../services/auth.service";
 
 @Component({
   selector: 'app-single-track',
   templateUrl: './single-track.component.html',
   styleUrls: ['./single-track.component.css']
 })
-export class SingleTrackComponent implements OnInit {
+export class SingleTrackComponent implements OnInit{
 
   @Input() track: TrackMetadata;
 
-  uid: string;
-  idToken: string;
+  ownedFilter: boolean = false;
   more: boolean = false;
 
   constructor(
     private mapview: MapViewComponent,
-    private manager: TrackManagerService) {}
+    private manager: TrackManagerService,
+    private auth: AuthService) {}
 
-  ngOnInit() {
-    firebase.auth().onAuthStateChanged(
-      (user) => {
-        if (user) {
-          this.uid = user.uid;
-          user.getIdToken().then( (token) => {
-            this.idToken = token;
-          });
-        } else {
-          this.uid = '';
-          this.idToken = '';
-        }
-      }
-    );
-  }
+    ngOnInit(){
+    this.filter();
+    }
 
   useTrack() {
     this.mapview.loadIGC(this.track);
   }
-
 
   // from https://stackoverflow.com/questions/51682514/how-download-a-file-from-httpclient#
   downloadTrack() {
@@ -58,13 +45,25 @@ export class SingleTrackComponent implements OnInit {
     );
   }
 
+  async filter(){
+    const userID = await this.auth.getUserID();
+    if(userID === this.track.UID){
+      this.ownedFilter = true;
+    }
+    else { this.ownedFilter = false;}
+  }
+
   showMore(){
     this.more=!this.more;
   }
 
   changePrivacy(){
-    const privacy = "" + !this.track.Privacy;
-    this.manager.updatePrivacy(this.track.TrackID, privacy);
+      const privacy = "" + !this.track.Privacy;
+      this.manager.updatePrivacy(this.track.TrackID, privacy);
+  }
+
+  deleteTrack(){
+    this.manager.deleteTrack(this.track.TrackID);
   }
 
 }
