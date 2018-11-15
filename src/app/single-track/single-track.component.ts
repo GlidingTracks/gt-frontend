@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {TrackMetadata} from '../../track';
 import {MapViewComponent} from '../map-view/map-view.component';
 import {TrackManagerService} from '../services/track-manager.service';
-import {AuthService} from "../services/auth.service";
+import {AuthService} from '../services/auth.service';
 
 @Component({
   selector: 'app-single-track',
@@ -21,7 +21,7 @@ export class SingleTrackComponent implements OnInit{
     private manager: TrackManagerService,
     private auth: AuthService) {}
 
-    ngOnInit(){
+    ngOnInit() {
     this.filter();
     }
 
@@ -45,24 +45,23 @@ export class SingleTrackComponent implements OnInit{
     );
   }
 
-  async filter(){
+  async filter() {
     const userID = await this.auth.getUserID();
-    if(userID === this.track.UID){
+    if(userID === this.track.UID) {
       this.ownedFilter = true;
-    }
-    else { this.ownedFilter = false;}
+    } else { this.ownedFilter = false;}
   }
 
-  showMore(){
-    this.more=!this.more;
+  showMore() {
+    this.more = !this.more;
   }
 
-  changePrivacy(){
-      const privacy = "" + !this.track.Privacy;
+  changePrivacy() {
+      const privacy = '' + !this.track.Privacy;
       this.manager.updatePrivacy(this.track.TrackID, privacy);
   }
 
-  deleteTrack(){
+  deleteTrack() {
     this.manager.deleteTrack(this.track.TrackID);
   }
 

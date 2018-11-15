@@ -37,7 +37,7 @@ export class TrackManagerService {
     return (await this.http.request('PUT', this.backendBaseURL + '/insertTrackPoint', {headers})).toPromise();
   }
 
-  async updatePrivacy(trackID: string, privacy: string){
+  async updatePrivacy(trackID: string, privacy: string) {
     const idToken = await this.auth.getUserToken();
     const headers = new HttpHeaders()
       .set('token', idToken)
@@ -46,7 +46,7 @@ export class TrackManagerService {
     return(await this.http.request('PUT', this.backendBaseURL + '/updatePrivacy', {headers})).toPromise();
   }
 
-  async takeOwnership(trackID: string){
+  async takeOwnership(trackID: string) {
     const idToken = await this.auth.getUserToken();
     const headers = new HttpHeaders()
       .set('token', idToken)
@@ -54,7 +54,7 @@ export class TrackManagerService {
     return(await this.http.request('PUT', this.backendBaseURL + '/takeOwnership', {headers})).toPromise();
   }
 
-  async deleteTrack(trackID: string){
+  async deleteTrack(trackID: string) {
     const idToken = await this.auth.getUserToken();
     const headers = new HttpHeaders()
       .set('token', idToken)
