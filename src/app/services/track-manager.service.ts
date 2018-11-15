@@ -12,11 +12,12 @@ export class TrackManagerService {
   constructor(private http: HttpClient,
               private auth: AuthService) { }
 
-  async getTracks(privacy = 'Public') {
+  async getTracks(privacy = 'Public', timeSkip = 1) {
     const idToken = await this.auth.getUserToken();
     const headers = new HttpHeaders()
       .set('token', idToken)
-      .set('queryType', privacy);
+      .set('queryType', privacy)
+      .set('timeSkip', timeSkip.toString());
     return await this.http.request('GET', this.backendBaseURL + '/getTracks', {headers}).toPromise();
   }
 

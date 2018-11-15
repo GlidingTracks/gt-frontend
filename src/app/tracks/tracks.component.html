@@ -1,14 +1,17 @@
 <div class="viewport">
   <p>Track List</p>
   <div class="getTracks">
-    <button (click)="showTracks()">Refresh</button>
+    <button (click)="refresh()">Refresh</button>
   </div>
   <div class="track-container" *ngIf="tracks">
     <h4>Number of tracks: {{ tracks.length }}</h4>
+    <h4>Current page: {{ currentPage }}</h4>
 
+    <div class="prev page" (click)="showPreviousTracks()">Up</div>
     <div class="track" *ngFor="let mytrack of tracks">
       <app-single-track [track]="mytrack"></app-single-track>
     </div>
+    <div class="next page" (click)="showNextTracks()">Down</div>
   </div>
 </div>
 

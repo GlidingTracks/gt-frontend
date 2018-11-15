@@ -39,3 +39,6 @@ button:hover{
   font-size: 0.8vw;
 }
 
+.page {
+  cursor: pointer;
+}
