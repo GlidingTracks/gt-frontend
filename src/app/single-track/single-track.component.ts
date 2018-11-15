@@ -9,7 +9,7 @@ import {AuthService} from '../services/auth.service';
   templateUrl: './single-track.component.html',
   styleUrls: ['./single-track.component.css']
 })
-export class SingleTrackComponent implements OnInit{
+export class SingleTrackComponent implements OnInit {
 
   @Input() track: TrackMetadata;
 
@@ -45,11 +45,9 @@ export class SingleTrackComponent implements OnInit{
     );
   }
 
-  async filter() {
-    const userID = await this.auth.getUserID();
-    if(userID === this.track.UID) {
-      this.ownedFilter = true;
-    } else { this.ownedFilter = false;}
+  filter() {
+    const userID = this.auth.getUserID();
+    this.ownedFilter = userID === this.track.UID;
   }
 
   showMore() {
