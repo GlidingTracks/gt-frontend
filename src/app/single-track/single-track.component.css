@@ -1,6 +1,22 @@
-.track {
+div{
   background-color: #91de5b;
-  padding: 0.5vh 1vw;
+  padding: 1vh 0.2vw;
+}
+
+.viewport{
+  box-shadow: 0 -0.15vh 0 #5A26E3;
+}
+
+.buttons{
+  width: 50%;
+  float: right;
+}
+
+div.more{
+  z-index: -1000;
+  padding: 0;
+  display: inline-block;
+  background-color: #4392F1;
 }
 
 button{
@@ -10,25 +26,18 @@ button{
   background-color: white;
   float: right;
   font-size: 1vw;
+  padding: 1vh;
 }
 button:hover{
   background-color: #EFEFEF;
 }
 
-button.useTrack{
-  margin-right: 1.5vw;
+button.shown{
+  margin-right: 6%;
+  margin-left: 3%;
 }
-button.downloadTrack{
-  margin-top: 2.5vh;
-}
-button.more{
-  margin-right: 1.5vw;
-}
-button.changePrivacy{
-  margin-right: 1.5vw;
-  margin-top: 02.5vh;
-}
-
-div.more{
-
+button.moreFunc{
+  float: none;
+  width: 100%;
+  text-align: center;
 }

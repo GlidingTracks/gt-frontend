@@ -38,14 +38,14 @@ export class SingleTrackComponent implements OnInit {
   }
 
   useTrack() {
-    this.mapview.loadIGC(this.idToken, this.track);
+    this.mapview.loadIGC(this.track);
   }
 
 
   // from https://stackoverflow.com/questions/51682514/how-download-a-file-from-httpclient#
   downloadTrack() {
     const TrackID = this.track.TrackID;
-    this.manager.getTrack(this.idToken, TrackID).subscribe(
+    this.manager.getTrack(TrackID).then(
       (response: any) => {
         const dataType = response.type;
         const binaryData = [];
@@ -63,6 +63,8 @@ export class SingleTrackComponent implements OnInit {
   }
 
   changePrivacy(){
-
+    const privacy = "" + !this.track.Privacy;
+    this.manager.updatePrivacy(this.track.TrackID, privacy);
   }
+
 }

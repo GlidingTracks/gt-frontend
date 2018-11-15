@@ -1,23 +1,29 @@
-<div *ngIf="track">
-  <button class="more" (click)="showMore()">
-    More
-  </button>
-  <button class="useTrack" (click)="useTrack()">
-    Select track
-  </button>
-  <div *ngIf="more" class="more" id="more">
-    <br>
-    <button class="downloadTrack" (click)="downloadTrack()">
-      Download track
+<div *ngIf="track" class="viewport">
+  <div class="buttons">
+    <button class="more shown" (click)="showMore()">
+      More
     </button>
-    <button class="changePrivacy" (click)="changePrivacy()">
-      Change privacy
+    <button class="useTrack shown" (click)="useTrack()">
+      Select track
     </button>
-    <br>
+    <div *ngIf="more" class="more" id="more">
+      <br>
+      <button class="downloadTrack moreFunc" (click)="downloadTrack()">
+        Download track
+      </button>
+      <button class="changePrivacy moreFunc" (click)="changePrivacy()">
+        Change privacy
+      </button>
+    </div>
   </div>
-  <div>
-  Pilot: {{ track.Record.Header.Pilot }} <br>
-  Import date: {{ track.Time*1000 | date:'MM/dd/yyyy HH:mm:ss' }} <br>
-  Privacy: {{ track.Privacy }}
+  <div class="info">
+    <span>Pilot: {{ track.Record.Header.Pilot }}</span><br>
+    <span>Import date: {{ track.Time*1000 | date:'MM/dd/yyyy HH:mm:ss' }}</span><br>
+    <span *ngIf="track.Privacy"> Privacy: private</span>
+    <span *ngIf="!track.Privacy"> Privacy: public</span><br>
+    <span *ngIf="track.TrackPoints" style="color: blue">Turn-points already generated</span>
+    <span *ngIf="!track.TrackPoints" style="color: red">Turn-points not generated</span>
   </div>
+
+
 </div>

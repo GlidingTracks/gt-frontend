@@ -1,7 +1,11 @@
 <div class="viewport">
   <p>Track List</p>
   <div class="getTracks">
-    <button (click)="showTracks()">Refresh</button>
+      <button (click)="switchTracksPanel(false);showTracks();"
+              [ngStyle] = "{'background-color': getTracksColor(false)}">
+        Public Tracks</button>
+      <button (click)="showOwnTracks();switchTracksPanel(true);"
+              [ngStyle] = "{'background-color': getTracksColor(true)}">My Tracks</button>
   </div>
   <div class="track-container" *ngIf="tracks">
     <h4>Number of tracks: {{ tracks.length }}</h4>
