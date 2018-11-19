@@ -1,13 +1,39 @@
-<!-- TODO Create a "more infos" button to display a popup with the detailed info about the track -->
-<div class="track" *ngIf="track">
-  <button class="downloadTrack" (click)="downloadTrack()">
-    Download track
-  </button>
-  <button class="useTrack" (click)="useTrack()">
-    Select track
-  </button>
-  <span>Pilot: {{ track.Record.Header.Pilot }}</span><br>
-  <span>Import date: {{ track.Time*1000 | date:'MM/dd/yyyy HH:mm:ss' }}</span><br>
-  <span *ngIf="track.TrackPoints" style="color: green">Turn-points already generated</span>
-  <span *ngIf="!track.TrackPoints" style="color: red">Turn-points not generated</span>
+<div *ngIf="track" class="viewport">
+  <div *ngIf="ownedFilter" class="buttons">
+    <button class="more shown" (click)="showMore()">
+      More
+    </button>
+    <button class="useTrack shown" (click)="useTrack()">
+      Select track
+    </button>
+    <div *ngIf="more" class="more" id="more">
+      <button class="downloadTrack moreFunc" (click)="downloadTrack()">
+        Download track
+      </button>
+      <button class="changePrivacy moreFunc" (click)="changePrivacy()">
+        Change privacy
+      </button>
+      <button class="deleteTrack moreFunc" (click)="deleteTrack()">
+        Delete track
+      </button>
+    </div>
+  </div>
+  <div *ngIf="!ownedFilter" class="buttons">
+    <button class="downloadTrack public" (click)="downloadTrack()">
+      Download track
+    </button>
+    <button class="useTrack public" (click)="useTrack()">
+      Select track
+    </button>
+  </div>
+  <div class="info">
+    <span>Pilot: {{ track.Record.Header.Pilot }}</span><br>
+    <span>Import date: {{ track.Time*1000 | date:'MM/dd/yyyy HH:mm:ss' }}</span><br>
+    <span *ngIf="track.Privacy"> Privacy: private</span>
+    <span *ngIf="!track.Privacy"> Privacy: public</span><br>
+    <span *ngIf="track.TrackPoints" style="color: blue">Turn-points already generated</span>
+    <span *ngIf="!track.TrackPoints" style="color: red">Turn-points not generated</span>
+  </div>
+
+
 </div>
