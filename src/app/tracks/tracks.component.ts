@@ -12,6 +12,7 @@ export class TracksComponent implements OnInit {
   currentPage = 1;
   tracks: TrackPoint[];
   trackPages: TrackPoint[][];
+  infoSwitch = false;
 
   constructor(private trackManager: TrackManagerService) { }
 
@@ -22,6 +23,24 @@ export class TracksComponent implements OnInit {
   refresh() {
     this.currentPage = 1;
     this.trackPages = [];
+    if (this.infoSwitch) {
+      this.showOwnTracks();
+    } else {
+      this.showTracks();
+    }
+
+  }
+  // Switch between public/own tracks
+  switchTracksPanel(value) {
+    this.infoSwitch = value;
+  }
+
+  // Update the color of the public/own tracks panel
+  getTracksColor(value) {
+    return this.infoSwitch === value ? '#91de5b' : '#7cc254';
+  }
+
+  showTracks() {
     this.trackManager.getTracks('Public')
       .then(data => {
         this.tracks = data as TrackPoint[];
@@ -55,5 +74,11 @@ export class TracksComponent implements OnInit {
       this.tracks = this.trackPages[this.currentPage];
     }
     this.currentPage++;
+  }
+
+  showOwnTracks() {
+    this.trackManager.getTracks('Private')
+      .then(data => this.tracks = data  as TrackPoint[])
+      .catch( error => console.warn(error));
   }
 }

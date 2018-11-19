@@ -1,7 +1,12 @@
 <div class="viewport">
   <p>Track List</p>
+  <button (click)="refresh()">Refresh</button>
   <div class="getTracks">
-    <button (click)="refresh()">Refresh</button>
+    <button (click)="showTracks();switchTracksPanel(false);"
+            [ngStyle] = "{'background-color': getTracksColor(false)}">
+      Public Tracks</button>
+    <button (click)="showOwnTracks();switchTracksPanel(true);"
+            [ngStyle] = "{'background-color': getTracksColor(true)}">My Tracks</button>
   </div>
   <div class="track-container" *ngIf="tracks">
     <h4>Number of tracks: {{ tracks.length }}</h4>
@@ -14,4 +19,3 @@
     <div class="next page" (click)="showNextTracks()">Down</div>
   </div>
 </div>
-
