@@ -3,8 +3,7 @@ import {TrackMetadata} from '../../track';
 import {MapViewComponent} from '../map-view/map-view.component';
 import {TrackManagerService} from '../services/track-manager.service';
 import {AuthService} from '../services/auth.service';
-import {isDefined} from "@ng-bootstrap/ng-bootstrap/util/util";
-import * as firebase from "firebase";
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-single-track',
@@ -15,10 +14,10 @@ export class SingleTrackComponent implements OnInit {
 
   @Input() track: TrackMetadata;
 
-  uid: string = '';
+  uid = '';
 
-  ownedFilter: boolean = false;
-  more: boolean = false;
+  ownedFilter = false;
+  more = false;
 
   constructor(
     private mapview: MapViewComponent,
