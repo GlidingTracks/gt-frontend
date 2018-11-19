@@ -26,7 +26,7 @@ export class TracksComponent implements OnInit {
     if (this.infoSwitch) {
       this.showOwnTracks();
     } else {
-      this.showTracks();
+      this.showNewTracks();
     }
 
   }
@@ -40,16 +40,7 @@ export class TracksComponent implements OnInit {
     return this.infoSwitch === value ? '#91de5b' : '#7cc254';
   }
 
-  showTracks() {
-    this.trackManager.getTracks('Public')
-      .then(data => {
-        this.tracks = data as TrackPoint[];
-        this.trackPages.push(this.tracks);
-      })
-      .catch( error => console.warn(error));
-  }
-
-  showNewTracks(timeSkip) {
+  showNewTracks(timeSkip = 1) {
     this.trackManager.getTracks('Public', timeSkip)
       .then(data => {
         this.tracks = data as TrackPoint[];
