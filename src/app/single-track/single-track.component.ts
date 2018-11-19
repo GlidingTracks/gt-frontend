@@ -3,7 +3,6 @@ import {TrackMetadata} from '../../track';
 import {MapViewComponent} from '../map-view/map-view.component';
 import {TrackManagerService} from '../services/track-manager.service';
 import {AuthService} from '../services/auth.service';
-import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-single-track',
@@ -13,9 +12,7 @@ import * as firebase from 'firebase';
 export class SingleTrackComponent implements OnInit {
 
   @Input() track: TrackMetadata;
-
   uid = '';
-
   ownedFilter = false;
   more = false;
 

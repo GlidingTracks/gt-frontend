@@ -54,4 +54,15 @@ describe('SingleTrackComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('filter() should change "ownedfilter" to false as no user is logged in', () => {
+    component.ownedFilter = true;
+    component.filter();
+    expect(component.ownedFilter).toEqual(false);
+  });
+
+  it('showMore() should change the value of "more"', () => {
+    const value = component.more;
+    component.showMore();
+    expect(component.more).toEqual(!value);
+  });
 });

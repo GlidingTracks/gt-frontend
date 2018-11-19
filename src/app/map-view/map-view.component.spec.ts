@@ -90,4 +90,24 @@ describe('MapViewComponent', () => {
     expect(component.getSwitchColor(false)).toEqual('#91de5b');
     expect(component.getSwitchColor(true)).toEqual('#7cc254');
   });
+
+  it('isPilotFalsy() should return true if "pilot" is undefined', () => {
+    component.pilot = undefined;
+    expect(component.isPilotFalsy()).toEqual(true);
+  });
+
+  it('isPilotFalsy() should return true if "pilot" is null', () => {
+    component.pilot = null;
+    expect(component.isPilotFalsy()).toEqual(true);
+  });
+
+  it('isPilotFalsy() should return true if "pilot" is ""', () => {
+    component.pilot = '';
+    expect(component.isPilotFalsy()).toEqual(true);
+  });
+
+  it('isPilotFalsy() should return false if "pilot" is a non-empty string', () => {
+    component.pilot = 'abcde';
+    expect(component.isPilotFalsy()).toEqual(false);
+  });
 });

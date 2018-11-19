@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {TrackManagerService} from '../services/track-manager.service';
-import { TrackPoint } from 'src/track';
+import { TrackMetadata } from 'src/track';
 
 @Component({
   selector: 'app-tracks',
@@ -10,8 +10,8 @@ import { TrackPoint } from 'src/track';
 export class TracksComponent implements OnInit {
 
   currentPage = 1;
-  tracks: TrackPoint[];
-  trackPages: TrackPoint[][];
+  tracks: TrackMetadata[];
+  trackPages: TrackMetadata[][];
   infoSwitch = false;
 
   constructor(private trackManager: TrackManagerService) { }
@@ -23,12 +23,7 @@ export class TracksComponent implements OnInit {
   refresh() {
     this.currentPage = 1;
     this.trackPages = [];
-    if (this.infoSwitch) {
-      this.showOwnTracks();
-    } else {
-      this.showNewTracks();
-    }
-
+    this.showNewTracks();
   }
   // Switch between public/own tracks
   switchTracksPanel(value) {
@@ -41,9 +36,9 @@ export class TracksComponent implements OnInit {
   }
 
   showNewTracks(timeSkip = 1) {
-    this.trackManager.getTracks('Public', timeSkip)
+    this.trackManager.getTracks(this.getPrivacy(), timeSkip)
       .then(data => {
-        this.tracks = data as TrackPoint[];
+        this.tracks = data as TrackMetadata[];
         this.trackPages.push(this.tracks);
       })
       .catch( error => console.warn(error));
@@ -67,9 +62,7 @@ export class TracksComponent implements OnInit {
     this.currentPage++;
   }
 
-  showOwnTracks() {
-    this.trackManager.getTracks('Private')
-      .then(data => this.tracks = data  as TrackPoint[])
-      .catch( error => console.warn(error));
+  getPrivacy() {
+    return this.infoSwitch ? 'Private' : 'Public';
   }
 }
