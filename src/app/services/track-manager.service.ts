@@ -27,9 +27,10 @@ export class TrackManagerService {
   insertTracks(idToken: string, privacy: string = 'false', file) {
     const headers = new HttpHeaders()
       .set('token', idToken)
+      .set('private', privacy)
       .set('Content-Type', 'multipart/form-data');
     const formData: FormData = new FormData();
-    formData.append('file', file, file.name);
+    formData.set('file', file, file.name);
     const request = new HttpRequest('POST', this.backendBaseURL + '/insertTrack', formData, {headers});
     return this.http.request(request).toPromise();
   }
