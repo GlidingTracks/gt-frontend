@@ -3,7 +3,6 @@ import {TrackMetadata} from '../../track';
 import {MapViewComponent} from '../map-view/map-view.component';
 import {TrackManagerService} from '../services/track-manager.service';
 import {AuthService} from '../services/auth.service';
-import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-single-track',
@@ -13,9 +12,7 @@ import * as firebase from 'firebase';
 export class SingleTrackComponent implements OnInit {
 
   @Input() track: TrackMetadata;
-
   uid = '';
-
   ownedFilter = false;
   more = false;
 
@@ -24,18 +21,9 @@ export class SingleTrackComponent implements OnInit {
     private manager: TrackManagerService,
     private auth: AuthService) {}
 
-    ngOnInit() {
-      firebase.auth().onAuthStateChanged(
-        (user) => {
-          if (user) {
-            this.uid = user.uid;
-          } else {
-            this.uid = '';
-          }
-        }
-      );
+  ngOnInit() {
     this.filter();
-    }
+  }
 
   useTrack() {
     this.mapview.loadIGC(this.track);
@@ -58,6 +46,7 @@ export class SingleTrackComponent implements OnInit {
   }
 
   filter() {
+    this.uid = this.auth.getUserID();
     this.ownedFilter = this.uid === this.track.UID;
   }
 
@@ -73,5 +62,4 @@ export class SingleTrackComponent implements OnInit {
   deleteTrack() {
     this.manager.deleteTrack(this.track.TrackID);
   }
-
 }

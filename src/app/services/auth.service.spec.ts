@@ -23,6 +23,16 @@ describe('AuthService', () => {
     expect(firebase.app.length).toBeGreaterThan(0);
   });
 
+  it('getUserToken() should return "" if currentUser is null', async () => {
+    const res = await service.getUserToken();
+    expect(res).toBe('');
+  });
+
+  it('getUserID() should return "" if currentUser is null', async () => {
+    const res = await service.getUserToken();
+    expect(res).toBe('');
+  });
+
   it('signOutUser() should sign out the user', () => {
     firebase.auth().signOut();
     expect(firebase.auth().currentUser).toBeFalsy();

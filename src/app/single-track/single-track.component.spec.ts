@@ -3,8 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { SingleTrackComponent } from './single-track.component';
 import { MapViewComponent } from '../map-view/map-view.component';
 import {HttpClient} from '@angular/common/http';
-import {By} from "@angular/platform-browser";
-import {TrackMetadata} from "../../track";
+import {TrackMetadata} from '../../track';
 
 const httpClientSpy = jasmine.createSpyObj('Router', ['get']);
 const mapViewSpy = jasmine.createSpyObj('Router', ['loadIGC']);
@@ -48,8 +47,6 @@ describe('SingleTrackComponent', () => {
       UID: 'BDrDvjCY45gUS3pKpYrivWCVhor2'
     } as TrackMetadata;
 
-    
-
     fixture.detectChanges();
   });
 
@@ -57,4 +54,15 @@ describe('SingleTrackComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('filter() should change "ownedfilter" to false as no user is logged in', () => {
+    component.ownedFilter = true;
+    component.filter();
+    expect(component.ownedFilter).toEqual(false);
+  });
+
+  it('showMore() should change the value of "more"', () => {
+    const value = component.more;
+    component.showMore();
+    expect(component.more).toEqual(!value);
+  });
 });

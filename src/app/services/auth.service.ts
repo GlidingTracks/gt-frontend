@@ -7,11 +7,17 @@ import * as firebase from 'firebase';
 export class AuthService {
 
   async getUserToken() {
-    return await firebase.auth().currentUser.getIdToken();
+    if (firebase.auth().currentUser !== null) {
+      return await firebase.auth().currentUser.getIdToken();
+    }
+    return '';
   }
 
   getUserID() {
-    return firebase.auth().currentUser.uid;
+    if (firebase.auth().currentUser !== null) {
+      return firebase.auth().currentUser.uid;
+    }
+    return '';
   }
 
   userHandler(email: string, password: string, signMethod: string) {

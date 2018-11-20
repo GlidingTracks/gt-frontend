@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {TrackManagerService} from '../services/track-manager.service';
+import { TrackMetadata } from 'src/track';
 
 @Component({
   selector: 'app-tracks',
@@ -8,15 +9,22 @@ import {TrackManagerService} from '../services/track-manager.service';
 })
 export class TracksComponent implements OnInit {
 
-  tracks;
+  currentPage = 1;
+  tracks: TrackMetadata[];
+  trackPages: TrackMetadata[][];
   infoSwitch = false;
 
   constructor(private trackManager: TrackManagerService) { }
 
   ngOnInit() {
-    this.showTracks();
+    this.refresh();
   }
 
+  refresh() {
+    this.currentPage = 1;
+    this.trackPages = [];
+    this.showNewTracks();
+  }
   // Switch between public/own tracks
   switchTracksPanel(value) {
     this.infoSwitch = value;
@@ -27,15 +35,34 @@ export class TracksComponent implements OnInit {
     return this.infoSwitch === value ? '#91de5b' : '#7cc254';
   }
 
-  showTracks() {
-    this.trackManager.getTracks('Public')
-      .then(data => this.tracks = data)
+  showNewTracks(timeSkip = 1) {
+    this.trackManager.getTracks(this.getPrivacy(), timeSkip)
+      .then(data => {
+        this.tracks = data as TrackMetadata[];
+        this.trackPages.push(this.tracks);
+      })
       .catch( error => console.warn(error));
   }
 
-  showOwnTracks() {
-    this.trackManager.getTracks('Private')
-      .then(data => this.tracks = data)
-      .catch( error => console.warn(error));
+  showPreviousTracks() {
+    if (this.currentPage === 1) {
+      return;
+    }
+    this.tracks = this.trackPages[this.currentPage];
+    this.currentPage--;
+  }
+
+  showNextTracks() {
+    if (this.trackPages.length === this.currentPage) { // Need to load new tracks
+      const timeSkip = this.tracks[this.tracks.length - 1].Time;
+      this.showNewTracks(timeSkip);
+    } else { // Next page already stored locally
+      this.tracks = this.trackPages[this.currentPage];
+    }
+    this.currentPage++;
+  }
+
+  getPrivacy() {
+    return this.infoSwitch ? 'Private' : 'Public';
   }
 }

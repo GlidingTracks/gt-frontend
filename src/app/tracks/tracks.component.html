@@ -1,17 +1,22 @@
 <div class="viewport">
-  <p>Track List</p>
+  <span class="title">Track List</span>
   <div class="getTracks">
-      <button (click)="showTracks();switchTracksPanel(false);"
-              [ngStyle] = "{'background-color': getTracksColor(false)}">
-        Public Tracks</button>
-      <button (click)="showOwnTracks();switchTracksPanel(true);"
-              [ngStyle] = "{'background-color': getTracksColor(true)}">My Tracks</button>
+    <img class="refresh" (click)="refresh()" src="assets/sync.png">
+    <button (click)="switchTracksPanel(false);refresh()"
+            [ngStyle] = "{'background-color': getTracksColor(false)}">
+      Public Tracks</button>
+    <button (click)="switchTracksPanel(true);refresh()"
+            [ngStyle] = "{'background-color': getTracksColor(true)}">My Tracks</button>
   </div>
   <div class="track-container" *ngIf="tracks">
-    <h4>Number of tracks: {{ tracks.length }}</h4>
-
+    <div class="prev page" (click)="showPreviousTracks()">
+      <img src="assets/arrow-up.png">
+    </div>
     <div class="track" *ngFor="let mytrack of tracks">
       <app-single-track [track]="mytrack"></app-single-track>
+    </div>
+    <div class="next page" (click)="showNextTracks()">
+      <img src="assets/arrow-down.png">
     </div>
   </div>
 </div>

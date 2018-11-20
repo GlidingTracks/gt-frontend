@@ -1,26 +1,26 @@
 div{
   background-color: #91de5b;
-  padding: 1vh 0.2vw;
+  padding: 0.2vh 0.2vw;
 }
 
-.viewport{
-  box-shadow: 0 -0.15vh 0 #5A26E3;
+.viewport {
+  box-shadow: 0 -0.3vh 0 #5A26E3;
 }
 
-div.buttons{
+div.buttons {
   width: 65%;
   float: right;
   z-index: 0;
 }
 
-div.more{
+div.more {
   z-index: -1000;
   padding: 0;
   display: inline-block;
   background-color: #91de5b;
 }
 
-button{
+button {
   font-family: Comfortaa, sans-serif;
   outline: none;
   border: none;
@@ -29,19 +29,19 @@ button{
   font-size: 1vw;
   padding: 1vh;
 }
-button:hover{
+button:hover {
   background-color: #EFEFEF;
 }
 
-button.public{
+button.public {
   margin-left: 1%;
   margin-right: 2%;
 }
-button.shown{
+button.shown {
   margin-right: 6%;
   margin-left: 3%;
 }
-button.moreFunc{
+button.moreFunc {
   float: none;
   width: 100%;
   margin-top: 0.15vh;
