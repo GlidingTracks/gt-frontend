@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -8,9 +8,9 @@ export class TrackManagerService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getTracks(uid: string, privacy = 'Public') {
-    const options = uid ? { params: new HttpParams()
-        .set('uid', uid)
+  getTracks(token: any, privacy = 'Public') {
+    const options = token ? { headers: new HttpHeaders()
+        .set('token', token)
         .set('queryType', privacy)
     } : {};
     return this.httpClient.get('http://localhost:8080/getTracks', options);

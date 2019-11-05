@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
 import Map from 'ol/Map';
 import View from 'ol/View';
@@ -64,8 +64,10 @@ export class MapViewService {
   startAltitude;
   stopAltitude;
   highestPoint;
+  pilot;
 
-  constructor() { }
+  constructor() {
+  }
 
   initMap() {
     // Init View
@@ -150,13 +152,14 @@ export class MapViewService {
 
   // Function responsible for IGC file parsing
   parseIGCFile(filename: string, trackDay: string, callback) {
+    console.log(filename);
     let trackData: TrackPoint[] = [] as any;
     let p: string[];
     // Accessing the file form its url
     this.get(filename, (data) => {
       // Separate rows and iterate through them
       const rows = data.split('\n');
-      rows.forEach( (row) => {
+      rows.forEach((row) => {
         switch (row[0]) {
           case 'B': // B Record parsing
             p = this.parseBrecord(row);
@@ -174,6 +177,14 @@ export class MapViewService {
               } as TrackPoint
             ];
             break; // TODO Add test to check length of trackData
+
+          case 'H': // H Record parsing
+            // tslint:disable-next-line:no-unused-expression
+            if (row.substring(2, 5) === 'PLT') {
+              row.indexOf(':');
+              this.pilot = row.substring(row.indexOf(':') + 1);
+            }
+            break;
         }
       });
       callback(trackData);
@@ -191,8 +202,11 @@ export class MapViewService {
     ];
   }
 
+  //
+
   // Load a track as features into to tracks layer on the map
   loadTrack(trackData) {
+    this.vectorSource.clear();
     const features = this.fromTrackDataToFeatures(trackData);
     this.vectorSource.addFeatures(features);
     this.view.fit(this.vectorSource.getExtent());
@@ -230,45 +244,52 @@ export class MapViewService {
     return features;
   }
 
+  // Returns the Pilot name
+
+  getPilot() {
+    return this.pilot;
+  }
+
   // Returns the total length of the track in meters
   getTotalDistance(trackData) {
-    if (!this.totalDistance) {
-      this.totalDistance = 0;
-      let c1, c2;
-      for (let i = 0; i < trackData.length - 1; i++) {
-        c1 = this.fromLonLatStr([trackData[i].Longitude, trackData[i].Latitude]);
-        c2 = this.fromLonLatStr([trackData[i + 1].Longitude, trackData[i + 1].Latitude]);
-        this.totalDistance += getDistance(c1, c2);
-      }
-
+    // if (!this.totalDistance) {
+    this.totalDistance = 0;
+    let c1, c2;
+    for (let i = 0; i < trackData.length - 1; i++) {
+      c1 = this.fromLonLatStr([trackData[i].Longitude, trackData[i].Latitude]);
+      c2 = this.fromLonLatStr([trackData[i + 1].Longitude, trackData[i + 1].Latitude]);
+      this.totalDistance += getDistance(c1, c2);
     }
+
+    // }
+    console.log(this.totalDistance);
     return this.totalDistance;
   }
 
   // Returns the altitude in meters at the beginning of the track
   getStartAltitude(trackData) {
-    if (!this.startAltitude) {
-      this.startAltitude = trackData[0].GPS_alt;
-    }
+    // if (!this.startAltitude) {
+    this.startAltitude = trackData[0].GPS_alt;
+    // }
     return this.startAltitude;
   }
 
   // Returns the altitude in meters at the end of the track
   getStopAltitude(trackData) {
-    if (!this.stopAltitude) {
-      this.stopAltitude = trackData[trackData.length - 1].GPS_alt;
-    }
+    // if (!this.stopAltitude) {
+    this.stopAltitude = trackData[trackData.length - 1].GPS_alt;
+    // }
     return this.stopAltitude;
   }
 
   // Returns the greatest altitude reached during the flight in meters
   getHighestPoint(trackData) {
-    if (!this.highestPoint) {
-      this.highestPoint = 0;
-      trackData.forEach( point =>
-        this.highestPoint = point.GPS_alt > this.highestPoint ? point.GPS_alt : this.highestPoint
-      );
-    }
+    // if (!this.highestPoint) {
+    this.highestPoint = 0;
+    trackData.forEach(point =>
+      this.highestPoint = point.GPS_alt > this.highestPoint ? point.GPS_alt : this.highestPoint
+    );
+    // }
     return this.highestPoint;
   }
 
@@ -289,25 +310,25 @@ export class MapViewService {
 
   // Returns to total duration of the flight
   getFlightDuration(trackData) {
-    if (!this.flightDuration) {
-      const t1 = trackData[0].Time;
-      const t2 = trackData[trackData.length - 1].Time;
-      const deltaT = this.getElapsedTime(t1, t2);
-      const hours = Math.floor(deltaT / 3600);
-      const minutes = Math.floor((deltaT % 3600) / 60);
-      const seconds = Math.floor(deltaT % 60);
-      this.flightDuration = `${hours}h${minutes}m${seconds}s`;
-    }
+    // if (!this.flightDuration) {
+    const t1 = trackData[0].Time;
+    const t2 = trackData[trackData.length - 1].Time;
+    const deltaT = this.getElapsedTime(t1, t2);
+    const hours = Math.floor(deltaT / 3600);
+    const minutes = Math.floor((deltaT % 3600) / 60);
+    const seconds = Math.floor(deltaT % 60);
+    this.flightDuration = `${hours}h${minutes}m${seconds}s`;
+    // }
     return this.flightDuration;
   }
 
   // Returns the distance in meters between the start and the end points
   getE2EDistance(trackData) {
-    if (!this.e2eDistance) {
-      const c1 = this.fromLonLatStr([trackData[0].Longitude, trackData[0].Latitude]);
-      const c2 = this.fromLonLatStr([trackData[trackData.length - 1].Longitude, trackData[trackData.length - 1].Latitude]);
-      this.e2eDistance = getDistance(c1, c2);
-    }
+    // if (!this.e2eDistance) {
+    const c1 = this.fromLonLatStr([trackData[0].Longitude, trackData[0].Latitude]);
+    const c2 = this.fromLonLatStr([trackData[trackData.length - 1].Longitude, trackData[trackData.length - 1].Latitude]);
+    this.e2eDistance = getDistance(c1, c2);
+    // }
     return this.e2eDistance;
   }
 
@@ -354,7 +375,7 @@ export class MapViewService {
 
   // Sigmoid function for better color range coding of the upward/downward movement
   sigmoid(x, range) {
-    return 1 / ( 1 + Math.exp(-8 * x / range));
+    return 1 / (1 + Math.exp(-8 * x / range));
   }
 
   // GET html request
@@ -378,6 +399,6 @@ export class MapViewService {
 
   // Notify a change has been made to 'this.infos'
   emitInfos() {
-      this.infosSubject.next(this.infos);
+    this.infosSubject.next(this.infos);
   }
 }

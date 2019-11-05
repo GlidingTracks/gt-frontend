@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {TrackManagerService} from '../services/track-manager.service';
 import {AuthService} from '../services/auth.service';
 import * as firebase from 'firebase';
@@ -11,29 +11,36 @@ import {TrackMetadata} from '../../track';
 })
 export class TracksComponent implements OnInit {
 
-  uid: string;
+  token: any;
   tracks: TrackMetadata[];
 
   constructor(private tracksManager: TrackManagerService,
-              private authService: AuthService) { }
+              private authService: AuthService) {
+  }
 
   ngOnInit() {
     firebase.auth().onAuthStateChanged(
       (user) => {
         if (user) {
-          this.uid = user.uid;
-          this.showTracks();
+          user.getIdToken(/* forceRefresh */ true).then(function (idToken) {
+            this.token = idToken;
+          }.bind(this)).catch(function (error) {
+            // Handle error
+            console.log(error);
+          });
         } else {
-          this.uid = '';
+          this.token = '';
         }
+        console.log(this.token);
+        this.showTracks();
       }
     );
   }
 
   showTracks() {
-    if (this.uid) {
-      console.log(this.uid);
-      this.tracksManager.getTracks(this.uid, 'Public')
+    if (this.token) {
+      console.log(this.token);
+      this.tracksManager.getTracks(this.token, 'Public')
         .subscribe((data: TrackMetadata[]) => {
           console.log(data);
           this.tracks = data;

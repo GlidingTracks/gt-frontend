@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, ElementRef, OnInit, Renderer2} from '@angular/core';
 import {MapViewService} from '../services/map-view.service';
 import {Subscription} from 'rxjs';
 import * as parseFilename from 'igc-filename-parser';
+import {DataService} from '../services/data.service';
 
 @Component({
   selector: 'app-map-view',
@@ -10,13 +11,10 @@ import * as parseFilename from 'igc-filename-parser';
 })
 export class MapViewComponent implements OnInit {
 
-  // Test urls of IGC files
-  igcUrls =  [
-    '2018-08-12-XCT-MNO-02.igc',
-    'https://firebasestorage.googleapis.com/v0/b/gt-backend-8b9c2.appspot.com/o/' +
-      'HAGOdywD9rQayoOOIHyd?alt=media&token=f0511567-2b36-4689-802d-b80e5b52b2af',
-    'https://openlayers.org/en/latest/examples/data/igc/Damien-de-Baenst.igc',
-  ];
+  // url of IGC files
+  igcUrls = 'https://firebasestorage.googleapis.com/v0/b/gt-backend-8b9c2.appspot.com/o/' +
+      'HAGOdywD9rQayoOOIHyd?alt=media&token=f0511567-2b36-4689-802d-b80e5b52b2af';
+
   // Display data
   currentLatitude: string;
   currentLongitude: string;
@@ -25,6 +23,7 @@ export class MapViewComponent implements OnInit {
   currentScreenPos;
   isDragging;
   infosSubscription: Subscription;
+  urlSubscription: Subscription;
   // Track data
   pilot: string;
   flightDuration: string;
@@ -37,13 +36,25 @@ export class MapViewComponent implements OnInit {
   maxDescentSpeed: number;
 
   // IGC file Parsing
-  IGCFilename = this.igcUrls[2]; // TODO Connect urls to firestore
+  IGCFilename = this.igcUrls; // TODO Connect urls to firestore
   IGCFilenameData = parseFilename(this.IGCFilename); // TODO Get pilot name
   trackDay: string;
 
-  constructor(private mvs: MapViewService) { }
+  constructor(private mvs: MapViewService, private data: DataService, private el: ElementRef, private renderer2: Renderer2) {
+  }
 
   ngOnInit() {
+    this.urlSubscription = this.data.currentMessage.subscribe(url => {
+      this.IGCFilename = url;
+      this.IGCFilenameData = parseFilename(this.IGCFilename);
+      console.log(this.IGCFilename);
+      this.trackDay = this.IGCFilenameData !== null ? this.IGCFilenameData.date : '1970-01-01';
+      // TODO Format Track infos + Metadata from frontend
+      this.mvs.parseIGCFile(this.IGCFilename, this.trackDay, (trackData) => {
+        this.mvs.loadTrack(trackData);
+        this.getTrackInfos(trackData);
+      });
+    });
     // Bind variables
     this.infosSubscription = this.mvs.infosSubject.subscribe(
       (infos: any) => {
@@ -78,6 +89,7 @@ export class MapViewComponent implements OnInit {
     this.e2eDistance = this.mvs.getE2EDistance(trackData);
     this.maxAscendSpeed = this.mvs.getMaxAscendSpeed();
     this.maxDescentSpeed = this.mvs.getMaxDescentSpeed();
+    this.pilot = this.mvs.getPilot();
   }
 
   getScreenPos(index) {

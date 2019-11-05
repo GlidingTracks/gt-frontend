@@ -20,6 +20,7 @@ import { TracksComponent } from './tracks/tracks.component';
 import { TrackPipe } from './pipes/track.pipe';
 import { SingleTrackComponent } from './single-track/single-track.component';
 import { MeterPipe } from './pipes/meter.pipe';
+import {DataService} from './services/data.service';
 
 const appRoutes: Routes = [
   { path: 'auth/signup', component: SignupComponent},
@@ -57,7 +58,8 @@ const appRoutes: Routes = [
   providers: [
     AuthService,
     AuthGuardService,
-    MapViewService
+    MapViewService,
+    DataService
   ],
   bootstrap: [AppComponent]
 })
