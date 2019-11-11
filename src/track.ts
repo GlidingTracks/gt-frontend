@@ -39,4 +39,5 @@ export interface TrackPoint {
   GPS_alt?: number;
   Accuracy?: number;
   Engine_RPM?: number;
+  Status?: string;
 }

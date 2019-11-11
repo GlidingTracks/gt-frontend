@@ -13,6 +13,6 @@ export class TrackManagerService {
         .set('token', token)
         .set('queryType', privacy)
     } : {};
-    return this.httpClient.get('http://localhost:8080/getTracks', options);
+    return this.httpClient.get('http://128.39.142.141:8080/getTracks', options);
   }
 }

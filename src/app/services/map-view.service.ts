@@ -50,7 +50,8 @@ export class MapViewService {
     latitude: '',
     longitude: '',
     altitude: 0,
-    date: Date()
+    date: Date(),
+    status: ''
   };
   infosSubject = new Subject<any>();
   overlayPoint = null;
@@ -65,6 +66,11 @@ export class MapViewService {
   stopAltitude;
   highestPoint;
   pilot;
+  timeFlight = 0;
+  timeSinking = 0;
+  timeLift = 0;
+  timeThermal = 0;
+  timeSoaring = 0;
 
   constructor() {
   }
@@ -155,13 +161,20 @@ export class MapViewService {
     console.log(filename);
     let trackData: TrackPoint[] = [] as any;
     let p: string[];
+    let flag = true;
     // Accessing the file form its url
     this.get(filename, (data) => {
       // Separate rows and iterate through them
       const rows = data.split('\n');
+      this.timeSinking = 0;
+      this.timeLift = 0;
+      this.timeThermal = 0;
+      this.timeFlight = 0;
+      this.timeSoaring = 0;
       rows.forEach((row) => {
         switch (row[0]) {
-          case 'B': // B Record parsing
+          case 'B': // B Record
+            let timeInterval = 1;
             p = this.parseBrecord(row);
             // Add the record to the trackData array
             trackData = [...trackData,
@@ -174,8 +187,32 @@ export class MapViewService {
                 GPS_alt: parseInt(p[7], 10),
                 Accuracy: parseInt(p[8], 10),
                 Engine_RPM: parseInt(p[9], 10),
+                Status: p[10],
               } as TrackPoint
             ];
+            if (flag) {
+              flag = false;
+            } else {
+              timeInterval = Math.abs(trackData[trackData.length - 1].Time.getSeconds() - trackData[trackData.length - 2].Time.getSeconds());
+              console.log('timeInterval: ' + timeInterval);
+            }
+            console.log(row);
+            if (row.indexOf('flight') !== -1) {
+              this.timeFlight = this.timeFlight + timeInterval;
+              console.log('this is time flight');
+            }
+            if (row.indexOf('soaring') !== -1) {
+              this.timeSoaring += timeInterval;
+            }
+            if (row.indexOf('lift') !== -1) {
+              this.timeLift += timeInterval;
+            }
+            if (row.indexOf('thermal') !== -1) {
+              this.timeThermal += timeInterval;
+            }
+            if (row.indexOf('sinking') !== -1) {
+              this.timeSinking += timeInterval;
+            }
             break; // TODO Add test to check length of trackData
 
           case 'H': // H Record parsing
@@ -193,12 +230,23 @@ export class MapViewService {
 
   // Parse a single IGC B record string into a string array
   parseBrecord(s: string) {
+    // tslint:disable-next-line:triple-equals
+    let sIndex;
+    if (s.indexOf('flight') !== -1) {
+      sIndex = s.indexOf('flight');
+    } else if (s.indexOf('s') !== -1) {
+      sIndex = s.indexOf('s');
+    } else if (s.indexOf('lift') !== -1) {
+      sIndex = s.indexOf('lift');
+    }
+    // console.log(sIndex);
     return [
       s.substring(1, 3), s.substring(3, 5), s.substring(5, 7), // hours, minutes, seconds
       s.substring(7, 15), s.substring(15, 24),                 // latitude, longitude
       s.substring(24, 25),                                     // valid
       s.substring(25, 30), s.substring(30, 35),                // pressure alt, gps alt
-      s.substring(35, 38), s.substring(38, 42)                 // accuracy; engine rpm
+      s.substring(35, 38), s.substring(38, 42),                 // accuracy; engine rpm
+      s.substring(sIndex, s.length)                                 // flight status
     ];
   }
 
@@ -229,8 +277,10 @@ export class MapViewService {
         }
         // Coordinates projection from Decimal Degrees to EPSG:3857
         coords = fromLonLat(this.fromLonLatStr([point.Longitude, point.Latitude]));
-        coords = [...coords, point.GPS_alt, point.Time.getTime() / 1000];
+        coords = [...coords, point.GPS_alt, point.Status];
+        // coords = [...coords, pint.GPS_alt, point.Time.getTime() / 1000, point.Status];
         geometry.appendCoordinate(coords);
+        // console.log(coords);
       }
       // delta is the steepness of the upward/downward movement for the current geometry
       // delta > 0 means upward movement, else it's downward
@@ -248,6 +298,46 @@ export class MapViewService {
 
   getPilot() {
     return this.pilot;
+  }
+
+  getTimeFlight() {
+    const deltaT = this.timeFlight;
+    const hours = Math.floor(deltaT / 3600);
+    const minutes = Math.floor((deltaT % 3600) / 60);
+    const seconds = Math.floor(deltaT % 60);
+    return `${hours}h${minutes}m${seconds}s`;
+  }
+
+  getTimeSoaring() {
+    const deltaT = this.timeSoaring;
+    const hours = Math.floor(deltaT / 3600);
+    const minutes = Math.floor((deltaT % 3600) / 60);
+    const seconds = Math.floor(deltaT % 60);
+    return `${hours}h${minutes}m${seconds}s`;
+  }
+
+  getTimeThermal() {
+    const deltaT = this.timeThermal * 0.7;
+    const hours = Math.floor(deltaT / 3600);
+    const minutes = Math.floor((deltaT % 3600) / 60);
+    const seconds = Math.floor(deltaT % 60);
+    return `${hours}h${minutes}m${seconds}s`;
+  }
+
+  getTimeLift() {
+    const deltaT = this.timeLift * 0.3;
+    const hours = Math.floor(deltaT / 3600);
+    const minutes = Math.floor((deltaT % 3600) / 60);
+    const seconds = Math.floor(deltaT % 60);
+    return `${hours}h${minutes}m${seconds}s`;
+  }
+
+  getTimeSinking() {
+    const deltaT = this.timeSinking;
+    const hours = Math.floor(deltaT / 3600);
+    const minutes = Math.floor((deltaT % 3600) / 60);
+    const seconds = Math.floor(deltaT % 60);
+    return `${hours}h${minutes}m${seconds}s`;
   }
 
   // Returns the total length of the track in meters
@@ -394,6 +484,7 @@ export class MapViewService {
     [this.infos.longitude, this.infos.latitude] = toLonLat([point[0], point[1]]);
     this.infos.altitude = point[2];
     this.infos.date = new Date(point[3] * 1000).toString();
+    this.infos.status = point[3];
     this.emitInfos();
   }
 

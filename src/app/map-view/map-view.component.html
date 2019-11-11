@@ -21,6 +21,15 @@
           <span class="label">Max Ascending Speed:</span> {{ maxAscendSpeed | number:'1.1-1' }}m/s <br>
           <span class="label">Max Descending Speed:</span> {{ maxDescentSpeed | number:'1.1-1' }}m/s <br>
         </div>
+        <div class="track-info">
+          <span class="label">Time Lift:</span> {{ flightLift }}<br>
+          <span class="label">Time Thermal:</span> {{ flightThermal }} <br>
+          <span class="label">Time Flight:</span> {{ flightFlight }} <br>
+        </div>
+        <div class="track-info">
+          <span class="label">Time Sinking:</span> {{ flightSinking }} <br>
+          <span class="label">Time Soaring:</span> {{ flightSoaring }} <br>
+        </div>
       </div>
     </div>
     <div id="map" class="map">
@@ -34,7 +43,8 @@
           <span class="label">Latitude:</span> {{ currentLatitude | latitude }} <br>
           <span class="label">Longitude:</span> {{ currentLongitude  | longitude }} <br>
           <span class="label">Altitude:</span> {{ currentAltitude }}m <br>
-          <span class="label">Date:</span> {{ currentDate | date:'short' }} <br>
+          <!--<span class="label">Date:</span> {{ currentDate | date:'short' }} <br>-->
+          <span class="label">Status: </span>{{ currentStatus}} <br>
         </div>
       </div>
     </div>

@@ -13,13 +13,14 @@ export class MapViewComponent implements OnInit {
 
   // url of IGC files
   igcUrls = 'https://firebasestorage.googleapis.com/v0/b/gt-backend-8b9c2.appspot.com/o/' +
-      'HAGOdywD9rQayoOOIHyd?alt=media&token=f0511567-2b36-4689-802d-b80e5b52b2af';
+    'HAGOdywD9rQayoOOIHyd?alt=media&token=f0511567-2b36-4689-802d-b80e5b52b2af';
 
   // Display data
   currentLatitude: string;
   currentLongitude: string;
   currentAltitude: number;
   currentDate: string;
+  currentStatus: string;
   currentScreenPos;
   isDragging;
   infosSubscription: Subscription;
@@ -34,6 +35,12 @@ export class MapViewComponent implements OnInit {
   e2eDistance: number;
   maxAscendSpeed: number;
   maxDescentSpeed: number;
+
+  flightThermal: string;
+  flightLift: string;
+  flightFlight: string;
+  flightSoaring: string;
+  flightSinking: string;
 
   // IGC file Parsing
   IGCFilename = this.igcUrls; // TODO Connect urls to firestore
@@ -64,6 +71,7 @@ export class MapViewComponent implements OnInit {
         this.currentLongitude = infos.longitude;
         this.currentAltitude = Math.floor(infos.altitude);
         this.currentDate = infos.date;
+        this.currentStatus = infos.status;
       }
     );
     this.mvs.emitInfos();
@@ -90,6 +98,12 @@ export class MapViewComponent implements OnInit {
     this.maxAscendSpeed = this.mvs.getMaxAscendSpeed();
     this.maxDescentSpeed = this.mvs.getMaxDescentSpeed();
     this.pilot = this.mvs.getPilot();
+    this.flightSoaring = this.mvs.getTimeSoaring();
+    this.flightFlight = this.mvs.getTimeFlight();
+    this.flightThermal = this.mvs.getTimeThermal();
+    this.flightSinking = this.mvs.getTimeSinking();
+    this.flightLift = this.mvs.getTimeLift();
+
   }
 
   getScreenPos(index) {
