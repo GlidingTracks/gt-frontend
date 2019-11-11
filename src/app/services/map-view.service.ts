@@ -231,6 +231,7 @@ export class MapViewService {
   // Parse a single IGC B record string into a string array
   parseBrecord(s: string) {
     // tslint:disable-next-line:triple-equals
+    // console.log(s);
     let sIndex;
     if (s.indexOf('flight') !== -1) {
       sIndex = s.indexOf('flight');
@@ -239,14 +240,13 @@ export class MapViewService {
     } else if (s.indexOf('lift') !== -1) {
       sIndex = s.indexOf('lift');
     }
-    // console.log(sIndex);
     return [
       s.substring(1, 3), s.substring(3, 5), s.substring(5, 7), // hours, minutes, seconds
       s.substring(7, 15), s.substring(15, 24),                 // latitude, longitude
       s.substring(24, 25),                                     // valid
       s.substring(25, 30), s.substring(30, 35),                // pressure alt, gps alt
       s.substring(35, 38), s.substring(38, 42),                 // accuracy; engine rpm
-      s.substring(sIndex, s.length)                                 // flight status
+      s.substring(sIndex)                               // flight status
     ];
   }
 
@@ -485,6 +485,11 @@ export class MapViewService {
     this.infos.altitude = point[2];
     this.infos.date = new Date(point[3] * 1000).toString();
     this.infos.status = point[3];
+    console.log(point[3])
+    if (point[3].indexOf('NaN') !== -1) {
+      this.infos.status = point[3].substring(0, point[3].indexOf('NaN'));
+    }
+
     this.emitInfos();
   }
 
