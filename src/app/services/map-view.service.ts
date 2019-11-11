@@ -235,10 +235,14 @@ export class MapViewService {
     let sIndex;
     if (s.indexOf('flight') !== -1) {
       sIndex = s.indexOf('flight');
-    } else if (s.indexOf('s') !== -1) {
-      sIndex = s.indexOf('s');
+    } else if (s.indexOf('severe') !== -1) {
+      sIndex = s.indexOf('severe');
+    } else if (s.indexOf('sinking') !== -1) {
+      sIndex = s.indexOf('sinking');
     } else if (s.indexOf('lift') !== -1) {
       sIndex = s.indexOf('lift');
+    } else if (s.indexOf('thermal') !== -1) {
+      sIndex = s.indexOf('thermal');
     }
     return [
       s.substring(1, 3), s.substring(3, 5), s.substring(5, 7), // hours, minutes, seconds
@@ -489,7 +493,6 @@ export class MapViewService {
     if (point[3].indexOf('NaN') !== -1) {
       this.infos.status = point[3].substring(0, point[3].indexOf('NaN'));
     }
-
     this.emitInfos();
   }
 
