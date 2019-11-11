@@ -194,12 +194,12 @@ export class MapViewService {
               flag = false;
             } else {
               timeInterval = Math.abs(trackData[trackData.length - 1].Time.getSeconds() - trackData[trackData.length - 2].Time.getSeconds());
-              console.log('timeInterval: ' + timeInterval);
+              // console.log('timeInterval: ' + timeInterval);
             }
-            console.log(row);
+            // console.log(row);
             if (row.indexOf('flight') !== -1) {
               this.timeFlight = this.timeFlight + timeInterval;
-              console.log('this is time flight');
+              // console.log('this is time flight');
             }
             if (row.indexOf('soaring') !== -1) {
               this.timeSoaring += timeInterval;
